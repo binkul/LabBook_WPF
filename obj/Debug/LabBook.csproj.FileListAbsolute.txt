@@ -1,0 +1,17 @@
+D:\Jacek\Programy Visual Studio\Community\LabBook\bin\Debug\LabBook.exe.config
+D:\Jacek\Programy Visual Studio\Community\LabBook\bin\Debug\LabBook.exe
+D:\Jacek\Programy Visual Studio\Community\LabBook\bin\Debug\LabBook.pdb
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.csprojAssemblyReference.cache
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\Forms\Login\LoginForm.g.cs
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\MainWindow.g.cs
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\App.g.cs
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook_MarkupCompile.cache
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook_MarkupCompile.lref
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\Forms\Login\LoginForm.baml
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\MainWindow.baml
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.g.resources
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.Properties.Resources.resources
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.csproj.GenerateResource.cache
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.csproj.CoreCompileInputs.cache
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.exe
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.pdb
