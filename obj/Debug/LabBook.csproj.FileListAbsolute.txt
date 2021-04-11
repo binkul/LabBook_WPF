@@ -15,3 +15,4 @@ D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.csproj.Gener
 D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.csproj.CoreCompileInputs.cache
 D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.exe
 D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\LabBook.pdb
+D:\Jacek\Programy Visual Studio\Community\LabBook\obj\Debug\App.baml

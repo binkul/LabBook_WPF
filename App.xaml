@@ -1,9 +1,10 @@
 ﻿<Application x:Class="LabBook.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:LabBook"
+             xmlns:local="clr-namespace:LabBook" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="Forms/Login/LoginForm.xaml">
     <Application.Resources>
-         
+        <sys:String x:Key="ConnectionString">Data Source=LAPTOP-S66RS9QE\SQLEXPRESS_2012;Initial Catalog=LabBook;User ID=sa;Password=sata</sys:String>
     </Application.Resources>
 </Application>

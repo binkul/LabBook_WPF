@@ -17,7 +17,7 @@ namespace LabBook.Forms.Login
 
         private void BtnSubbmit_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection(@"Data Source=LAPTOP-S66RS9QE\SQLEXPRESS_2012;Initial Catalog=LabBook;User ID=sa;Password=sata");
+            SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
             
             try
             {
@@ -34,7 +34,7 @@ namespace LabBook.Forms.Login
             }
             catch (SqlException ex)
             {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
                     "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)

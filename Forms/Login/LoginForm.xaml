@@ -34,7 +34,7 @@
                 </PasswordBox.ToolTip>
             </PasswordBox>
             <Button x:Name="BtnSubbmit" Content="Zaloguj się" Background="#FF545d6a" Foreground="White" 
-                    FontSize="18" Margin="80 10" Click="BtnSubbmit_Click" />
+                    FontSize="18" Margin="80 10" Click="BtnSubbmit_Click" IsDefault="True" />
         </StackPanel>
     </Border>
 </Window>
