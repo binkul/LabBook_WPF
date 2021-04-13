@@ -1,7 +1,13 @@
-﻿using System;
+﻿using LabBook.Security;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace LabBook.Forms.Login
 {
@@ -10,9 +16,16 @@ namespace LabBook.Forms.Login
     /// </summary>
     public partial class LoginForm : Window
     {
+        private readonly string _loginPath = "\\Data\\login.txt";
+        private readonly List<string> _logins;
+
         public LoginForm()
         {
             InitializeComponent();
+
+            _logins = GetLogins();
+            //CmbUserName.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Source = _logins });
+            CmbUserName.ItemsSource = _logins;
         }
 
         private void BtnSubbmit_Click(object sender, RoutedEventArgs e)
@@ -27,8 +40,8 @@ namespace LabBook.Forms.Login
                 string query = "Select Count(1) From LabBook.dbo.Users usr Where usr.login=@username and usr.password=@password";
                 SqlCommand sqlCmd = new SqlCommand(query, connection);
                 sqlCmd.CommandType = CommandType.Text;
-                sqlCmd.Parameters.AddWithValue("@username", TxtUserName.Text);
-                sqlCmd.Parameters.AddWithValue("@password", TxtPassword.Password);
+                sqlCmd.Parameters.AddWithValue("@username", CmbUserName.Text);
+                sqlCmd.Parameters.AddWithValue("@password", Encrypt.MD5Encrypt(TxtPassword.Password));
 
                 Login(Convert.ToInt32(sqlCmd.ExecuteScalar()));
             }
@@ -45,6 +58,7 @@ namespace LabBook.Forms.Login
             finally
             {
                 connection.Close();
+                SaveLogins();
             }
         }
 
@@ -62,6 +76,55 @@ namespace LabBook.Forms.Login
                     "Błąd logowania", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private List<string> GetLogins()
+        {
+            List<string> logins = new List<string>();
+            string line = "";
+
+            if (File.Exists(Environment.CurrentDirectory + _loginPath))
+            {
+                StreamReader file = new StreamReader(Environment.CurrentDirectory + _loginPath);
+                while ((line = file.ReadLine()) != null)
+                {
+                    logins.Add(line);
+                }
+                file.Close();
+            }
+            return logins;
+        }
+
+        private void SaveLogins()
+        {
+            string login = CmbUserName.Text;
+            string file = Environment.CurrentDirectory + "\\Data\\login.txt";
+
+            _logins.Sort();
+            _logins.Remove(login);
+            if (!_logins.Contains(login))
+            {
+                _logins.Insert(0, login);
+            }
+
+            if (!Directory.Exists(Path.GetDirectoryName(file)))
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
+
+            File.WriteAllLines(Environment.CurrentDirectory + "\\Data\\login.txt", _logins);
+
+        }
+
+        private void FrmLogin_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                BtnSubbmit_Click(null, null);
+            }
         }
     }
 }
