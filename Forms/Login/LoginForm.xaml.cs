@@ -1,4 +1,5 @@
-﻿using LabBook.Security;
+﻿using LabBook.Forms.Register;
+using LabBook.Security;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -80,7 +81,9 @@ namespace LabBook.Forms.Login
 
         private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-
+            RegisterForm registerForm = new RegisterForm();
+            registerForm.Show();
+            this.Close();
         }
 
         private List<string> GetLogins()
@@ -102,8 +105,8 @@ namespace LabBook.Forms.Login
 
         private void SaveLogins()
         {
-            string login = CmbUserName.Text;
-            string file = Environment.CurrentDirectory + "\\Data\\login.txt";
+            var login = CmbUserName.Text;
+            var file = Environment.CurrentDirectory + "\\Data\\login.txt";
 
             _logins.Sort();
             _logins.Remove(login);

@@ -34,3 +34,5 @@ D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug
 D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug\LabBook.csproj.CoreCompileInputs.cache
 D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug\LabBook.exe
 D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug\LabBook.pdb
+D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug\Forms\Register\RegisterForm.g.cs
+D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\obj\Debug\Forms\Register\RegisterForm.baml

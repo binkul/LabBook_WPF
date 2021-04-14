@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Dane\Stary dysk\d\Programy\Programy Visual Studio Community\LabBook\App.xaml
-2-346048645
+3-1345710555
 
-91634816532
+101513373105
 14-1095375905
-Forms\Login\LoginForm.xaml;MainWindow.xaml;
+Forms\Login\LoginForm.xaml;Forms\Register\RegisterForm.xaml;MainWindow.xaml;
 
 True
 
