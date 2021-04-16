@@ -1,6 +1,7 @@
-﻿using LabBook.Security;
+﻿using LabBook.Forms.Tools;
+using LabBook.Security;
+using LabBook.ADO.Services;
 using System.Data;
-using System.Data.SqlClient;
 using System.Windows;
 
 namespace LabBook.Forms.MainForm
@@ -10,32 +11,37 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
+        private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
+        private readonly LabBookService _labBookService;
         private DataTable _labBookTable;
         private DataView _labBookView;
 
         public LabBookForm(User user)
         {
             InitializeComponent();
-            this._user = user;
-            SetLabBookTable();
+            _user = user;
+            _labBookService = new LabBookService(_user);
+            PrepareForm();
         }
 
-        private void SetLabBookTable()
+        private void PrepareForm()
         {
-            string query = "Select bk.id, bk.title, bk.density, bk.remarks, bk.observation, bk.user_id, bk.cycle, " +
-                " bk.created, bk.modified From LabBook.dbo.ExpLabBook bk Order by id";
-            SqlDataAdapter adapter = new SqlDataAdapter(query, _user.Connection);
-            _labBookTable = new DataTable();
-            adapter.Fill(_labBookTable);
-            DataColumn id = new DataColumn();
-            DataColumn[] klucz = new DataColumn[1];
-            id = _labBookTable.Columns["id"];
-            klucz[0] = id;
-            _labBookTable.PrimaryKey = klucz;
+            _labBookTable = _labBookService.GetAll();
             _labBookView = new DataView(_labBookTable);
+            DataContext = _labBookView;
 
-            DgLabBook.ItemsSource = _labBookView;
+            WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
+        }
+
+        private void FrmLabBook_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            WindowsOperation.SaveWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
+        }
+
+        private void FrmLabBook_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

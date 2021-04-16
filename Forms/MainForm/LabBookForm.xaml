@@ -6,16 +6,38 @@
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
         mc:Ignorable="d"
         ResizeMode="CanResize"
-        Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" >
+        Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" Loaded="FrmLabBook_Loaded" >
+    <Window.Resources>
+        <Style TargetType="{x:Type DataGrid}" >
+            <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
+            <Setter Property="VerticalGridLinesBrush" Value="#FF8E8E8E" />
+        </Style>
+        <Style TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+        <Style TargetType="{x:Type DataGridCell}" >
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style x:Key="AlignRight" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <DataGrid x:Name="DgLabBook" Margin="10,171,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                  AutoGenerateColumns="False" IsReadOnly="True" ColumnWidth="*">
+        <DataGrid x:Name="DgLabBook" Margin="10,171,10,10" ItemsSource="{Binding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
+                  CanUserAddRows="True"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20"
+                  FrozenColumnCount="1" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Numer D" Binding="{Binding id}" />
+                <DataGridTextColumn Header="Numer D" Binding="{Binding id}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Tytuł" Binding="{Binding title}" />
-                <DataGridTextColumn Header="Wykonał" Binding="{Binding user_id}" />
-                <DataGridTextColumn Header="Cykl" Binding="{Binding cycle}" />
-                <DataGridTextColumn Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" />
+                <DataGridTextColumn Header="Wykonał" Binding="{Binding user_id}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Cykl" Binding="{Binding cycle}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" />
             </DataGrid.Columns>
             
         </DataGrid>

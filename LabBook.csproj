@@ -59,12 +59,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ADO\Services\LabBookService.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
     <Compile Include="Security\User.cs" />
     <Compile Include="System\Text\ASCII.cs" />
