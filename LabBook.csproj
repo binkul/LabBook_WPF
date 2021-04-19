@@ -59,7 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ADO\Services\LabBookService.cs" />
+    <Compile Include="ADO\Common\IRepository.cs" />
+    <Compile Include="ADO\Repository\LabBookRepository.cs" />
+    <Compile Include="ADO\Service\LabBookService.cs" />
+    <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>

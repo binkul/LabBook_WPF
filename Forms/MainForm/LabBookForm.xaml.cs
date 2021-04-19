@@ -1,8 +1,9 @@
 ﻿using LabBook.Forms.Tools;
 using LabBook.Security;
-using LabBook.ADO.Services;
+using LabBook.ADO.Service;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace LabBook.Forms.MainForm
 {
@@ -14,7 +15,7 @@ namespace LabBook.Forms.MainForm
         private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
         private readonly LabBookService _labBookService;
-        private DataTable _labBookTable;
+ //       private readonly DataTable _labBookTable;
         private DataView _labBookView;
 
         public LabBookForm(User user)
@@ -27,8 +28,8 @@ namespace LabBook.Forms.MainForm
 
         private void PrepareForm()
         {
-            _labBookTable = _labBookService.GetAll();
-            _labBookView = new DataView(_labBookTable);
+            //_labBookTable = _labBookService.GetAll();
+            _labBookView = _labBookService.GetAll(); // new DataView(_labBookTable);
             DataContext = _labBookView;
 
             WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
@@ -42,6 +43,21 @@ namespace LabBook.Forms.MainForm
         private void FrmLabBook_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
+        {
+            int startPos = 32;
+            Canvas.SetLeft(ChbFilter, 10);
+            Canvas.SetLeft(TxtNumerDFilter, startPos);
+            startPos += (int)(ColNumerD.ActualWidth);
+            Canvas.SetLeft(TxtTitleFilter, startPos);
+            startPos += (int)(ColTytul.ActualWidth);
+            Canvas.SetLeft(CmbUserFilter, startPos);
+            startPos += (int)(ColWykonal.ActualWidth);
+            Canvas.SetLeft(CmbCycleFilter, startPos);
+            startPos += (int)(ColCykl.ActualWidth);
+            Canvas.SetLeft(DpDate, startPos);
         }
     }
 }

@@ -12,19 +12,33 @@
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
             <Setter Property="VerticalGridLinesBrush" Value="#FF8E8E8E" />
         </Style>
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style x:Key="AllignCellCenter" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="AllignCellLeft" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Padding" Value="5 0 0 0" />
+        </Style>
+        <Style x:Key="AllignColmnHeaderCenter" TargetType="DataGridColumnHeader">
             <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Height" Value="25" />
+            <EventSetter Event="SizeChanged" Handler="Column_SizedChanged" />
         </Style>
-        <Style TargetType="{x:Type DataGridCell}" >
-            <Setter Property="FontSize" Value="12" />
+        <Style x:Key="AllignColmnHeaderLeft" TargetType="DataGridColumnHeader">
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+            <EventSetter Event="SizeChanged" Handler="Column_SizedChanged" />
         </Style>
-        <Style x:Key="AlignRight" TargetType="{x:Type TextBlock}">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
+
+
     </Window.Resources>
 
     <Grid>
@@ -33,14 +47,44 @@
                   CanUserAddRows="True"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20"
                   FrozenColumnCount="1" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Numer D" Binding="{Binding id}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Tytuł" Binding="{Binding title}" />
-                <DataGridTextColumn Header="Wykonał" Binding="{Binding user_id}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Cykl" Binding="{Binding cycle}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" />
+                <DataGridTextColumn x:Name="ColNumerD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
+                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
+                <DataGridTextColumn x:Name="ColTytul" Header="Tytuł" Binding="{Binding title}"
+                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
+                <DataGridTextColumn x:Name="ColWykonal" Header="Wykonał" Binding="{Binding user_id}" IsReadOnly="True" 
+                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                </DataGridTextColumn>
+
+                <DataGridTextColumn x:Name="ColCykl" Header="Cykl" Binding="{Binding cycle}" IsReadOnly="True" 
+                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" 
+                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
+                </DataGridTextColumn>
             </DataGrid.Columns>
-            
+
         </DataGrid>
 
+        <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,118,0,395">
+         <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="27"/>
+           <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" 
+                 Width="{Binding ElementName=ColTytul, Path=ActualWidth}" Canvas.Left="186" Canvas.Top="23" />
+            <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" 
+                 Width="{Binding ElementName=ColNumerD, Path=ActualWidth}" Canvas.Left="10" Canvas.Top="23" />
+            <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                 Width="{Binding ElementName=ColWykonal, Path=ActualWidth}" Canvas.Left="360" Canvas.Top="23" />
+            <ComboBox x:Name="CmbCycleFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                 Width="{Binding ElementName=ColCykl, Path=ActualWidth}" Canvas.Left="535" Canvas.Top="23" />
+            <DatePicker Name="DpDate" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
+                        Width="{Binding ElementName=ColDate, Path=ActualWidth}" Canvas.Left="710" Canvas.Top="23"/>
+        </Canvas>
     </Grid>
 </Window>
