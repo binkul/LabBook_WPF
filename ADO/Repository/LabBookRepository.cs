@@ -8,8 +8,10 @@ namespace LabBook.ADO.Repository
 {
     public class LabBookRepository : IRepository<LabBookDto>
     {
-        private const string getAllQuery = "Select bk.id, bk.title, bk.density, bk.remarks, bk.observation, bk.user_id, bk.cycle, " +
-                            " bk.created, bk.modified From LabBook.dbo.ExpLabBook bk Order by id";
+        private const string getAllQuery = "Select bk.id, bk.title, bk.density, bk.remarks, bk.observation, us.identifier, bk.user_id, " +
+                            "ck.name as cycle, bk.cycle_id, bk.created, bk.modified From LabBook.dbo.ExpLabBook bk Left Join " +
+                            "LabBook.dbo.Users us on bk.user_id=us.id Left Join LabBook.dbo.ExpCycle ck on bk.cycle_id= ck.id Order by id";
+
         private readonly User _user;
 
         public LabBookRepository(User user)

@@ -119,12 +119,21 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Img\arrow-right.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\Atom.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Atom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\arrow-left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\arrow-left_first.png" />
+    <Resource Include="Img\arrow-right_last.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

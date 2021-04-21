@@ -4,6 +4,8 @@ using LabBook.ADO.Service;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System;
+using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm
 {
@@ -42,10 +44,32 @@ namespace LabBook.Forms.MainForm
 
         private void FrmLabBook_Loaded(object sender, RoutedEventArgs e)
         {
-
+            SelectRowByIndex(DgLabBook, 0);
         }
 
-        private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
+        public static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)
+        {
+            if (!dataGrid.SelectionUnit.Equals(DataGridSelectionUnit.FullRow))
+                throw new ArgumentException("The SelectionUnit of the DataGrid must be set to FullRow.");
+
+            if (rowIndex < 0 || rowIndex > (dataGrid.Items.Count - 1))
+                throw new ArgumentException(string.Format("{0} is an invalid row index.", rowIndex));
+
+            var item = dataGrid.Items[rowIndex];
+            dataGrid.SelectedItem = item;
+
+            DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            if (row == null)
+            {
+                dataGrid.ScrollIntoView(item);
+//                row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
+            }
+
+//            row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+            dataGrid.Focus();
+        }
+
+    private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
         {
             int startPos = 32;
             Canvas.SetLeft(ChbFilter, 10);
