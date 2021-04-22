@@ -19,6 +19,7 @@ namespace LabBook.ADO.Repository
             _user = user;
         }
 
+
         public DataTable GetAll()
         {
             SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, _user.Connection);
@@ -32,6 +33,21 @@ namespace LabBook.ADO.Repository
             table.PrimaryKey = klucz;
 
             return table;
+        }
+
+        public bool Delete()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public LabBookDto Save(LabBookDto data)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public LabBookDto Update(LabBookDto data)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LabBook.Forms.Login;
+﻿using LabBook.ADO.Repository;
+using LabBook.Forms.Login;
 using LabBook.Security;
 using System;
 using System.Data;
@@ -56,91 +57,19 @@ namespace LabBook.Forms.Register
             return true;
         }
 
-        private bool ValidateUser(SqlConnection connection)
-        {
-            var result = true;
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-
-                string query = "Select Count(1) From LabBook.dbo.Users usr Where usr.login=@username";
-                SqlCommand sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
-                sqlCmd.Parameters.AddWithValue("@username", TxtLogin.Text);
-
-                if (Convert.ToInt32(sqlCmd.ExecuteScalar()) >= 1)
-                {
-                    MessageBox.Show("Użytkownik o loginie: '" + TxtLogin.Text + "' istnieje już w bazie. Użyj innego loginu do rejestracji.",
-                        "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
-                    result = false;
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                result = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                result = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-            return result;
-        }
-
         private void BtnSubbmit_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateTextBox()) return;
 
-            SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
-            if (!ValidateUser(connection)) return;
+            var repository = new UserRepository();
+            var status = repository.ExistUserByLogin(TxtLogin.Text);
 
-            try
+            if (status == RegisterStatus.Ok)
             {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-
-                string query = "Insert Into LabBook.dbo.Users(name, surname, e_mail, login, password, "
-                    + "permission, identifier, active, date) Values(@name, @surname, @e_mail, @login, @password, "
-                    + "@permission, @identifier, @active, @date)";
-                SqlCommand sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
-                sqlCmd.Parameters.AddWithValue("@name", TxtName.Text);
-                sqlCmd.Parameters.AddWithValue("@surname", TxtSurname.Text);
-                sqlCmd.Parameters.AddWithValue("@e_mail", TxtEmail.Text);
-                sqlCmd.Parameters.AddWithValue("@login", TxtLogin.Text);
-                sqlCmd.Parameters.AddWithValue("@password", Encrypt.MD5Encrypt(TxtPassword.Password));
-                sqlCmd.Parameters.AddWithValue("@permission", "user");
-                var identifier = TxtName.Text.Substring(0, 1).ToUpper() + TxtSurname.Text.Substring(0, 1).ToUpper();
-                sqlCmd.Parameters.AddWithValue("@identifier", identifier);
-                sqlCmd.Parameters.AddWithValue("@active", "true");
-                sqlCmd.Parameters.AddWithValue("@date", DateTime.Now);
-                sqlCmd.ExecuteNonQuery();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                connection.Close();
                 LoginForm loginForm = new LoginForm();
                 loginForm.Show();
                 this.Close();
             }
-
         }
     }
 }

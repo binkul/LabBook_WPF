@@ -4,8 +4,6 @@ using LabBook.ADO.Service;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System;
-using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm
 {
@@ -17,22 +15,32 @@ namespace LabBook.Forms.MainForm
         private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
         private readonly LabBookService _labBookService;
- //       private readonly DataTable _labBookTable;
+        private readonly ExperimentCycleService _expCycleService;
+        private readonly UserService _userService;
         private DataView _labBookView;
+        private DataView _expCycleView;
+        private DataView _userView;
 
         public LabBookForm(User user)
         {
             InitializeComponent();
             _user = user;
             _labBookService = new LabBookService(_user);
+            _expCycleService = new ExperimentCycleService(_user);
+            _userService = new UserService(_user);
             PrepareForm();
         }
 
         private void PrepareForm()
         {
-            //_labBookTable = _labBookService.GetAll();
-            _labBookView = _labBookService.GetAll(); // new DataView(_labBookTable);
+            _labBookView = _labBookService.GetAll();
             DataContext = _labBookView;
+
+            _expCycleView = _expCycleService.GetAll();
+            CmbCycleFilter.ItemsSource = _expCycleView;
+
+            _userView = _userService.GetAll();
+            CmbUserFilter.ItemsSource = _userView;
 
             WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
@@ -44,29 +52,7 @@ namespace LabBook.Forms.MainForm
 
         private void FrmLabBook_Loaded(object sender, RoutedEventArgs e)
         {
-            SelectRowByIndex(DgLabBook, 0);
-        }
-
-        public static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)
-        {
-            if (!dataGrid.SelectionUnit.Equals(DataGridSelectionUnit.FullRow))
-                throw new ArgumentException("The SelectionUnit of the DataGrid must be set to FullRow.");
-
-            if (rowIndex < 0 || rowIndex > (dataGrid.Items.Count - 1))
-                throw new ArgumentException(string.Format("{0} is an invalid row index.", rowIndex));
-
-            var item = dataGrid.Items[rowIndex];
-            dataGrid.SelectedItem = item;
-
-            DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
-            if (row == null)
-            {
-                dataGrid.ScrollIntoView(item);
-//                row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
-            }
-
-//            row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
-            dataGrid.Focus();
+            Navigation.SelectRowByIndex(DgLabBook, 0);
         }
 
     private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
@@ -82,6 +68,11 @@ namespace LabBook.Forms.MainForm
             Canvas.SetLeft(CmbCycleFilter, startPos);
             startPos += (int)(ColCykl.ActualWidth);
             Canvas.SetLeft(DpDate, startPos);
+        }
+
+        private void BtnNavigation_Click(object sender, RoutedEventArgs e)
+        {
+            Navigation.Navigate(DgLabBook, TxtNavieRec, sender);
         }
     }
 }

@@ -6,23 +6,23 @@ using System.Data;
 
 namespace LabBook.ADO.Service
 {
-    public class LabBookService
+    public class ExperimentCycleService
     {
         private readonly User _user;
-        private readonly IRepository<LabBookDto> _labBookRepository;
+        private readonly IRepository<ExperimentCycleDto> _expCycleRepository;
         private DataTable dataTable;
 
-        public LabBookService(User user)
+        public ExperimentCycleService(User user)
         {
             _user = user;
-            _labBookRepository = new LabBookRepository(_user);
+            _expCycleRepository = new ExperimentCycleRepository(_user);
         }
 
         public DataView GetAll()
         {
-            dataTable = _labBookRepository.GetAll();
+            dataTable = _expCycleRepository.GetAll();
             DataView view = new DataView(dataTable);
-            view.Sort = "id";
+            view.Sort = "name";
             return view;
         }
     }
