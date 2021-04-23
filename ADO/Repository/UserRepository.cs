@@ -19,6 +19,8 @@ namespace LabBook.ADO.Repository
     {
         private const string getAllQuery = "Select us.id, (us.name + ' ' + us.surname) as name From LabBook.dbo.Users us";
         private const string existQuery = "Select Count(1) From LabBook.dbo.Users usr Where usr.login=@username";
+        private const string loginQuery = "Select us.id, us.name, us.surname, us.e_mail, us.login, us.permission, us.identifier, us.active "
+                                           + "From LabBook.dbo.Users us Where us.login='@username' and us.password='@password'";
         private const string registerQuery = "Insert Into LabBook.dbo.Users(name, surname, e_mail, login, password, "
                                            + "permission, identifier, active, date) Values(@name, @surname, @e_mail, @login, @password, "
                                            + "@permission, @identifier, @active, @date)";
@@ -139,6 +141,55 @@ namespace LabBook.ADO.Repository
             }
 
             return result;
+        }
+
+        public User GetUserByLoginAndPassword(string login, string password)
+        {
+            User user = null;
+            SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                var query = loginQuery.Replace("@username", login);
+                query = query.Replace("@password", Encrypt.MD5Encrypt(password));
+
+                SqlCommand sqlCmd = new SqlCommand(query, connection);
+                SqlDataReader reader = sqlCmd.ExecuteReader(CommandBehavior.CloseConnection);
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    var id = Convert.ToInt64(reader[0]);
+                    var name = Convert.ToString(reader[1]);
+                    var surname = Convert.ToString(reader[2]);
+                    var email = Convert.ToString(reader[3]);
+                    var log = Convert.ToString(reader[4]);
+                    var permission = Convert.ToString(reader[5]);
+                    var identifier = Convert.ToString(reader[6]);
+                    var isActive = Convert.ToBoolean(reader[7]);
+                    user = new User(id, name, surname, email, login, permission, identifier, isActive, connection);
+                }
+
+                reader.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return user;
         }
 
         public UserDto Update(UserDto data)

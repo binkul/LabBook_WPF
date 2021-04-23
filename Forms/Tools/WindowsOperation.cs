@@ -32,10 +32,15 @@ namespace LabBook.Forms.Tools
 
             if (grid != null)
             {
+                var col = 0;
                 for (int i = 0; i < rowcount; i++)
                 {
-                    var columnWidth = new XElement("W" + i.ToString(), grid.Columns[i].ActualWidth);
-                    dataGrid.Add(columnWidth);
+                    if (grid.Columns[i].Visibility == Visibility.Visible)
+                    {
+                        var columnWidth = new XElement("W" + col.ToString(), grid.Columns[i].ActualWidth);
+                        dataGrid.Add(columnWidth);
+                        col++;
+                    }
                 }
                 window.Add(dataGrid);
             }
@@ -72,9 +77,14 @@ namespace LabBook.Forms.Tools
                 if (grid != null)
                 {
                     XElement datagrid = xml.Root.Element("window").Element("datagrid");
+                    var col = 0;
                     for (int i = 0; i < rowcount; i++)
                     {
-                        grid.Columns[i].Width = double.Parse(datagrid.Element("W" + i.ToString()).Value, CultureInfo.InvariantCulture);
+                        if (grid.Columns[i].Visibility == Visibility.Visible)
+                        {
+                            grid.Columns[i].Width = double.Parse(datagrid.Element("W" + col.ToString()).Value, CultureInfo.InvariantCulture);
+                            col++;
+                        }
                     }
                 }
 

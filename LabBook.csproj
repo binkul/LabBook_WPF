@@ -76,6 +76,8 @@
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Tools\DateConverter.cs" />
+    <Compile Include="Forms\Tools\DotConverter.cs" />
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
     <Compile Include="Security\User.cs" />

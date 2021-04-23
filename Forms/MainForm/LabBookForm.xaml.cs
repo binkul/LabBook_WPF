@@ -4,6 +4,8 @@ using LabBook.ADO.Service;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Data;
 
 namespace LabBook.Forms.MainForm
 {
@@ -38,9 +40,11 @@ namespace LabBook.Forms.MainForm
 
             _expCycleView = _expCycleService.GetAll();
             CmbCycleFilter.ItemsSource = _expCycleView;
+            CmbCycle.ItemsSource = _expCycleView;
 
             _userView = _userService.GetAll();
             CmbUserFilter.ItemsSource = _userView;
+
 
             WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
@@ -55,24 +59,69 @@ namespace LabBook.Forms.MainForm
             Navigation.SelectRowByIndex(DgLabBook, 0);
         }
 
-    private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
+        private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
         {
             int startPos = 32;
             Canvas.SetLeft(ChbFilter, 10);
             Canvas.SetLeft(TxtNumerDFilter, startPos);
-            startPos += (int)(ColNumerD.ActualWidth);
+            startPos += (int)(ColNumberD.ActualWidth);
             Canvas.SetLeft(TxtTitleFilter, startPos);
-            startPos += (int)(ColTytul.ActualWidth);
+            startPos += (int)(ColTitle.ActualWidth);
             Canvas.SetLeft(CmbUserFilter, startPos);
-            startPos += (int)(ColWykonal.ActualWidth);
+            startPos += (int)(ColUser.ActualWidth);
             Canvas.SetLeft(CmbCycleFilter, startPos);
-            startPos += (int)(ColCykl.ActualWidth);
+            startPos += (int)(ColCycle.ActualWidth);
             Canvas.SetLeft(DpDate, startPos);
         }
 
         private void BtnNavigation_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.Navigate(DgLabBook, TxtNavieRec, sender);
+            Navigation.Navigate(DgLabBook, TxtNavieRec, LblNavieRec, sender);
+        }
+
+        private void TxtBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TextBox tBox = (TextBox)sender;
+                DependencyProperty prop = TextBox.TextProperty;
+
+                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+                if (binding != null) { binding.UpdateSource(); }
+
+                TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
+                if (Keyboard.FocusedElement is UIElement keyboardFocus)
+                {
+                    keyboardFocus.MoveFocus(tRequest);
+                }
+            }
+        }
+
+        private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Navigation.SetNavigationText(DgLabBook.SelectedIndex + 1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
+            //DataRow row = (DgLabBook.SelectedItem as DataRowView).Row;
+
+            //if (row != null)
+            //{
+            //    var id = row["cycle_id"];
+            //    CmbCycle.SelectedValue = id;
+            //}
+        }
+
+        private void CmbCycle_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView cmbRow = (DataRowView)CmbCycle.SelectedItem;
+            DataRow dgRow = (DgLabBook.SelectedItem as DataRowView).Row;
+
+            if (cmbRow != null && dgRow != null)
+            {
+                if (!cmbRow["name"].Equals(dgRow["cycle"]))
+                {
+                    dgRow["cycle"] = cmbRow["name"];
+                }
+            }
+
         }
     }
 }
