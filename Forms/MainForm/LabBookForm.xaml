@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
-        xmlns:Convertors="clr-namespace:LabBook.Forms.Tools"
+        xmlns:Convertors="clr-namespace:LabBook.Forms.Tools" 
+        xmlns:System="clr-namespace:System.Data;assembly=System.Data"
         mc:Ignorable="d"
         ResizeMode="CanResize"
         Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" Loaded="FrmLabBook_Loaded" >
     <Window.Resources>
+        <System:DataView x:Key="UserTable"></System:DataView>
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:DateConverter x:Key="DateConverter" />
         <Style TargetType="{x:Type DataGrid}" >
@@ -45,30 +47,33 @@
     </Window.Resources>
 
     <Grid>
-        <Label Content="D" Margin="5,50,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
+        <Label Content="D" Margin="5,48,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
-        <Label Name="LblNumerD" Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="20,50,0,0" Foreground="#FF0000E1"
+        <Label Name="LblNumerD" Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="20,48,0,0" Foreground="#FF0000E1"
                FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65" Height="23"  FontSize="18" Padding="0" />
 
-        <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" 
-                 Margin="89,49,127.6,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" />
+        <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" Margin="89,49,127.6,0" 
+                 TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
+                 Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"/>
 
-        <Label Content="Cykl" Margin="5,82,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
+        <Label Content="Cykl" Margin="5,80,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
         <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   DisplayMemberPath="name" SelectedValuePath="id" 
                   SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" Width="250" Margin="89,82,0,0" SelectionChanged="CmbCycle_SelectionChanged" />
 
-        <Label Content="Gęstość" Margin="375,82,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
+        <Label Content="Gęstość" Margin="375,80,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
         <TextBox x:Name="TxtDensity" Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" 
-                 Margin="458,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" HorizontalAlignment="Left" Width="86" />
+                 Margin="458,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
+                 HorizontalAlignment="Left" Width="86" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" />
 
         <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateConverter}}" 
-               Margin="0,49,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18" Padding="0" Foreground="Red" />
+               Margin="0,48,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18" 
+               Padding="0" Foreground="Red" />
 
         <DataGrid x:Name="DgLabBook" Margin="10,171,9.6,27" ItemsSource="{Binding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow"
@@ -112,9 +117,11 @@
         <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,118,0,395">
             <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="27"/>
             <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
-                 Width="{Binding ElementName=ColTitle, Path=ActualWidth}" Canvas.Left="186" Canvas.Top="23" />
+                 Width="{Binding ElementName=ColTitle, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" 
+                     Canvas.Left="186" Canvas.Top="23" />
             <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
-                 Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" Canvas.Left="10" Canvas.Top="23" />
+                 Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"
+                     Canvas.Left="10" Canvas.Top="23" />
             <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"
                       DisplayMemberPath="name" SelectedValuePath="id" IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
                  Width="{Binding ElementName=ColUser, Path=ActualWidth}" Canvas.Left="360" Canvas.Top="23" />

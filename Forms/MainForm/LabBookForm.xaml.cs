@@ -30,6 +30,7 @@ namespace LabBook.Forms.MainForm
             _labBookService = new LabBookService(_user);
             _expCycleService = new ExperimentCycleService(_user);
             _userService = new UserService(_user);
+            Resources["UserTable"] = _userView;
             PrepareForm();
         }
 
