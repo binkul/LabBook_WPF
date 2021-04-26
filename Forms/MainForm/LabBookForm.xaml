@@ -48,6 +48,21 @@
 
     <DockPanel>
 
+        <!--#### Ribbon menu ####-->
+        <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14">
+            <RibbonTab Header="Plik" >
+
+            </RibbonTab>
+
+            <RibbonTab Header="Edycja" >
+
+            </RibbonTab>
+
+            <RibbonTab Header="Okna" >
+
+            </RibbonTab>
+        </Ribbon>
+
         <!--#### Navigation ####-->
         <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="{Binding ElementName=FrmLabBook, Path=ActualWidth}">
             <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
@@ -81,102 +96,122 @@
         </Canvas>
 
         <Grid>
-            <Label Content="D" Margin="5,50,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
+
+            <!--#### Main controls visible on all Tabs ####-->
+            <Label Content="D" Margin="5,11,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
-            <Label Name="LblNumerD" Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="0,50,808.6,0" Foreground="#FF0000E1"
+            <Label Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="0,11,808.6,0" Foreground="#FF0000E1"
                FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Height="23"  FontSize="18" Padding="0" />
 
-            <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" Margin="89,49,127.6,0" 
+            <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" Margin="89,10,127.6,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
                  Height="28"/>
 
-            <Label Content="Cykl" Margin="5,86,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
+            <Label Content="Cykl" Margin="5,52,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
             <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   DisplayMemberPath="name" SelectedValuePath="id" 
-                  SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" Width="250" Margin="89,87,0,0" />
+                  SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" Width="250" Margin="89,53,0,0" />
 
-            <Label Content="Gęstość" Margin="376,86,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
+            <Label Content="Gęstość" Margin="376,52,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
             <TextBox x:Name="TxtDensity" Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" 
-                 Margin="458,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
+                 Margin="458,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
                  HorizontalAlignment="Left" Width="86" Height="28" />
 
             <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateConverter}}" 
-               Margin="0,50,10,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18" 
+               Margin="0,11,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
                Padding="0" Foreground="Red" />
 
-            <DataGrid x:Name="DgLabBook" Margin="10,171,10,2" ItemsSource="{Binding}" HorizontalAlignment="Stretch" 
-                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow"
-                  CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20"
-                  FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" >
-                <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
+            <TabControl Margin="0,83,-6.4,4" Width="{Binding ElementName=FrmLabBook, Path=ActualWidth}">
+                <TabItem Header="Strona główna">
+                    <Grid Background="#FFE5E5E5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="78*"/>
+                            <ColumnDefinition Width="367*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--#### Filtering ####-->
+                        <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,0,0,-0.2">
+                            <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="4"/>
+                            <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                    Width="{Binding ElementName=ColTitle, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" 
+                                    Canvas.Left="186" Canvas.Top="0" />
+                            <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
+                                    Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"
+                                    Canvas.Left="10" Canvas.Top="0" />
+                            <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"
+                                    DisplayMemberPath="name" SelectedValuePath="id" IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
+                                    Width="{Binding ElementName=ColUser, Path=ActualWidth}" Canvas.Left="360" Canvas.Top="0" />
+                            <ComboBox x:Name="CmbCycleFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                    DisplayMemberPath="name" SelectedValuePath="id" SelectedIndex="0" 
+                                    Width="{Binding ElementName=ColCycle, Path=ActualWidth}" Canvas.Left="535" Canvas.Top="0" />
+                            <DatePicker Name="DpDate" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
+                                    Width="{Binding ElementName=ColDate, Path=ActualWidth}" Canvas.Left="710" Canvas.Top="0"/>
+                        </Canvas>
+
+                        <!--#### Main DataGrid ####-->
+                        <DataGrid x:Name="DgLabBook" Margin="5,28,5.4,1.8" ItemsSource="{Binding}" HorizontalAlignment="Stretch" 
+                                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" 
+                                  CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
+                                  FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" Grid.ColumnSpan="2" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
-                    <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title}"
+                                <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title}"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
-                    <DataGridTextColumn x:Name="ColUser" Header="Wykonał" IsReadOnly="True" 
+                                <DataGridTextColumn x:Name="ColUser" Header="Wykonał" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
-                        <DataGridTextColumn.Binding>
-                            <MultiBinding Converter="{StaticResource UserConverter}">
-                                <Binding Path="user_id" />
-                                <Binding Path="GetUserView" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
-                            </MultiBinding>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource UserConverter}">
+                                            <Binding Path="user_id" />
+                                            <Binding Path="GetUserView" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
 
-                    <DataGridTextColumn x:Name="ColCycle" Header="Cykl" IsReadOnly="True" 
+                                <DataGridTextColumn x:Name="ColCycle" Header="Cykl" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
-                        <DataGridTextColumn.Binding>
-                            <MultiBinding Converter="{StaticResource CycleConverter}">
-                                <Binding Path="cycle_id" />
-                                <Binding Path="GetExpCycle" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
-                            </MultiBinding>
-                        </DataGridTextColumn.Binding>
-                    </DataGridTextColumn>
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource CycleConverter}">
+                                            <Binding Path="cycle_id" />
+                                            <Binding Path="GetExpCycle" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
 
-                    <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" 
+                                <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
-                    </DataGridTextColumn>
+                                </DataGridTextColumn>
 
-                    <DataGridTextColumn x:Name="ColCycle_id" Width="0" Visibility="Hidden" Binding="{Binding cycle_id}"/>
-                    <DataGridTextColumn x:Name="ColDensity" Width="0" Visibility="Hidden" Binding="{Binding density}"/>
-                    <DataGridTextColumn x:Name="ColRemark" Width="0" Visibility="Hidden" Binding="{Binding remarks}"/>
-                    <DataGridTextColumn x:Name="ColObservation" Width="0" Visibility="Hidden" Binding="{Binding observation}"/>
-                    <DataGridTextColumn x:Name="ColUser_id" Width="0" Visibility="Hidden" Binding="{Binding user_id}"/>
-                    <DataGridTextColumn x:Name="ColModified" Width="0" Visibility="Hidden" Binding="{Binding modified}"/>
-                    <DataGridTextColumn x:Name="ColDeleted" Width="0" Visibility="Hidden" Binding="{Binding deleted}"/>
-                </DataGrid.Columns>
+                                <DataGridTextColumn x:Name="ColCycle_id" Width="0" Visibility="Hidden" Binding="{Binding cycle_id}"/>
+                                <DataGridTextColumn x:Name="ColDensity" Width="0" Visibility="Hidden" Binding="{Binding density}"/>
+                                <DataGridTextColumn x:Name="ColRemark" Width="0" Visibility="Hidden" Binding="{Binding remarks}"/>
+                                <DataGridTextColumn x:Name="ColObservation" Width="0" Visibility="Hidden" Binding="{Binding observation}"/>
+                                <DataGridTextColumn x:Name="ColUser_id" Width="0" Visibility="Hidden" Binding="{Binding user_id}"/>
+                                <DataGridTextColumn x:Name="ColModified" Width="0" Visibility="Hidden" Binding="{Binding modified}"/>
+                                <DataGridTextColumn x:Name="ColDeleted" Width="0" Visibility="Hidden" Binding="{Binding deleted}"/>
+                            </DataGrid.Columns>
 
-            </DataGrid>
+                        </DataGrid>
 
-            <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,118,0,395">
-                <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="27"/>
-                <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
-                 Width="{Binding ElementName=ColTitle, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" 
-                     Canvas.Left="186" Canvas.Top="23" />
-                <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
-                 Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"
-                     Canvas.Left="10" Canvas.Top="23" />
-                <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"
-                      DisplayMemberPath="name" SelectedValuePath="id" IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
-                 Width="{Binding ElementName=ColUser, Path=ActualWidth}" Canvas.Left="360" Canvas.Top="23" />
-                <ComboBox x:Name="CmbCycleFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                      DisplayMemberPath="name" SelectedValuePath="id" SelectedIndex="0" 
-                 Width="{Binding ElementName=ColCycle, Path=ActualWidth}" Canvas.Left="535" Canvas.Top="23" />
-                <DatePicker Name="DpDate" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
-                        Width="{Binding ElementName=ColDate, Path=ActualWidth}" Canvas.Left="710" Canvas.Top="23"/>
-            </Canvas>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Obserwacje" Margin="-1.8,0,-2.4,-0.8">
+                    <Grid Background="#FFE5E5E5"/>
+                </TabItem>
+            </TabControl>
+
         </Grid>
     </DockPanel>
 </Window>
