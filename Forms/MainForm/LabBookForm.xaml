@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
         xmlns:Convertors="clr-namespace:LabBook.Forms.Tools" 
-        xmlns:System="clr-namespace:System.Data;assembly=System.Data"
         mc:Ignorable="d"
         ResizeMode="CanResize"
         Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" Loaded="FrmLabBook_Loaded" >
     <Window.Resources>
-        <System:DataView x:Key="UserTable"></System:DataView>
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:DateConverter x:Key="DateConverter" />
+        <Convertors:UserToNameConverter x:Key="UserConverter" />
+        <Convertors:CycleToNameConverter x:Key="CycleConverter" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
             <Setter Property="VerticalGridLinesBrush" Value="#FF8E8E8E" />
@@ -46,118 +46,137 @@
 
     </Window.Resources>
 
-    <Grid>
-        <Label Content="D" Margin="5,48,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
+    <DockPanel>
+
+        <!--#### Navigation ####-->
+        <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="{Binding ElementName=FrmLabBook, Path=ActualWidth}">
+            <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                Click="BtnNavigation_Click" Canvas.Left="10" Canvas.Top="2" >
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                Click="BtnNavigation_Click" Canvas.Top="2" Canvas.Left="30" >
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+            <TextBox x:Name="TxtNavieRec" Text="1" Height="20" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0"
+                 VerticalAlignment="Bottom" FontSize="11" FontWeight="SemiBold" IsReadOnly="True" Canvas.Left="55" Canvas.Top="2"/>
+            <Label x:Name="LblNavieRec" Content="z 12138" Height="20" Width="49" HorizontalAlignment="Left" 
+                 VerticalAlignment="Bottom" FontSize="11" FontWeight="SemiBold" Padding="0,3,0,0" Canvas.Left="113" Canvas.Top="2"/>
+            <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                Click="BtnNavigation_Click" Canvas.Left="164" Canvas.Top="2" >
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                Click="BtnNavigation_Click" RenderTransformOrigin="0.473,0.487" Canvas.Left="185" Canvas.Top="2" >
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+        </Canvas>
+
+        <Grid>
+            <Label Content="D" Margin="5,50,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="15"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
-        <Label Name="LblNumerD" Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="20,48,0,0" Foreground="#FF0000E1"
-               FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65" Height="23"  FontSize="18" Padding="0" />
+            <Label Name="LblNumerD" Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay}" Margin="0,50,808.6,0" Foreground="#FF0000E1"
+               FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="65" Height="23"  FontSize="18" Padding="0" />
 
-        <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" Margin="89,49,127.6,0" 
+            <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" Margin="89,49,127.6,0" 
                  TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
-                 Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"/>
+                 Height="28"/>
 
-        <Label Content="Cykl" Margin="5,80,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
+            <Label Content="Cykl" Margin="5,86,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="45"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
-        <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" 
+            <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   DisplayMemberPath="name" SelectedValuePath="id" 
-                  SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" Width="250" Margin="89,82,0,0" SelectionChanged="CmbCycle_SelectionChanged" />
+                  SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" Width="250" Margin="89,87,0,0" />
 
-        <Label Content="Gęstość" Margin="375,80,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
+            <Label Content="Gęstość" Margin="376,86,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
                Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
-        <TextBox x:Name="TxtDensity" Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" 
-                 Margin="458,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
-                 HorizontalAlignment="Left" Width="86" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" />
+            <TextBox x:Name="TxtDensity" Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" 
+                 Margin="458,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" 
+                 HorizontalAlignment="Left" Width="86" Height="28" />
 
-        <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateConverter}}" 
-               Margin="0,48,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18" 
+            <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateConverter}}" 
+               Margin="0,50,10,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18" 
                Padding="0" Foreground="Red" />
 
-        <DataGrid x:Name="DgLabBook" Margin="10,171,9.6,27" ItemsSource="{Binding}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+            <DataGrid x:Name="DgLabBook" Margin="10,171,10,2" ItemsSource="{Binding}" HorizontalAlignment="Stretch" 
                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow"
                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20"
                   FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" >
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
-                <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title}"
+                    <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title}"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
-                <DataGridTextColumn x:Name="ColUser" Header="Wykonał" Binding="{Binding identifier}" IsReadOnly="True" 
+                    <DataGridTextColumn x:Name="ColUser" Header="Wykonał" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
-                </DataGridTextColumn>
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource UserConverter}">
+                                <Binding Path="user_id" />
+                                <Binding Path="GetUserView" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn x:Name="ColCycle" Header="Cykl" Binding="{Binding cycle}" IsReadOnly="True" 
+                    <DataGridTextColumn x:Name="ColCycle" Header="Cykl" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
-                </DataGridTextColumn>
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource CycleConverter}">
+                                <Binding Path="cycle_id" />
+                                <Binding Path="GetExpCycle" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}"/>
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" 
+                    <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True" 
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
-                </DataGridTextColumn>
+                    </DataGridTextColumn>
 
-                <DataGridTextColumn x:Name="ColCycle_id" Width="0" Visibility="Hidden" Binding="{Binding cycle_id}"/>
-                <DataGridTextColumn x:Name="ColDensity" Width="0" Visibility="Hidden" Binding="{Binding density}"/>
-                <DataGridTextColumn x:Name="ColRemark" Width="0" Visibility="Hidden" Binding="{Binding remarks}"/>
-                <DataGridTextColumn x:Name="ColObservation" Width="0" Visibility="Hidden" Binding="{Binding observation}"/>
-                <DataGridTextColumn x:Name="ColUser_id" Width="0" Visibility="Hidden" Binding="{Binding user_id}"/>
-                <DataGridTextColumn x:Name="ColModified" Width="0" Visibility="Hidden" Binding="{Binding modified}"/>
-                <DataGridTextColumn x:Name="ColDeleted" Width="0" Visibility="Hidden" Binding="{Binding deleted}"/>
-            </DataGrid.Columns>
+                    <DataGridTextColumn x:Name="ColCycle_id" Width="0" Visibility="Hidden" Binding="{Binding cycle_id}"/>
+                    <DataGridTextColumn x:Name="ColDensity" Width="0" Visibility="Hidden" Binding="{Binding density}"/>
+                    <DataGridTextColumn x:Name="ColRemark" Width="0" Visibility="Hidden" Binding="{Binding remarks}"/>
+                    <DataGridTextColumn x:Name="ColObservation" Width="0" Visibility="Hidden" Binding="{Binding observation}"/>
+                    <DataGridTextColumn x:Name="ColUser_id" Width="0" Visibility="Hidden" Binding="{Binding user_id}"/>
+                    <DataGridTextColumn x:Name="ColModified" Width="0" Visibility="Hidden" Binding="{Binding modified}"/>
+                    <DataGridTextColumn x:Name="ColDeleted" Width="0" Visibility="Hidden" Binding="{Binding deleted}"/>
+                </DataGrid.Columns>
 
-        </DataGrid>
+            </DataGrid>
 
-        <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,118,0,395">
-            <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="27"/>
-            <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
+            <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,118,0,395">
+                <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" Canvas.Left="0" Canvas.Top="27"/>
+                <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
                  Width="{Binding ElementName=ColTitle, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}" 
                      Canvas.Left="186" Canvas.Top="23" />
-            <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
+                <TextBox x:Name="TxtNumerDFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
                  Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"
                      Canvas.Left="10" Canvas.Top="23" />
-            <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"
+                <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"
                       DisplayMemberPath="name" SelectedValuePath="id" IsSynchronizedWithCurrentItem="True" SelectedIndex="0"
                  Width="{Binding ElementName=ColUser, Path=ActualWidth}" Canvas.Left="360" Canvas.Top="23" />
-            <ComboBox x:Name="CmbCycleFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                <ComboBox x:Name="CmbCycleFilter" HorizontalAlignment="Left" VerticalAlignment="Top" 
                       DisplayMemberPath="name" SelectedValuePath="id" SelectedIndex="0" 
                  Width="{Binding ElementName=ColCycle, Path=ActualWidth}" Canvas.Left="535" Canvas.Top="23" />
-            <DatePicker Name="DpDate" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
+                <DatePicker Name="DpDate" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
                         Width="{Binding ElementName=ColDate, Path=ActualWidth}" Canvas.Left="710" Canvas.Top="23"/>
-        </Canvas>
-        <Button x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" Margin="10,0,0,2" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" >
-            <StackPanel Orientation="Horizontal" >
-                <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
-            </StackPanel>
-        </Button>
-        <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" Margin="30,0,0,2" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" >
-            <StackPanel Orientation="Horizontal" >
-                <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
-            </StackPanel>
-        </Button>
-        <TextBox x:Name="TxtNavieRec" Text="1" Height="20" Width="50" Margin="55,0,0,2" HorizontalAlignment="Left" 
-                 VerticalAlignment="Bottom" FontSize="11" FontWeight="SemiBold" IsReadOnly="True"/>
-        <Label x:Name="LblNavieRec" Content="z 12138" Height="20" Width="49" Margin="110,0,0,2" HorizontalAlignment="Left" 
-                 VerticalAlignment="Bottom" FontSize="11" FontWeight="SemiBold" Padding="0,3,0,0"/>
-        <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" Margin="164,0,0,2" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" >
-            <StackPanel Orientation="Horizontal" >
-                <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
-            </StackPanel>
-        </Button>
-        <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" Margin="185,0,0,2" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" RenderTransformOrigin="0.473,0.487" >
-            <StackPanel Orientation="Horizontal" >
-                <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
-            </StackPanel>
-        </Button>
-    </Grid>
+            </Canvas>
+        </Grid>
+    </DockPanel>
 </Window>

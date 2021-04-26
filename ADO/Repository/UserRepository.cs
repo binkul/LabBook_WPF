@@ -17,7 +17,7 @@ namespace LabBook.ADO.Repository
 
     public class UserRepository : IRepository<UserDto>
     {
-        private const string getAllQuery = "Select us.id, (us.name + ' ' + us.surname) as name From LabBook.dbo.Users us";
+        private const string getAllQuery = "Select us.id, (us.name + ' ' + us.surname) as name, us.identifier From LabBook.dbo.Users us";
         private const string existQuery = "Select Count(1) From LabBook.dbo.Users usr Where usr.login=@username";
         private const string loginQuery = "Select us.id, us.name, us.surname, us.e_mail, us.login, us.permission, us.identifier, us.active "
                                            + "From LabBook.dbo.Users us Where us.login='@username' and us.password='@password'";

@@ -30,8 +30,17 @@ namespace LabBook.Forms.MainForm
             _labBookService = new LabBookService(_user);
             _expCycleService = new ExperimentCycleService(_user);
             _userService = new UserService(_user);
-            Resources["UserTable"] = _userView;
             PrepareForm();
+        }
+
+        public DataView GetUserView
+        {
+            get { return _userView; }
+        }
+
+        public DataView GetExpCycle
+        {
+            get { return _expCycleView; }
         }
 
         private void PrepareForm()
@@ -44,6 +53,7 @@ namespace LabBook.Forms.MainForm
             CmbCycle.ItemsSource = _expCycleView;
 
             _userView = _userService.GetAll();
+            Resources["UserTable"] = _userView;
             CmbUserFilter.ItemsSource = _userView;
 
 
@@ -101,28 +111,6 @@ namespace LabBook.Forms.MainForm
         private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Navigation.SetNavigationText(DgLabBook.SelectedIndex + 1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
-            //DataRow row = (DgLabBook.SelectedItem as DataRowView).Row;
-
-            //if (row != null)
-            //{
-            //    var id = row["cycle_id"];
-            //    CmbCycle.SelectedValue = id;
-            //}
-        }
-
-        private void CmbCycle_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataRowView cmbRow = (DataRowView)CmbCycle.SelectedItem;
-            DataRow dgRow = (DgLabBook.SelectedItem as DataRowView).Row;
-
-            if (cmbRow != null && dgRow != null)
-            {
-                if (!cmbRow["name"].Equals(dgRow["cycle"]))
-                {
-                    dgRow["cycle"] = cmbRow["name"];
-                }
-            }
-
         }
     }
 }
