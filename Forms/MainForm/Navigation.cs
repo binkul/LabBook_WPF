@@ -67,5 +67,19 @@ namespace LabBook.Forms.MainForm
             dataGrid.Focus();
         }
 
+        public static void SelectFirstRow(DataGrid dataGrid)
+        {
+            if ((dataGrid.Items.Count == 0)) return;
+
+            var item = dataGrid.Items[0];
+            dataGrid.SelectedItem = item;
+
+            DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(0) as DataGridRow;
+            if (row == null)
+            {
+                dataGrid.ScrollIntoView(item);
+            }
+
+        }
     }
 }

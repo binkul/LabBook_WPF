@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Text;
+using System.Collections.Generic;
 
 namespace LabBook.Forms.MainForm
 {
@@ -14,6 +16,7 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
+        private readonly string _allUser = "-- Wszyscy --";
         private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
         private readonly LabBookService _labBookService;
@@ -43,6 +46,11 @@ namespace LabBook.Forms.MainForm
             get { return _expCycleView; }
         }
 
+        public DataView GetLabBookView
+        {
+            get { return _labBookView; }
+        }
+
         private void PrepareForm()
         {
             _labBookView = _labBookService.GetAll();
@@ -53,9 +61,15 @@ namespace LabBook.Forms.MainForm
             CmbCycle.ItemsSource = _expCycleView;
 
             _userView = _userService.GetAll();
-            Resources["UserTable"] = _userView;
-            CmbUserFilter.ItemsSource = _userView;
-
+            DataTable usersFilter = _userView.ToTable();
+            DataRow row = usersFilter.NewRow();
+            row["id"] = -1;
+            row["name"] = _allUser;
+            row["identifier"] = "Brak";
+            usersFilter.Rows.Add(row);
+            DataView viewFilter = new DataView(usersFilter);
+            viewFilter.Sort = "name";
+            CmbUserFilter.ItemsSource = viewFilter;
 
             WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
@@ -72,17 +86,7 @@ namespace LabBook.Forms.MainForm
 
         private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
         {
-            int startPos = 32;
-            Canvas.SetLeft(ChbFilter, 10);
-            Canvas.SetLeft(TxtNumerDFilter, startPos);
-            startPos += (int)(ColNumberD.ActualWidth);
-            Canvas.SetLeft(TxtTitleFilter, startPos);
-            startPos += (int)(ColTitle.ActualWidth);
-            Canvas.SetLeft(CmbUserFilter, startPos);
-            startPos += (int)(ColUser.ActualWidth);
-            Canvas.SetLeft(CmbCycleFilter, startPos);
-            startPos += (int)(ColCycle.ActualWidth);
-            Canvas.SetLeft(DpDate, startPos);
+            LabBookControlOperation.SetFilterColntorlsSize(this);
         }
 
         private void BtnNavigation_Click(object sender, RoutedEventArgs e)
@@ -111,6 +115,28 @@ namespace LabBook.Forms.MainForm
         private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Navigation.SetNavigationText(DgLabBook.SelectedIndex + 1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
+        }
+
+        private void TxtFilterChanged_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _labBookView.RowFilter = Filter.SetFilter(this);
+            Navigation.SelectFirstRow(DgLabBook);
+            Navigation.SetNavigationText(1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
+        }
+
+        private void CmbFilterChange_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TxtFilterChanged_TextChanged(null, null);
+        }
+
+        private void ChbFilter_Checked(object sender, RoutedEventArgs e)
+        {
+            TxtFilterChanged_TextChanged(null, null);
+        }
+
+        private void DpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TxtFilterChanged_TextChanged(null, null);
         }
     }
 }

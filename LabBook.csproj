@@ -70,6 +70,8 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
+    <Compile Include="Forms\MainForm\Filter.cs" />
+    <Compile Include="Forms\MainForm\LabBookControlOperation.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
@@ -79,7 +81,9 @@
     </Compile>
     <Compile Include="Forms\Tools\CycleToNameConverter.cs" />
     <Compile Include="Forms\Tools\DateConverter.cs" />
+    <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />
+    <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
     <Compile Include="Forms\Tools\UserToNameConverter.cs" />
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
