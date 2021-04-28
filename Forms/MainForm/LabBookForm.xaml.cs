@@ -67,8 +67,7 @@ namespace LabBook.Forms.MainForm
             row["name"] = _allUser;
             row["identifier"] = "Brak";
             usersFilter.Rows.Add(row);
-            DataView viewFilter = new DataView(usersFilter);
-            viewFilter.Sort = "name";
+            DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
             CmbUserFilter.ItemsSource = viewFilter;
 
             WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);

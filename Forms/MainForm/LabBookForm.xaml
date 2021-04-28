@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
         xmlns:Convertors="clr-namespace:LabBook.Forms.Tools" 
+        xmlns:vm="clr-namespace:LabBook.Forms.MainForm.ModelView"
         mc:Ignorable="d"
         ResizeMode="CanResize"
         Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" Loaded="FrmLabBook_Loaded" >
     <Window.Resources>
+        <!--<vm:WindowEdit x:Key="windowSetting" />-->
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:DensityConverter x:Key="DensityConverter" />
         <Convertors:DateConverter x:Key="DateConverter" />
