@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
         xmlns:Convertors="clr-namespace:LabBook.Forms.Tools" 
-        xmlns:vm="clr-namespace:LabBook.Forms.MainForm.ModelView"
+        xmlns:vm ="clr-namespace:LabBook.Forms.MainForm.ModelView"
         mc:Ignorable="d"
         ResizeMode="CanResize"
-        Title="LabBook" Height="600" Width="900" WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" Loaded="FrmLabBook_Loaded" >
+        Title="LabBook" Height="{Binding FormHeight, Mode=TwoWay}" Width="{Binding FormWidth, Mode=TwoWay}" Top="{Binding FormYpos, Mode=TwoWay}" Left="{Binding FormXpos, Mode=TwoWay}"
+        WindowStartupLocation="CenterScreen" Closing="FrmLabBook_Closing" >
+    <Window.DataContext>
+        <vm:WindowEdit />
+    </Window.DataContext>
     <Window.Resources>
         <!--<vm:WindowEdit x:Key="windowSetting" />-->
         <Convertors:DotConverter x:Key="DecimalConverter" />
@@ -17,6 +21,8 @@
         <Convertors:UserToNameConverter x:Key="UserConverter" />
         <Convertors:CycleToNameConverter x:Key="CycleConverter" />
         <Convertors:IdToNumerDConverter x:Key="IdConverter" />
+        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
+        <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
             <Setter Property="VerticalGridLinesBrush" Value="#FF8E8E8E" />
@@ -158,19 +164,24 @@
 
                         <!--#### Main DataGrid ####-->
                         <DataGrid x:Name="DgLabBook" Margin="5,28,5.4,1.8" ItemsSource="{Binding}" HorizontalAlignment="Stretch" 
-                                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" 
+                                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
                                   FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" >
+                            
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
+                                    Width="{Binding Data.ColumnId, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                                </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title, Mode=TwoWay}"
+                                    Width="{Binding Data.ColumnTitle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                                 <DataGridTextColumn x:Name="ColUser" Header="Wykonał" IsReadOnly="True" 
+                                    Width="{Binding Data.ColumnUser, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
                                     <DataGridTextColumn.Binding>
@@ -182,6 +193,7 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColCycle" Header="Cykl" IsReadOnly="True" 
+                                    Width="{Binding Data.ColumnCycle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
                                     <DataGridTextColumn.Binding>
@@ -193,10 +205,12 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColDensity" Header="Gęstość" Binding="{Binding density, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
+                                    Width="{Binding Data.ColumnDensity, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellLeft}"
                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                                 <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True"
+                                    Width="{Binding Data.ColumnDate, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                     ElementStyle="{StaticResource AllignCellCenter}" 
                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
                                 </DataGridTextColumn>

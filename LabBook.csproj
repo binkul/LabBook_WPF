@@ -75,6 +75,7 @@
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MainForm\BindingProxy.cs" />
     <Compile Include="Forms\MainForm\ModelView\WindowEdit.cs" />
     <Compile Include="Forms\MainForm\Model\WindowData.cs" />
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
@@ -83,6 +84,7 @@
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\Tools\CycleToNameConverter.cs" />
+    <Compile Include="Forms\Tools\DataGridLenghtToDoubleConverter.cs" />
     <Compile Include="Forms\Tools\DateConverter.cs" />
     <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />

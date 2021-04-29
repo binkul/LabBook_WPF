@@ -6,13 +6,30 @@ using System.Threading.Tasks;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
+    using LabBook.ADO.Service;
+    using LabBook.Security;
     using Model;
     using System.ComponentModel;
+    using System.Data;
+    using System.Windows.Controls;
 
     public class WindowEdit : INotifyPropertyChanged
     {
         private readonly WindowData windowData = WindowSetting.Read();
-        
+        //private readonly User _user;
+        //private readonly LabBookService _labBookService;
+        //private DataView _labBookView;
+
+        //public WindowEdit(User user)
+        //{
+        //    _user = user;
+        //    _labBookService = new LabBookService(_user);
+        //    _labBookView = _labBookService.GetAll();
+        //}
+
+        public WindowEdit()
+        { }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(params string[] names)
@@ -76,7 +93,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public double ColId
+        public double ColumnId
         {
             get
             {
@@ -85,11 +102,11 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColId = value;
-                OnPropertyChanged(nameof(ColId));
+                OnPropertyChanged(nameof(ColumnId));
             }
         }
 
-        public double ColTitle
+        public double ColumnTitle
         {
             get
             {
@@ -98,11 +115,11 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColTitle = value;
-                OnPropertyChanged(nameof(ColTitle));
+                OnPropertyChanged(nameof(ColumnTitle));
             }
         }
 
-        public double ColUser
+        public double ColumnUser
         {
             get
             {
@@ -111,11 +128,11 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColUser = value;
-                OnPropertyChanged(nameof(ColUser));
+                OnPropertyChanged(nameof(ColumnUser));
             }
         }
 
-        public double ColCycle
+        public double ColumnCycle
         {
             get
             {
@@ -124,11 +141,11 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColCycle = value;
-                OnPropertyChanged(nameof(ColCycle));
+                OnPropertyChanged(nameof(ColumnCycle));
             }
         }
 
-        public double ColDensity
+        public double ColumnDensity
         {
             get
             {
@@ -137,11 +154,11 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColDensity = value;
-                OnPropertyChanged(nameof(ColDensity));
+                OnPropertyChanged(nameof(ColumnDensity));
             }
         }
 
-        public double ColDate
+        public double ColumnDate
         {
             get
             {
@@ -150,9 +167,18 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 windowData.ColDate = value;
-                OnPropertyChanged(nameof(ColDate));
+                OnPropertyChanged(nameof(ColumnDate));
             }
         }
+
+        //public DataView GetLabBookView
+        //{
+        //    get
+        //    {
+        //        return _labBookView;
+        //    }
+        //}
+
 
         public void Save()
         {

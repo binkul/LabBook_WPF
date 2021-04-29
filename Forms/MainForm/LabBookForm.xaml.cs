@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Data;
 using System.Text;
 using System.Collections.Generic;
+using LabBook.Forms.MainForm.ModelView;
 
 namespace LabBook.Forms.MainForm
 {
@@ -33,6 +34,10 @@ namespace LabBook.Forms.MainForm
             _labBookService = new LabBookService(_user);
             _expCycleService = new ExperimentCycleService(_user);
             _userService = new UserService(_user);
+
+            //WindowEdit mainModelView = new WindowEdit(_user);
+            //this.DataContext = mainModelView;
+
             PrepareForm();
         }
 
@@ -54,7 +59,8 @@ namespace LabBook.Forms.MainForm
         private void PrepareForm()
         {
             _labBookView = _labBookService.GetAll();
-            DataContext = _labBookView;
+            //var dataContex = this.DataContext as WindowEdit;
+            DgLabBook.DataContext = _labBookView;
 
             _expCycleView = _expCycleService.GetAll();
             CmbCycleFilter.ItemsSource = _expCycleView;
@@ -70,17 +76,12 @@ namespace LabBook.Forms.MainForm
             DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
             CmbUserFilter.ItemsSource = viewFilter;
 
-            WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
+            //WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
 
         private void FrmLabBook_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            WindowsOperation.SaveWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
-        }
-
-        private void FrmLabBook_Loaded(object sender, RoutedEventArgs e)
-        {
-            Navigation.SelectRowByIndex(DgLabBook, 0);
+            //WindowsOperation.SaveWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
 
         private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
