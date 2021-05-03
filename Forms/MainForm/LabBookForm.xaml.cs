@@ -1,13 +1,8 @@
-﻿using LabBook.Forms.Tools;
-using LabBook.Security;
-using LabBook.ADO.Service;
-using System.Data;
+﻿using LabBook.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Data;
-using System.Text;
-using System.Collections.Generic;
 using LabBook.Forms.MainForm.ModelView;
 
 namespace LabBook.Forms.MainForm
@@ -17,77 +12,59 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
-        private readonly string _allUser = "-- Wszyscy --";
-        private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
+        //private readonly string _allUser = "-- Wszyscy --";
+        //private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
-        private readonly LabBookService _labBookService;
-        private readonly ExperimentCycleService _expCycleService;
-        private readonly UserService _userService;
-        private DataView _labBookView;
-        private DataView _expCycleView;
-        private DataView _userView;
+        private readonly FilterMV _filterMV;
+        //private readonly LabBookService _labBookService;
+        //private readonly ExperimentCycleService _expCycleService;
+        //private readonly UserService _userService;
+        //private DataView _labBookView;
+        //private DataView _expCycleView;
+        //private DataView _userView;
 
         public LabBookForm(User user)
         {
             InitializeComponent();
             _user = user;
-            _labBookService = new LabBookService(_user);
-            _expCycleService = new ExperimentCycleService(_user);
-            _userService = new UserService(_user);
+            //_labBookService = new LabBookService(_user);
+            //_expCycleService = new ExperimentCycleService(_user);
+            //_userService = new UserService(_user);
 
-            //WindowEdit mainModelView = new WindowEdit(_user);
-            //this.DataContext = mainModelView;
+            WindowEditMV mainModelView = new WindowEditMV(_user, this);
+            this.DataContext = mainModelView;
+            _filterMV = this.Resources["filter"] as FilterMV;
+            _filterMV.SetWindowEdit(mainModelView);
 
-            PrepareForm();
-        }
-
-        public DataView GetUserView
-        {
-            get { return _userView; }
-        }
-
-        public DataView GetExpCycle
-        {
-            get { return _expCycleView; }
-        }
-
-        public DataView GetLabBookView
-        {
-            get { return _labBookView; }
+            //PrepareForm();
         }
 
         private void PrepareForm()
         {
-            _labBookView = _labBookService.GetAll();
+            //_labBookView = _labBookService.GetAll();
             //var dataContex = this.DataContext as WindowEdit;
-            DgLabBook.DataContext = _labBookView;
+            //DgLabBook.DataContext = _labBookView;
 
-            _expCycleView = _expCycleService.GetAll();
-            CmbCycleFilter.ItemsSource = _expCycleView;
-            CmbCycle.ItemsSource = _expCycleView;
+            //_expCycleView = _expCycleService.GetAll();
+            //CmbCycleFilter.ItemsSource = _expCycleView;
+            //CmbCycle.ItemsSource = _expCycleView;
 
-            _userView = _userService.GetAll();
-            DataTable usersFilter = _userView.ToTable();
-            DataRow row = usersFilter.NewRow();
-            row["id"] = -1;
-            row["name"] = _allUser;
-            row["identifier"] = "Brak";
-            usersFilter.Rows.Add(row);
-            DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
-            CmbUserFilter.ItemsSource = viewFilter;
+            //_userView = _userService.GetAll();
+            //DataTable usersFilter = _userView.ToTable();
+            //DataRow row = usersFilter.NewRow();
+            //row["id"] = -1;
+            //row["name"] = _allUser;
+            //row["identifier"] = "Brak";
+            //usersFilter.Rows.Add(row);
+            //DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
+            //CmbUserFilter.ItemsSource = viewFilter;
 
-            //WindowsOperation.LoadWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
         }
 
-        private void FrmLabBook_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //WindowsOperation.SaveWindowPosition(this, DgLabBook, DgLabBook.Columns.Count, _path);
-        }
-
-        private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
-        {
-            LabBookControlOperation.SetFilterColntorlsSize(this);
-        }
+        //private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    LabBookControlOperation.SetFilterColntorlsSize(this);
+        //}
 
         private void BtnNavigation_Click(object sender, RoutedEventArgs e)
         {
@@ -114,29 +91,12 @@ namespace LabBook.Forms.MainForm
 
         private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Navigation.SetNavigationText(DgLabBook.SelectedIndex + 1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
+
         }
 
-        private void TxtFilterChanged_TextChanged(object sender, TextChangedEventArgs e)
+        public void GoToFirstRecord()
         {
-            _labBookView.RowFilter = Filter.SetFilter(this);
             Navigation.SelectFirstRow(DgLabBook);
-            Navigation.SetNavigationText(1, DgLabBook.Items.Count, TxtNavieRec, LblNavieRec);
-        }
-
-        private void CmbFilterChange_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TxtFilterChanged_TextChanged(null, null);
-        }
-
-        private void ChbFilter_Checked(object sender, RoutedEventArgs e)
-        {
-            TxtFilterChanged_TextChanged(null, null);
-        }
-
-        private void DpDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TxtFilterChanged_TextChanged(null, null);
         }
     }
 }

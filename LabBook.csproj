@@ -38,10 +38,25 @@
     <ApplicationIcon>Atom.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions">
+      <HintPath>packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -70,13 +85,13 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
-    <Compile Include="Forms\MainForm\Filter.cs" />
-    <Compile Include="Forms\MainForm\LabBookControlOperation.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm\BindingProxy.cs" />
-    <Compile Include="Forms\MainForm\ModelView\WindowEdit.cs" />
+    <Compile Include="Forms\MainForm\ModelView\FilterMV.cs" />
+    <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
+    <Compile Include="Forms\MainForm\ModelView\WindowEditMV.cs" />
     <Compile Include="Forms\MainForm\Model\WindowData.cs" />
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Navigation.cs" />
@@ -89,6 +104,8 @@
     <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />
     <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
+    <Compile Include="Forms\Tools\NaviCurrentConverter.cs" />
+    <Compile Include="Forms\Tools\NaviTotalCountConverter.cs" />
     <Compile Include="Forms\Tools\UserToNameConverter.cs" />
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
@@ -132,6 +149,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

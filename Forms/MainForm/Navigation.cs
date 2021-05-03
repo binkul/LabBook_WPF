@@ -10,13 +10,6 @@ namespace LabBook.Forms.MainForm
 {
     public class Navigation
     {
-
-        public static void SetNavigationText(int value, int maxValue, TextBox textBox, Label label)
-        {
-            textBox.Text = value.ToString();
-            label.Content = "z " + maxValue.ToString();
-        }
-
         public static void Navigate(DataGrid dataGrid, TextBox textBox, Label label, object sender)
         {
             if (dataGrid.Items.Count == 0) return;
@@ -42,7 +35,6 @@ namespace LabBook.Forms.MainForm
             }
 
             SelectRowByIndex(dataGrid, index);
-            SetNavigationText(index + 1, dataGrid.Items.Count, textBox, label);
         }
 
         public static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)

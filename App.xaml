@@ -5,7 +5,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="Forms/Login/LoginForm.xaml">
     <Application.Resources>
-        <!--<sys:String x:Key="ConnectionString">Data Source=LAPTOP-S66RS9QE\SQLEXPRESS_2012;Initial Catalog=LabBook;User ID=sa;Password=sata</sys:String>-->
-        <sys:String x:Key="ConnectionString">Data Source=BINKUL;Initial Catalog=LabBook;User ID=sa;Password=sata</sys:String>
+        <sys:String x:Key="ConnectionString">Data Source=LAPTOP-S66RS9QE\SQLEXPRESS_2012;Initial Catalog=LabBook;User ID=sa;Password=sata</sys:String>
+        <!--<sys:String x:Key="ConnectionString">Data Source=BINKUL;Initial Catalog=LabBook;User ID=sa;Password=sata</sys:String>-->
     </Application.Resources>
 </Application>
