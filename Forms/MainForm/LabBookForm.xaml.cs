@@ -12,63 +12,18 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
-        //private readonly string _allUser = "-- Wszyscy --";
-        //private readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
         private readonly User _user;
         private readonly FilterMV _filterMV;
-        //private readonly LabBookService _labBookService;
-        //private readonly ExperimentCycleService _expCycleService;
-        //private readonly UserService _userService;
-        //private DataView _labBookView;
-        //private DataView _expCycleView;
-        //private DataView _userView;
 
         public LabBookForm(User user)
         {
             InitializeComponent();
             _user = user;
-            //_labBookService = new LabBookService(_user);
-            //_expCycleService = new ExperimentCycleService(_user);
-            //_userService = new UserService(_user);
 
-            WindowEditMV mainModelView = new WindowEditMV(_user, this);
+            WindowEditMV mainModelView = new WindowEditMV(_user);
             this.DataContext = mainModelView;
             _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
-
-            //PrepareForm();
-        }
-
-        private void PrepareForm()
-        {
-            //_labBookView = _labBookService.GetAll();
-            //var dataContex = this.DataContext as WindowEdit;
-            //DgLabBook.DataContext = _labBookView;
-
-            //_expCycleView = _expCycleService.GetAll();
-            //CmbCycleFilter.ItemsSource = _expCycleView;
-            //CmbCycle.ItemsSource = _expCycleView;
-
-            //_userView = _userService.GetAll();
-            //DataTable usersFilter = _userView.ToTable();
-            //DataRow row = usersFilter.NewRow();
-            //row["id"] = -1;
-            //row["name"] = _allUser;
-            //row["identifier"] = "Brak";
-            //usersFilter.Rows.Add(row);
-            //DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
-            //CmbUserFilter.ItemsSource = viewFilter;
-
-        }
-
-        //private void Column_SizedChanged(object sender, SizeChangedEventArgs e)
-        //{
-        //    LabBookControlOperation.SetFilterColntorlsSize(this);
-        //}
-
-        private void BtnNavigation_Click(object sender, RoutedEventArgs e)
-        {
-            Navigation.Navigate(DgLabBook, TxtNavieRec, LblNavieRec, sender);
         }
 
         private void TxtBox_KeyUp(object sender, KeyEventArgs e)
@@ -91,12 +46,18 @@ namespace LabBook.Forms.MainForm
 
         private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            #region scroll to selected row
+            var index = DgLabBook.SelectedIndex;
+            if (index < 0) return;
 
-        }
-
-        public void GoToFirstRecord()
-        {
-            Navigation.SelectFirstRow(DgLabBook);
+            var item = DgLabBook.Items[index];
+            DataGridRow row = DgLabBook.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+            if (row == null)
+            {
+                DgLabBook.ScrollIntoView(item);
+            }
+            DgLabBook.Focus();
+            #endregion
         }
     }
 }

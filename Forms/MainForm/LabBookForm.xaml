@@ -10,7 +10,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
-        xmlns:Convertors="clr-namespace:LabBook.Forms.Tools" 
+        xmlns:Convertors="clr-namespace:LabBook.Forms.Tools"
         xmlns:vm ="clr-namespace:LabBook.Forms.MainForm.ModelView"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wi="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
@@ -31,6 +31,9 @@
             <cmd:EventToCommand Command="{Binding OnClosingCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <!--<i:Interaction.Behaviors>
+        <local:NavigationKeyBH x:Name="naviButton" NaviButton="{Binding ElementName=BtnNaviRight}" />
+    </i:Interaction.Behaviors>-->
     <Window.Resources>
         <!--<vm:WindowEditMV x:Key="windowSetting" />-->
         <vm:FilterMV x:Key="filter" />
@@ -94,36 +97,63 @@
 
         <!--#### Navigation ####-->
         <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="894" Margin="0,0,-0.4,0">
+            
             <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" Canvas.Left="10" Canvas.Top="2" >
+                     Canvas.Left="10" Canvas.Top="2" Tag="first">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
+            
             <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" Canvas.Top="2" Canvas.Left="30" >
+                    Canvas.Top="2" Canvas.Left="30" Tag="left">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
+            
             <TextBox x:Name="TxtNavieRec" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0" FontSize="11" Height="20"
                      FontWeight="SemiBold" VerticalAlignment="Bottom"  IsReadOnly="True" Canvas.Left="55" Canvas.Top="2"
                      Text="{Binding SelectedIndex, ElementName=DgLabBook, Converter={StaticResource NaviCurrConverter}}" />
+            
             <Label x:Name="LblNavieRec" Height="20" Width="49" HorizontalAlignment="Left" FontSize="11" FontWeight="SemiBold" 
                    Padding="0,3,0,0" VerticalAlignment="Bottom"  Canvas.Left="113" Canvas.Top="2"
                    Content="{Binding Items.Count, ElementName=DgLabBook, Converter={StaticResource NaviTotalConverter}}" />
+            
             <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                    Click="BtnNavigation_Click" Canvas.Left="164" Canvas.Top="2" >
+                    Canvas.Left="164" Canvas.Top="2" Tag="right" >
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
+            
             <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                Click="BtnNavigation_Click" RenderTransformOrigin="0.473,0.487" Canvas.Left="185" Canvas.Top="2" >
+                    Canvas.Left="185" Canvas.Top="2" Tag="last">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </Button>
+            
         </Canvas>
 
         <Grid>
@@ -206,7 +236,8 @@
                         <DataGrid x:Name="DgLabBook" Margin="5,28,5.4,1.8" ItemsSource="{Binding GetLabBookView}" HorizontalAlignment="Stretch" 
                                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
-                                  FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" >
+                                  FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" 
+                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay}" >
                             
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"

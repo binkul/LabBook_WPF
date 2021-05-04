@@ -85,6 +85,7 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
+    <Compile Include="Forms\MainForm\Bahavior\NavigationKeyBH.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
@@ -174,5 +175,6 @@
     <Resource Include="Img\arrow-left_first.png" />
     <Resource Include="Img\arrow-right_last.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

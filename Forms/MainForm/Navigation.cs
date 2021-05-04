@@ -55,7 +55,7 @@ namespace LabBook.Forms.MainForm
                 //                row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
             }
 
-                //        row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+            //        row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
             dataGrid.Focus();
         }
 

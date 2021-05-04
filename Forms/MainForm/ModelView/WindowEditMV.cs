@@ -1,5 +1,6 @@
 ﻿namespace LabBook.Forms.MainForm.ModelView
 {
+    using System.Windows.Controls;
     using LabBook.ADO.Service;
     using LabBook.Security;
     using Model;
@@ -13,7 +14,7 @@
         private readonly double _startLeftPosition = 28d;
 
         private readonly WindowData _windowData = WindowSetting.Read();
-        private readonly LabBookForm _windowForm;
+        private long _index = 0;
         private readonly User _user;
         private readonly LabBookService _labBookService;
         private readonly ExperimentCycleService _expCycleService;
@@ -22,11 +23,11 @@
         private DataView _expCycleView;
         private DataView _userView;
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
+        public RelayCommand<RoutedEventArgs> OnClickNavigationCommand { get; set; }
 
-        public WindowEditMV(User user, LabBookForm labBookForm)
+        public WindowEditMV(User user)
         {
             _user = user;
-            _windowForm = labBookForm;
             _labBookService = new LabBookService(_user);
             _expCycleService = new ExperimentCycleService(_user);
             _userService = new UserService(_user);
@@ -35,6 +36,7 @@
             _userView = _userService.GetAll();
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
+            OnClickNavigationCommand = new RelayCommand<RoutedEventArgs>(this.OnClickNavigationCommandExecuted);
 
             PrepareModelView();
         }
@@ -263,6 +265,18 @@
             }
         }
 
+        public long DgRowIndex
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+            }
+        }
+
         public void OnClosingCommandExecuted(CancelEventArgs cancelEventArgs)
         {
             if (MessageBox.Show("Czy zamknąć?", "", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
@@ -270,18 +284,44 @@
             WindowSetting.Save(_windowData);
         }
 
+        public void OnClickNavigationCommandExecuted(RoutedEventArgs routedEventArgs)
+        {
+            Button button = (Button)routedEventArgs.Source;
+            var count = GetLabBookView.Count;
+            var name = button.Tag;
+            var index = DgRowIndex;
+
+            switch (name)
+            {
+                case "first":
+                    index = 0;
+                    break;
+                case "left":
+                    _ = index > 0 ? index-- : index = 0;
+                    break;
+                case "right":
+                    _ = index < count - 1 ? index++ : index = count - 1;
+                    break;
+                case "last":
+                    index = count - 1;
+                    break;
+            }
+            DgRowIndex = index;
+            OnPropertyChanged(nameof(DgRowIndex));
+        }
+
         public void SetFiltration(bool filterOn, string filter)
         {
             if (filterOn)
             {
                 _labBookView.RowFilter = filter;
-                _windowForm.GoToFirstRecord();
             }
             else
             {
                 _labBookView.RowFilter = "";
-                _windowForm.GoToFirstRecord();
             }
+            DgRowIndex = 0;
+            OnPropertyChanged(nameof(DgRowIndex));
         }
 
         private void PrepareModelView()
