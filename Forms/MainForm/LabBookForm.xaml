@@ -31,9 +31,6 @@
             <cmd:EventToCommand Command="{Binding OnClosingCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <!--<i:Interaction.Behaviors>
-        <local:NavigationKeyBH x:Name="naviButton" NaviButton="{Binding ElementName=BtnNaviRight}" />
-    </i:Interaction.Behaviors>-->
     <Window.Resources>
         <!--<vm:WindowEditMV x:Key="windowSetting" />-->
         <vm:FilterMV x:Key="filter" />
@@ -99,27 +96,29 @@
         <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="894" Margin="0,0,-0.4,0">
             
             <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                     Canvas.Left="10" Canvas.Top="2" Tag="first">
+                     Canvas.Left="10" Canvas.Top="2" Tag="first"
+                     Command="{Binding MoveFirst}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
             </Button>
             
             <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                    Canvas.Top="2" Canvas.Left="30" Tag="left">
+                    Canvas.Top="2" Canvas.Left="30" Tag="left"
+                    Command="{Binding MoveLeft}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
             </Button>
             
             <TextBox x:Name="TxtNavieRec" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0" FontSize="11" Height="20"
@@ -131,27 +130,29 @@
                    Content="{Binding Items.Count, ElementName=DgLabBook, Converter={StaticResource NaviTotalConverter}}" />
             
             <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                    Canvas.Left="164" Canvas.Top="2" Tag="right" >
+                    Canvas.Left="164" Canvas.Top="2" Tag="right" 
+                    Command="{Binding MoveRight}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
             </Button>
             
             <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
-                    Canvas.Left="185" Canvas.Top="2" Tag="last">
+                    Canvas.Left="185" Canvas.Top="2" Tag="last"
+                    Command="{Binding MoveLast}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <cmd:EventToCommand Command="{Binding OnClickNavigationCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
             </Button>
             
         </Canvas>

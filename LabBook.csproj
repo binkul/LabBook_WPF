@@ -76,16 +76,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ADO\Common\IRepository.cs" />
+    <Compile Include="ADO\Repository\ExperimentalViscosity.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Dto\ExperimentalViscosityDto.cs" />
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
-    <Compile Include="Forms\MainForm\Bahavior\NavigationKeyBH.cs" />
+    <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>

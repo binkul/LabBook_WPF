@@ -7,11 +7,18 @@
     using System.ComponentModel;
     using System.Data;
     using System.Windows;
+    using System.Windows.Input;
+    using LabBook.Forms.MainForm.Command;
 
     public class WindowEditMV : INotifyPropertyChanged
     {
         private readonly string _allUser = "-- Wszyscy --";
         private readonly double _startLeftPosition = 28d;
+
+        private ICommand _moveRight;
+        private ICommand _moveLeft;
+        private ICommand _moveLast;
+        private ICommand _moveFirst;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private long _index = 0;
@@ -36,7 +43,7 @@
             _userView = _userService.GetAll();
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
-            OnClickNavigationCommand = new RelayCommand<RoutedEventArgs>(this.OnClickNavigationCommandExecuted);
+            //OnClickNavigationCommand = new RelayCommand<RoutedEventArgs>(this.OnClickNavigationCommandExecuted);
 
             PrepareModelView();
         }
@@ -284,29 +291,70 @@
             WindowSetting.Save(_windowData);
         }
 
-        public void OnClickNavigationCommandExecuted(RoutedEventArgs routedEventArgs)
-        {
-            Button button = (Button)routedEventArgs.Source;
-            var count = GetLabBookView.Count;
-            var name = button.Tag;
-            var index = DgRowIndex;
+        //public void OnClickNavigationCommandExecuted(RoutedEventArgs routedEventArgs)
+        //{
+        //    Button button = (Button)routedEventArgs.Source;
+        //    var count = GetLabBookView.Count;
+        //    var name = button.Tag;
+        //    var index = DgRowIndex;
 
-            switch (name)
+        //    switch (name)
+        //    {
+        //        case "first":
+        //            index = 0;
+        //            break;
+        //        case "left":
+        //            _ = index > 0 ? index-- : index = 0;
+        //            break;
+        //        case "right":
+        //            _ = index < count - 1 ? index++ : index = count - 1;
+        //            break;
+        //        case "last":
+        //            index = count - 1;
+        //            break;
+        //    }
+        //    DgRowIndex = index;
+        //    OnPropertyChanged(nameof(DgRowIndex));
+        //}
+
+        public ICommand MoveRight
+        {
+            get
             {
-                case "first":
-                    index = 0;
-                    break;
-                case "left":
-                    _ = index > 0 ? index-- : index = 0;
-                    break;
-                case "right":
-                    _ = index < count - 1 ? index++ : index = count - 1;
-                    break;
-                case "last":
-                    index = count - 1;
-                    break;
+                if (_moveRight == null) _moveRight = new NaviButtonRight(this);
+                return _moveRight;
             }
-            DgRowIndex = index;
+        }
+
+        public ICommand MoveLast
+        {
+            get
+            {
+                if (_moveLast == null) _moveLast = new NaviButtonLast(this);
+                return _moveLast;
+            }
+        }
+        
+        public ICommand MoveFirst
+        {
+            get
+            {
+                if (_moveFirst == null) _moveFirst = new NaviButtonFirst(this);
+                return _moveFirst;
+            }
+        }
+
+        public ICommand MoveLeft
+        {
+            get
+            {
+                if (_moveLeft == null) _moveLeft = new NaviButtonLeft(this);
+                return _moveLeft;
+            }
+        }
+
+        public void UpdateRowIndex()
+        {
             OnPropertyChanged(nameof(DgRowIndex));
         }
 
