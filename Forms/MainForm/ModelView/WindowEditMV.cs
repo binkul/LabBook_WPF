@@ -25,6 +25,7 @@
         private readonly User _user;
         private readonly LabBookService _labBookService;
         private readonly ExperimentCycleService _expCycleService;
+        private readonly ExperimentalVisService _expVisService;
         private readonly UserService _userService;
         private DataView _labBookView;
         private DataView _expCycleView;
@@ -37,6 +38,7 @@
             _user = user;
             _labBookService = new LabBookService(_user);
             _expCycleService = new ExperimentCycleService(_user);
+            _expVisService = new ExperimentalVisService(_user);
             _userService = new UserService(_user);
             _labBookView = _labBookService.GetAll();
             _expCycleView = _expCycleService.GetAll();
@@ -56,6 +58,14 @@
             {
                 foreach (string name in names)
                     PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public ExperimentalVisService GetVisService
+        {
+            get
+            {
+                return _expVisService;
             }
         }
 

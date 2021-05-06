@@ -14,6 +14,7 @@ namespace LabBook.Forms.MainForm
     {
         private readonly User _user;
         private readonly FilterMV _filterMV;
+        private readonly ViscosityMV _viscosityMV;
 
         public LabBookForm(User user)
         {
@@ -22,8 +23,13 @@ namespace LabBook.Forms.MainForm
 
             WindowEditMV mainModelView = new WindowEditMV(_user);
             this.DataContext = mainModelView;
+
+            _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
+            _viscosityMV.SetService = mainModelView.GetVisService;
+
             _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
+            
         }
 
         private void TxtBox_KeyUp(object sender, KeyEventArgs e)

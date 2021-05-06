@@ -10,7 +10,7 @@ namespace LabBook.ADO.Service
     {
         private readonly User _user;
         private readonly IRepository<ExperimentCycleDto> _expCycleRepository;
-        private DataTable dataTable;
+        private DataTable _dataTable;
 
         public ExperimentCycleService(User user)
         {
@@ -20,8 +20,8 @@ namespace LabBook.ADO.Service
 
         public DataView GetAll()
         {
-            dataTable = _expCycleRepository.GetAll();
-            DataView view = new DataView(dataTable);
+            _dataTable = _expCycleRepository.GetAll();
+            DataView view = new DataView(_dataTable);
             view.Sort = "name";
             return view;
         }

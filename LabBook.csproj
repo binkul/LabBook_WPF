@@ -76,14 +76,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ADO\Common\IRepository.cs" />
-    <Compile Include="ADO\Repository\ExperimentalViscosity.cs" />
+    <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
+    <Compile Include="ADO\Service\ExperimentalVisService.cs" />
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
-    <Compile Include="Dto\ExperimentalViscosityDto.cs" />
+    <Compile Include="Dto\ExperimentalVisDto.cs" />
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Forms\MainForm\BindingProxy.cs" />
     <Compile Include="Forms\MainForm\ModelView\FilterMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
+    <Compile Include="Forms\MainForm\ModelView\ViscosityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\WindowEditMV.cs" />
     <Compile Include="Forms\MainForm\Model\WindowData.cs" />
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
@@ -103,6 +105,7 @@
     </Compile>
     <Compile Include="Forms\Tools\CycleToNameConverter.cs" />
     <Compile Include="Forms\Tools\DataGridLenghtToDoubleConverter.cs" />
+    <Compile Include="Forms\Tools\DataRowViewToLongConverter.cs" />
     <Compile Include="Forms\Tools\DateConverter.cs" />
     <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />

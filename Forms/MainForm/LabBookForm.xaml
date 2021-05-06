@@ -34,6 +34,7 @@
     <Window.Resources>
         <!--<vm:WindowEditMV x:Key="windowSetting" />-->
         <vm:FilterMV x:Key="filter" />
+        <vm:ViscosityMV x:Key="viscosity" />
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:DensityConverter x:Key="DensityConverter" />
         <Convertors:DateConverter x:Key="DateConverter" />
@@ -43,6 +44,7 @@
         <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
         <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
         <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
+        <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
         <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
@@ -238,13 +240,14 @@
                                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
                                   FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" 
-                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay}" >
+                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay}" 
+                                  SelectedValue="{Binding Source={StaticResource viscosity}, Path=LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
                             
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
-                                    Width="{Binding Data.ColumnId, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellLeft}"
-                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                                                    Width="{Binding Data.ColumnId, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title, Mode=TwoWay}"

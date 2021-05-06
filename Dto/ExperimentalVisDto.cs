@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.Dto
 {
     public enum ViscosityType
     {
         brookfield,
+        brookfield_x,
         krebs,
         ici
     }
 
-    public class ExperimentalViscosityDto
+    public class ExperimentalVisDto
     {
         long ID { get; set; }
         long LabBookId { get; set; }
@@ -45,7 +42,7 @@ namespace LabBook.Dto
         string ICIcomment { get; set; }
         string Temperature { get; set; }
 
-        public ExperimentalViscosityDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5, 
+        public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5, 
             decimal brook10, decimal brook20, decimal brook30, decimal brook40, decimal brook50, decimal brook60, decimal brook70, decimal brook80, decimal brook90, 
             decimal brook100, string brookComment, string brookDisc, decimal brookXvisc, string brookXrpm, string brookXdisc, decimal krebs, string krebsComment, 
             decimal iCI, string iCIdisc, string iCIcomment, string temperature)
@@ -81,7 +78,7 @@ namespace LabBook.Dto
             Temperature = temperature;
         }
 
-        public ExperimentalViscosityDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5,
+        public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5,
             decimal brook10, decimal brook20, decimal brook50, decimal brook100, string brookComment, string brookDisc, string temperature)
         {
             ID = iD;
@@ -101,7 +98,7 @@ namespace LabBook.Dto
             Temperature = temperature;
         }
 
-        public ExperimentalViscosityDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5,
+        public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, decimal brook1, decimal brook5,
             decimal brook20, string brookComment, string brookDisc, string temperature)
         {
             ID = iD;
@@ -118,7 +115,7 @@ namespace LabBook.Dto
             Temperature = temperature;
         }
 
-        public ExperimentalViscosityDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, 
+        public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, ViscosityType type, 
             decimal brookXvisc, string brookXrpm, string brookXdisc, string temperature)
         {
             ID = iD;
