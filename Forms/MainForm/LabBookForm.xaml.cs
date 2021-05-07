@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Data;
 using LabBook.Forms.MainForm.ModelView;
+using System.Data;
+using System;
 
 namespace LabBook.Forms.MainForm
 {
@@ -64,6 +66,23 @@ namespace LabBook.Forms.MainForm
             }
             DgLabBook.Focus();
             #endregion
+        }
+
+        private void DgViscosity_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            e.NewItem = null;
+        }
+
+        private void DgViscosity_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            if (e.Row.IsNewItem)
+            {
+                DataRowView row = (DataRowView)e.Row.Item;
+                row["id"] = 1;
+                row["vis_type"] = "brookfield";
+                row["date_created"] = DateTime.Now;
+                row["date_update"] = DateTime.Now;
+            }
         }
     }
 }

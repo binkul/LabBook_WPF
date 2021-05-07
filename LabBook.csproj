@@ -103,6 +103,7 @@
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Tools\BoolToVisibiltyConverter.cs" />
     <Compile Include="Forms\Tools\CycleToNameConverter.cs" />
     <Compile Include="Forms\Tools\DataGridLenghtToDoubleConverter.cs" />
     <Compile Include="Forms\Tools\DataRowViewToLongConverter.cs" />
