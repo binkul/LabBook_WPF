@@ -23,9 +23,7 @@
         Top="{Binding FormYpos, Mode=TwoWay}" 
         Left="{Binding FormXpos, Mode=TwoWay}"
         WindowStartupLocation="CenterScreen" >
-    <!--<Window.DataContext> -->
-    <!-- DataContex for Form X, Y, Width, Height -->
-    <!--
+    <!--<Window.DataContext> 
         <vm:WindowEditMV />
     </Window.DataContext>-->
     <i:Interaction.Triggers>
@@ -198,10 +196,6 @@
                 <!-- Main Page -->
                 <TabItem Header="Strona główna">
                     <Grid Background="#FFE5E5E5" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="131*"/>
-                            <ColumnDefinition Width="621*"/>
-                        </Grid.ColumnDefinitions>
 
                         <!--#### Filtering ####-->
                         <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,0,0,-0.4" >
@@ -248,9 +242,15 @@
                         <DataGrid x:Name="DgLabBook" Margin="5,28,5,1.6" ItemsSource="{Binding GetLabBookView}" HorizontalAlignment="Stretch" 
                                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
-                                  FrozenColumnCount="1" SelectionChanged="DgLabBook_SelectionChanged" 
-                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay}" 
-                                  SelectedValue="{Binding Source={StaticResource viscosity}, Path=LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" Grid.ColumnSpan="2" >
+                                  FrozenColumnCount="1" 
+                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay, FallbackValue=0}"
+                                  SelectedItem="{Binding ActualRow, Mode=OneWayToSource}"
+                                  SelectedValue="{Binding Source={StaticResource viscosity}, Path=LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <cmd:EventToCommand Command="{Binding OnSelectionChangedCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
@@ -331,16 +331,26 @@
 
                         <DataGrid x:Name="DgViscosity" Margin="5,10,5,55.6" ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetBrookView, UpdateSourceTrigger=PropertyChanged}" 
                                   HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
-                                  CanUserAddRows="true"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" AddingNewItem="DgViscosity_AddingNewItem" RowEditEnding="DgViscosity_RowEditEnding" >
+                                  CanUserAddRows="true" CanUserDeleteRows="True" CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="InitializingNewItem">
+                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewItemCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding id}" Visibility="Collapsed" />
                                 <DataGridTextColumn Binding="{Binding vis_type}" Visibility="Collapsed" />
+                                <DataGridTextColumn Binding="{Binding labbok_id}" Visibility="Collapsed" />
                                 <DataGridTextColumn Header="Data start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
                                 </DataGridTextColumn>
                                 <DataGridTextColumn Header="Data pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Doba" Binding="{Binding days}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
                                 </DataGridTextColumn>

@@ -22,6 +22,7 @@
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private long _index = 0;
+        private DataRowView _actualRow;
         private readonly User _user;
         private readonly LabBookService _labBookService;
         private readonly ExperimentCycleService _expCycleService;
@@ -30,8 +31,9 @@
         private DataView _labBookView;
         private DataView _expCycleView;
         private DataView _userView;
+        public RelayCommand<SelectionChangedEventArgs> OnSelectionChangedCommand { get; set; }
+
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
-        public RelayCommand<RoutedEventArgs> OnClickNavigationCommand { get; set; }
 
         public WindowEditMV(User user)
         {
@@ -45,9 +47,9 @@
             _userView = _userService.GetAll();
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
-            //OnClickNavigationCommand = new RelayCommand<RoutedEventArgs>(this.OnClickNavigationCommandExecuted);
+            OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(this.OnSelectionChangedCommandExecuted);
 
-            PrepareModelView();
+            PrepareUsersView();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -294,38 +296,43 @@
             }
         }
 
-        public void OnClosingCommandExecuted(CancelEventArgs cancelEventArgs)
+        public DataRowView ActualRow
+        {
+            get
+            {
+                return _actualRow;
+            }
+            set
+            {
+                _actualRow = value;
+            }
+        }
+
+        public void OnClosingCommandExecuted(CancelEventArgs e)
         {
             if (MessageBox.Show("Czy zamknąć?", "", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-                cancelEventArgs.Cancel = true;
+                e.Cancel = true;
             WindowSetting.Save(_windowData);
         }
 
-        //public void OnClickNavigationCommandExecuted(RoutedEventArgs routedEventArgs)
-        //{
-        //    Button button = (Button)routedEventArgs.Source;
-        //    var count = GetLabBookView.Count;
-        //    var name = button.Tag;
-        //    var index = DgRowIndex;
+        public void OnSelectionChangedCommandExecuted(SelectionChangedEventArgs e)
+        {
+            var grid = (DataGrid)e.Source;
 
-        //    switch (name)
-        //    {
-        //        case "first":
-        //            index = 0;
-        //            break;
-        //        case "left":
-        //            _ = index > 0 ? index-- : index = 0;
-        //            break;
-        //        case "right":
-        //            _ = index < count - 1 ? index++ : index = count - 1;
-        //            break;
-        //        case "last":
-        //            index = count - 1;
-        //            break;
-        //    }
-        //    DgRowIndex = index;
-        //    OnPropertyChanged(nameof(DgRowIndex));
-        //}
+            #region scroll to selected row
+            var index = grid.SelectedIndex;
+            if (index < 0) return;
+
+            var item = grid.Items[index];
+            DataGridRow row = grid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+            if (row == null)
+            {
+                grid.ScrollIntoView(item);
+            }
+            grid.Focus();
+            #endregion
+
+        }
 
         public ICommand MoveRight
         {
@@ -382,15 +389,14 @@
             OnPropertyChanged(nameof(DgRowIndex));
         }
 
-        private void PrepareModelView()
+        private void PrepareUsersView()
         {
             DataTable usersFilter = _userView.ToTable();
             DataRow row = usersFilter.NewRow();
             row["id"] = -1;
-            row["name"] = _allUser;
+            row["name"] = "-- Wszyscy --";
             row["identifier"] = "Brak";
             usersFilter.Rows.Add(row);
-            DataView viewFilter = new DataView(usersFilter) { Sort = "name" };
         }
     }
 }

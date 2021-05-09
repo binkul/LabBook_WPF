@@ -6,16 +6,24 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
     public class ViscosityMV : INotifyPropertyChanged
     {
         private ExperimentalVisService _service;
+        private WindowEditMV _windowEditMV;
         private long _labBookId;
         private bool _profilStd = true;
         private bool _profilExt = false;
         private bool _profilFull = false;
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewItemCommand { get; set; }
+
+        public ViscosityMV()
+        {
+            OnInitializingNewItemCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewItemCommandExecuted);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(params string[] names)
@@ -27,7 +35,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public ExperimentalVisService SetService
+        public ExperimentalVisService ExpService
         {
             get
             {
@@ -37,6 +45,14 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 _service = value;
                 OnPropertyChanged(nameof(GetBrookView));
+            }
+        }
+
+        public WindowEditMV SetWindowEditMV
+        {
+            set
+            {
+                _windowEditMV = value;
             }
         }
 
@@ -110,6 +126,19 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 return ProfilFull || ProfilExtend;
             }
+        }
+
+        public void OnInitializingNewItemCommandExecuted(InitializingNewItemEventArgs e)
+        {
+            var row = _windowEditMV.ActualRow;
+            var id = Convert.ToInt64(row["id"].ToString());
+
+            var view = e.NewItem as DataRowView;
+            view.Row["id"] = -1;
+            view.Row["labbook_id"] = id;
+            view.Row["vis_type"] = "brookfield";
+            view.Row["date_created"] = DateTime.Now;
+            view.Row["date_update"] = DateTime.Now;
         }
     }
 }

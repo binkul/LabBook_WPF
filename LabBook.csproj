@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ADO\Common\IRepository.cs" />
+    <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />

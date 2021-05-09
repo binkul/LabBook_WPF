@@ -27,11 +27,13 @@ namespace LabBook.Forms.MainForm
             this.DataContext = mainModelView;
 
             _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
-            _viscosityMV.SetService = mainModelView.GetVisService;
+            _viscosityMV.ExpService = mainModelView.GetVisService;
+            _viscosityMV.SetWindowEditMV = mainModelView;
 
             _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
-            
+
+            DgLabBook.Focus();
         }
 
         private void TxtBox_KeyUp(object sender, KeyEventArgs e)
@@ -52,37 +54,5 @@ namespace LabBook.Forms.MainForm
             }
         }
 
-        private void DgLabBook_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            #region scroll to selected row
-            var index = DgLabBook.SelectedIndex;
-            if (index < 0) return;
-
-            var item = DgLabBook.Items[index];
-            DataGridRow row = DgLabBook.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
-            if (row == null)
-            {
-                DgLabBook.ScrollIntoView(item);
-            }
-            DgLabBook.Focus();
-            #endregion
-        }
-
-        private void DgViscosity_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            e.NewItem = null;
-        }
-
-        private void DgViscosity_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            if (e.Row.IsNewItem)
-            {
-                DataRowView row = (DataRowView)e.Row.Item;
-                row["id"] = 1;
-                row["vis_type"] = "brookfield";
-                row["date_created"] = DateTime.Now;
-                row["date_update"] = DateTime.Now;
-            }
-        }
     }
 }
