@@ -29,6 +29,7 @@ namespace LabBook.Forms.MainForm
             _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
             _viscosityMV.ExpService = mainModelView.GetVisService;
             _viscosityMV.SetWindowEditMV = mainModelView;
+            mainModelView.SetViscosityMV = _viscosityMV;
 
             _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);

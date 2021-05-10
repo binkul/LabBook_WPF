@@ -12,7 +12,6 @@
 
     public class WindowEditMV : INotifyPropertyChanged
     {
-        private readonly string _allUser = "-- Wszyscy --";
         private readonly double _startLeftPosition = 28d;
 
         private ICommand _moveRight;
@@ -21,6 +20,7 @@
         private ICommand _moveFirst;
 
         private readonly WindowData _windowData = WindowSetting.Read();
+        private ViscosityMV _viscosityMV;
         private long _index = 0;
         private DataRowView _actualRow;
         private readonly User _user;
@@ -68,6 +68,14 @@
             get
             {
                 return _expVisService;
+            }
+        }
+
+        public ViscosityMV SetViscosityMV
+        {
+            set
+            {
+                _viscosityMV = value;
             }
         }
 
@@ -331,7 +339,6 @@
             }
             grid.Focus();
             #endregion
-
         }
 
         public ICommand MoveRight

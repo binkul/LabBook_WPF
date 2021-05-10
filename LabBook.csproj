@@ -89,6 +89,7 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
+    <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
@@ -112,6 +113,7 @@
     <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />
     <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
+    <Compile Include="Forms\Tools\IgnoreNewItemPlaceholderConverter.cs" />
     <Compile Include="Forms\Tools\NaviCurrentConverter.cs" />
     <Compile Include="Forms\Tools\NaviTotalCountConverter.cs" />
     <Compile Include="Forms\Tools\UserToNameConverter.cs" />
@@ -182,6 +184,8 @@
     <Resource Include="Img\arrow-left_first.png" />
     <Resource Include="Img\arrow-right_last.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Img\delete.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

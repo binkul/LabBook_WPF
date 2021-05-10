@@ -37,7 +37,7 @@ namespace LabBook.ADO.Repository
             return table;
         }
 
-        public bool Delete()
+        public bool Delete(long id)
         {
             throw new System.NotImplementedException();
         }

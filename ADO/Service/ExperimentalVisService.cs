@@ -31,6 +31,7 @@ namespace LabBook.ADO.Service
 
         public void RefreshMainTable(long id)
         {
+            Save();
             _dataTable.Rows.Clear();
             _repository.RefreshMainTable(_dataTable, id);
         }
@@ -67,8 +68,9 @@ namespace LabBook.ADO.Service
             }
         }
 
-        public void Save()
+        public bool Save()
         {
+            if (_dataTable == null) return false;
             bool error = false;
 
             var newRows = _dataTable.GetChanges(DataRowState.Added);
@@ -90,6 +92,13 @@ namespace LabBook.ADO.Service
                         error = true;
                 }
             }
+
+            return error;
+        }
+
+        public bool Delete(long id)
+        {
+            return _repository.Delete(id);
         }
     }
 }

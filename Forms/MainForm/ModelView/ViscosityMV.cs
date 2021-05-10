@@ -1,4 +1,5 @@
 ﻿using LabBook.ADO.Service;
+using LabBook.Forms.MainForm.Command;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,13 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
     public class ViscosityMV : INotifyPropertyChanged
     {
+        private ICommand _delBrookViscosity;
+
         private ExperimentalVisService _service;
         private WindowEditMV _windowEditMV;
+        private long _index = 0;
+        private DataRowView _actualRow;
         private long _labBookId;
         private bool _profilStd = true;
         private bool _profilExt = false;
@@ -70,6 +76,31 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public long DgRowIndex
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+            }
+        }
+
+        public DataRowView ActualRow
+        {
+            get
+            {
+                return _actualRow;
+            }
+            set
+            {
+                if (value != null)
+                    _actualRow = value;
+            }
+        }
+
         public DataView GetBrookView
         {
             get
@@ -78,6 +109,14 @@ namespace LabBook.Forms.MainForm.ModelView
                     return _service.GetBrookfield;
                 else
                     return null;
+            }
+        }
+
+        public int RowCount
+        {
+            get
+            {
+                return GetBrookView.Count;
             }
         }
 
@@ -131,14 +170,30 @@ namespace LabBook.Forms.MainForm.ModelView
         public void OnInitializingNewItemCommandExecuted(InitializingNewItemEventArgs e)
         {
             var row = _windowEditMV.ActualRow;
-            var id = Convert.ToInt64(row["id"].ToString());
+            var id = Convert.ToInt64(row["id"]);
+            var date = Convert.ToDateTime(row["created"]);
 
             var view = e.NewItem as DataRowView;
             view.Row["id"] = -1;
             view.Row["labbook_id"] = id;
             view.Row["vis_type"] = "brookfield";
-            view.Row["date_created"] = DateTime.Now;
+            view.Row["date_created"] = date;
             view.Row["date_update"] = DateTime.Now;
+        }
+
+        public ICommand DeleteBrookViscosity
+        {
+            get
+            {
+                if (_delBrookViscosity == null) _delBrookViscosity = new DelViscosityButton(this);
+                return _delBrookViscosity;
+            }
+        }
+
+        public void Delete(long id)
+        {
+            if (ActualRow != null)
+                _service.Delete(id);
         }
     }
 }

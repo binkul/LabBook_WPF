@@ -30,6 +30,7 @@ namespace LabBook.ADO.Repository
             "brook_80=@brook_80, brook_90=@brook_90, brook_100=@brook_100, brook_comment=@brook_comment, brook_disc=@brook_disc, " +
             "brook_x_vis=@brook_x_vis, brook_x_rpm=@brook_x_rpm, brook_x_disc=@brook_x_disc, krebs=@krebs,, krebs_comment=@krebs_comment, " +
             "ici=@ici, ici_disc=@ici_disc, ici_comment=@ici_comment, temp=@temp Where id=@id ";
+        private static readonly string _delQuery = "Delete LabBook.dbo.ExpViscosity Where id = ";
         private readonly User _user;
 
         public ExperimentalVisRepository(User user)
@@ -37,9 +38,37 @@ namespace LabBook.ADO.Repository
             _user = user;
         }
 
-        public bool Delete()
+        public bool Delete(long id)
         {
-            throw new NotImplementedException();
+            bool error = false;
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = _user.Connection;
+            cmd.CommandText = _delQuery + id;
+
+            try
+            {
+                _user.Connection.Open();
+                cmd.ExecuteNonQuery();
+                _user.Connection.Close();
+            }
+            catch (SqlException ex)
+            {
+                error = true;
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                error = true;
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                _user.Connection.Close();
+            }
+
+            return error;
         }
 
         public DataTable CreateTable()
@@ -178,7 +207,6 @@ namespace LabBook.ADO.Repository
                 cmd.Parameters.AddWithValue("@temp", row["temp"]);
                 _user.Connection.Open();
                 cmd.ExecuteNonQuery();
-                _user.Connection.Close();
             }
             catch (SqlException ex)
             {
@@ -245,7 +273,6 @@ namespace LabBook.ADO.Repository
                 cmd.Parameters.AddWithValue("@id", row["id"]);
                 _user.Connection.Open();
                 cmd.ExecuteNonQuery();
-                _user.Connection.Close();
             }
             catch (SqlException ex)
             {

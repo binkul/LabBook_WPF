@@ -17,7 +17,7 @@ namespace LabBook.ADO.Repository
             _user = user;
         }
 
-        public bool Delete()
+        public bool Delete(long id)
         {
             return false;
         }
