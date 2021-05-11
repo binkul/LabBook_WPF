@@ -85,7 +85,15 @@
         <!--#### Ribbon menu ####-->
         <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14">
             <RibbonTab Header="Plik" >
-
+                <RibbonGroup Header="Operacje"  FontSize="10">
+                    <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding Save}"/>
+                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"/>
+                </RibbonGroup>
+                <RibbonGroup Header="Dodawanie"  FontSize="10">
+                    <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular"/>
+                    <RibbonButton Label="Rezerwacja" LargeImageSource="/Img/new-reservation.png"  FontSize="12" FontWeight="Regular"/>
+                </RibbonGroup>
             </RibbonTab>
 
             <RibbonTab Header="Edycja" >
@@ -207,7 +215,8 @@
                                      Text="{Binding Id, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                      Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" 
                                      Height="{Binding ElementName=CmbCycle, Path=ActualHeight}"
-                                     Canvas.Left="28" Canvas.Top="0" />
+                                     Canvas.Left="{Binding TxtFilerNumberDLeftPosition, Mode=OneWay, FallbackValue=50}" 
+                                     Canvas.Top="0" />
                             <TextBox x:Name="TxtTitleFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" 
                                      Text="{Binding Title, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                      Width="{Binding ElementName=ColTitle, Path=ActualWidth}" 
@@ -243,7 +252,7 @@
                         <DataGrid x:Name="DgLabBook" Margin="5,28,5,1.6" ItemsSource="{Binding GetLabBookView}" HorizontalAlignment="Stretch" 
                                   AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                                   CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
-                                  FrozenColumnCount="1"
+                                  FrozenColumnCount="1" HeadersVisibility="Column"
                                   SelectedIndex="{Binding DgRowIndex, Mode=TwoWay, FallbackValue=0}"
                                   SelectedItem="{Binding ActualRow, Mode=OneWayToSource}"
                                   SelectedValue="{Binding Source={StaticResource viscosity}, Path=LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
@@ -254,6 +263,19 @@
                             </i:Interaction.Triggers>
 
                             <DataGrid.Columns>
+
+                                <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" IsReadOnly="True"
+                                                        Width="{Binding Data.ColumnStatus, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <StackPanel Background="#FFE5E5E5">
+                                                <Image Source="/Img/delete.png" Width="16" Height="14" 
+                                                       Visibility="{Binding deleted, Converter={StaticResource VisibilityConverter}}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
                                 <DataGridTextColumn x:Name="ColNumberD" Header="Numer D" Binding="{Binding id}" IsReadOnly="True"
                                                     Width="{Binding Data.ColumnId, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
@@ -355,7 +377,7 @@
                                         <DataTemplate>
                                             <Button Command="{Binding Source={StaticResource viscosity}, Path=DeleteBrookViscosity}" >
                                                 <StackPanel>
-                                                    <Image Source="/Img/delete.png" Width="16" Height="14"/>
+                                                    <Image Source="/Img/delete.png" Width="16" Height="14" />
                                                 </StackPanel>
                                             </Button>
                                         </DataTemplate>

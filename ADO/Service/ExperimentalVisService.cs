@@ -17,23 +17,40 @@ namespace LabBook.ADO.Service
         private readonly DataView _brookxView;
         private readonly DataView _krebsView;
         private readonly DataView _iciView;
+        private bool _modified = false;
 
         public ExperimentalVisService(User user)
         {
             _user = user;
             _repository = new ExperimentalVisRepository(_user);
             _dataTable = _repository.CreateTable();
+            _dataTable.RowChanged += _dataTable_RowChanged;
             _brookView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield'", Sort = "date_created, date_update" };
             _brookxView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield_x'", Sort = "date_created, date_update" };
             _krebsView = new DataView(_dataTable) { RowFilter = "vis_type = 'krebs'", Sort = "date_created, date_update" };
             _iciView = new DataView(_dataTable) { RowFilter = "vis_type = 'ici'", Sort = "date_created, date_update" };
         }
 
+        private void _dataTable_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            _modified = true;
+        }
+
+        public bool Modified
+        {
+            get
+            {
+                return _modified;
+            }
+        }
+
         public void RefreshMainTable(long id)
         {
-            Save();
+            _ = Save();
+
             _dataTable.Rows.Clear();
             _repository.RefreshMainTable(_dataTable, id);
+            _modified = false;
         }
 
         public DataView GetBrookfield
@@ -70,8 +87,7 @@ namespace LabBook.ADO.Service
 
         public bool Save()
         {
-            if (_dataTable == null) return false;
-            bool error = false;
+            var result = true;
 
             var newRows = _dataTable.GetChanges(DataRowState.Added);
             if (newRows != null)
@@ -79,7 +95,7 @@ namespace LabBook.ADO.Service
                 foreach (DataRow row in newRows.Rows)
                 {
                     if (_repository.Save(row) != ExceptionCode.NoError)
-                        error = true;
+                        result = false;
                 }
             }
 
@@ -89,11 +105,28 @@ namespace LabBook.ADO.Service
                 foreach (DataRow row in updateRows.Rows)
                 {
                     if (_repository.Update(row) != ExceptionCode.NoError)
-                        error = true;
+                        result = false;
                 }
             }
 
-            return error;
+            if (result) _modified = false;
+
+            return result;
+        }
+
+        public bool SaveAndReload(long id)
+        {
+            var result = true;
+
+            if (Save())
+            {
+                _dataTable.Rows.Clear();
+                _repository.RefreshMainTable(_dataTable, id);
+            }
+            else
+                result = false;
+
+            return result;
         }
 
         public bool Delete(long id)

@@ -1,4 +1,5 @@
 ﻿using LabBook.ADO.Common;
+using LabBook.ADO.Exceptions;
 using LabBook.Dto;
 using LabBook.Security;
 using System;
@@ -193,6 +194,16 @@ namespace LabBook.ADO.Repository
         }
 
         public UserDto Update(UserDto data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ExceptionCode Save(DataRow data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ExceptionCode Update(DataRow data)
         {
             throw new NotImplementedException();
         }

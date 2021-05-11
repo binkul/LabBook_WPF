@@ -1,4 +1,5 @@
 ﻿using LabBook.ADO.Common;
+using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
 using LabBook.Security;
@@ -9,21 +10,56 @@ namespace LabBook.ADO.Service
     public class LabBookService
     {
         private readonly User _user;
-        private readonly IRepository<LabBookDto> _labBookRepository;
-        private DataTable dataTable;
+        private readonly IRepository<LabBookDto> _repository;
+        private bool _modified = false;
+        private DataTable _dataTable;
 
         public LabBookService(User user)
         {
             _user = user;
-            _labBookRepository = new LabBookRepository(_user);
+            _repository = new LabBookRepository(_user);
+        }
+
+        public bool Modified
+        {
+            get
+            {
+                return _modified;
+            }
         }
 
         public DataView GetAll()
         {
-            dataTable = _labBookRepository.GetAll();
-            DataView view = new DataView(dataTable);
+            _dataTable = _repository.GetAll();
+            _dataTable.RowChanged += DataTable_RowChanged;
+            DataView view = new DataView(_dataTable);
             view.Sort = "id";
             return view;
+        }
+
+        private void DataTable_RowChanged(object sender, DataRowChangeEventArgs e)
+        {
+            _modified = true;
+        }
+
+        public bool Update()
+        {
+            var result = true;
+
+            var updateRows = _dataTable.GetChanges(DataRowState.Modified);
+            if (updateRows != null)
+            {
+                foreach (DataRow row in updateRows.Rows)
+                {
+
+                    if (_repository.Update(row) != ExceptionCode.NoError)
+                        result = false;
+                }
+            }
+
+            if (result) _modified = false;
+
+            return result;
         }
     }
 }

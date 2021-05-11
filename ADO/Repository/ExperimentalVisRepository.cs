@@ -24,11 +24,11 @@ namespace LabBook.ADO.Repository
             "@brook_5, @brook_10, @brook_20, @brook_30, @brook_40, @brook_50, @brook_60, @brook_70, @brook_80, " +
             "@brook_90, @brook_100, @brook_comment, @brook_disc, @brook_x_vis, @brook_x_rpm, @brook_x_disc, @krebs, " +
             "@krebs_comment, @ici, @ici_disc, @ici_comment, @temp)";
-        private static readonly string _updateQuery = "Update LabBook.dbo.ExpViscosity(labbook_id=@labbook_id, date_created=@date_created, " +
+        private static readonly string _updateQuery = "Update LabBook.dbo.ExpViscosity Set labbook_id=@labbook_id, date_created=@date_created, " +
             "date_update=@date_update, pH=@pH, vis_type=@vis_type, brook_1=@brook_1, brook_5=@brook_5, brook_10=@brook_10, " +
             "brook_20=@brook_20, brook_30=@brook_30, brook_40=@brook_40, brook_50=@brook_50, brook_60=@brook_60, brook_70=@brook_70, " +
             "brook_80=@brook_80, brook_90=@brook_90, brook_100=@brook_100, brook_comment=@brook_comment, brook_disc=@brook_disc, " +
-            "brook_x_vis=@brook_x_vis, brook_x_rpm=@brook_x_rpm, brook_x_disc=@brook_x_disc, krebs=@krebs,, krebs_comment=@krebs_comment, " +
+            "brook_x_vis=@brook_x_vis, brook_x_rpm=@brook_x_rpm, brook_x_disc=@brook_x_disc, krebs=@krebs, krebs_comment=@krebs_comment, " +
             "ici=@ici, ici_disc=@ici_disc, ici_comment=@ici_comment, temp=@temp Where id=@id ";
         private static readonly string _delQuery = "Delete LabBook.dbo.ExpViscosity Where id = ";
         private readonly User _user;

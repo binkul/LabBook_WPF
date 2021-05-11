@@ -91,6 +91,7 @@
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
+    <Compile Include="Forms\MainForm\Command\SaveButton.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
@@ -186,6 +187,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\new-reservation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\new-exp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\test.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

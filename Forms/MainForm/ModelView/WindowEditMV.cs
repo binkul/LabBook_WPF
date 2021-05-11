@@ -12,12 +12,13 @@
 
     public class WindowEditMV : INotifyPropertyChanged
     {
-        private readonly double _startLeftPosition = 28d;
+        private readonly double _startLeftPosition = 5d;
 
         private ICommand _moveRight;
         private ICommand _moveLeft;
         private ICommand _moveLast;
         private ICommand _moveFirst;
+        private ICommand _saveButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -131,6 +132,26 @@
             }
         }
 
+        public double ColumnStatus
+        {
+            get
+            {
+                return _windowData.ColStatus;
+            }
+            set
+            {
+                _windowData.ColStatus = value;
+                OnPropertyChanged(
+                    nameof(ColumnStatus),
+                    nameof(TxtFilerNumberDLeftPosition),
+                    nameof(TxtFilterTitleLeftPosition),
+                    nameof(CmbFilterUserLeftPosition),
+                    nameof(CmbFilterCycleLeftPosition),
+                    nameof(TxtFilterDensityLeftPosition),
+                    nameof(DpFilterDateLeftPosition));
+            }
+        }
+
         public double ColumnId
         {
             get
@@ -140,7 +161,8 @@
             set
             {
                 _windowData.ColId = value;
-                OnPropertyChanged(nameof(ColumnId), 
+                OnPropertyChanged(
+                    nameof(TxtFilerNumberDLeftPosition), 
                     nameof(TxtFilterTitleLeftPosition), 
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
@@ -158,7 +180,8 @@
             set
             {
                 _windowData.ColTitle = value;
-                OnPropertyChanged(nameof(ColumnTitle), 
+                OnPropertyChanged(
+                    nameof(ColumnTitle), 
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
@@ -175,7 +198,8 @@
             set
             {
                 _windowData.ColUser = value;
-                OnPropertyChanged(nameof(ColumnUser), 
+                OnPropertyChanged(
+                    nameof(ColumnUser), 
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
@@ -192,7 +216,8 @@
             set
             {
                 _windowData.ColCycle = value;
-                OnPropertyChanged(nameof(ColumnCycle),
+                OnPropertyChanged(
+                    nameof(ColumnCycle),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
                     nameof(DpFilterDateLeftPosition));
@@ -208,7 +233,8 @@
             set
             {
                 _windowData.ColDensity = value;
-                OnPropertyChanged(nameof(ColumnDensity),
+                OnPropertyChanged(
+                    nameof(ColumnDensity),
                     nameof(TxtFilterDensityLeftPosition),
                     nameof(DpFilterDateLeftPosition));
             }
@@ -223,8 +249,17 @@
             set
             {
                 _windowData.ColDate = value;
-                OnPropertyChanged(nameof(ColumnDate),
+                OnPropertyChanged(
+                    nameof(ColumnDate),
                     nameof(DpFilterDateLeftPosition));
+            }
+        }
+
+        public double TxtFilerNumberDLeftPosition
+        {
+            get
+            {
+                return _startLeftPosition +  ColumnStatus;
             }
         }
 
@@ -232,7 +267,7 @@
         {
             get
             {
-                return _startLeftPosition + ColumnId;
+                return TxtFilerNumberDLeftPosition + ColumnId;
             }
         }
 
@@ -304,6 +339,14 @@
             }
         }
 
+        public bool Modified
+        {
+            get
+            {
+                return _labBookService.Modified || _viscosityMV.Modified;
+            }
+        }
+
         public DataRowView ActualRow
         {
             get
@@ -318,9 +361,27 @@
 
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {
-            if (MessageBox.Show("Czy zamknąć?", "", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+            var ansver = MessageBoxResult.No;
+
+            if (Modified)
+            {
+                ansver = MessageBox.Show("Dokonano zmian w rekordach. Czy zapisać zmiany?", "Zamis zmian", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            }
+
+            if (ansver == MessageBoxResult.Yes)
+            {
+
+
+                WindowSetting.Save(_windowData);
+            }
+            else if (ansver == MessageBoxResult.Cancel)
+            {
                 e.Cancel = true;
-            WindowSetting.Save(_windowData);
+            }
+            else
+            {
+                WindowSetting.Save(_windowData);
+            }
         }
 
         public void OnSelectionChangedCommandExecuted(SelectionChangedEventArgs e)
@@ -375,6 +436,21 @@
                 if (_moveLeft == null) _moveLeft = new NaviButtonLeft(this);
                 return _moveLeft;
             }
+        }
+
+        public ICommand Save
+        {
+            get
+            {
+                if (_saveButton == null) _saveButton = new SaveButton(this);
+                return _saveButton;
+            }
+        }
+
+        public void SaveAll()
+        {
+            _ = _labBookService.Update();
+            _viscosityMV.Save();
         }
 
         public void UpdateRowIndex()

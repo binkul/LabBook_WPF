@@ -167,6 +167,14 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public bool Modified
+        {
+            get
+            {
+                return _service.Modified;
+            }
+        }
+
         public void OnInitializingNewItemCommandExecuted(InitializingNewItemEventArgs e)
         {
             var row = _windowEditMV.ActualRow;
@@ -188,6 +196,11 @@ namespace LabBook.Forms.MainForm.ModelView
                 if (_delBrookViscosity == null) _delBrookViscosity = new DelViscosityButton(this);
                 return _delBrookViscosity;
             }
+        }
+
+        public void Save()
+        {
+            _ = _service.SaveAndReload(LabBookId);
         }
 
         public void Delete(long id)
