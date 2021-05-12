@@ -116,7 +116,6 @@
     <Compile Include="Forms\Tools\IconSourcePermissionConverter.cs" />
     <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
     <Compile Include="Forms\Tools\IgnoreNewItemPlaceholderConverter.cs" />
-    <Compile Include="Forms\Tools\LockVisibilityConverter.cs" />
     <Compile Include="Forms\Tools\NaviCurrentConverter.cs" />
     <Compile Include="Forms\Tools\NaviTotalCountConverter.cs" />
     <Compile Include="Forms\Tools\NotBoolConverter.cs" />
@@ -205,6 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\unlock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

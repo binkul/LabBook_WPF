@@ -49,10 +49,7 @@
         <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
         <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
         <Convertors:IgnoreNewItemPlaceholderConverter x:Key="IgnoreNewItemConverter" />
-        <Convertors:LockVisibilityConverter x:Key="LockConverter" />
         <Convertors:IconSourcePermissionConverter x:Key="IconSourceConverter" />
-        <Image x:Key="DeleteImage" x:Shared="false" Source="/Img/delete.png" />
-        <Image x:Key="LockImage" x:Shared="false" Source="/Img/lock.png" />
         <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
@@ -273,32 +270,20 @@
 
                             <DataGrid.Columns>
 
-                                <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" IsReadOnly="True"
+                                <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" IsReadOnly="True" CanUserSort="False"
                                                         Width="{Binding Data.ColumnStatus, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
                                     <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>
-                                            <StackPanel Background="#FFE5E5E5" Orientation="Horizontal">
-                                                <Image Width="16" Height="14">
+                                            <StackPanel Background="#FFE5E5E5" >
+                                                <Image Width="16" Height="16" Margin="1,1,1,1" >
                                                     <Image.Source>
                                                         <MultiBinding Converter="{StaticResource IconSourceConverter}" Mode="OneWay" >
                                                             <Binding Path="deleted" />
                                                             <Binding Path="user_id" />
-                                                            <Binding Source="{StaticResource DeleteImage}" />
-                                                            <Binding Source="{StaticResource LockImage}" />
                                                             <Binding Path="Data.GetUser" Source="{StaticResource proxy}" />
                                                         </MultiBinding>
                                                     </Image.Source>
                                                 </Image>
-                                                <!--<Image Source="/Img/delete.png" Width="16" Height="14" 
-                                                       Visibility="{Binding deleted, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
-                                                <Image Source="/Img/lock.png" Width="16" Height="14" >
-                                                    <Image.Visibility >
-                                                        <MultiBinding Converter="{StaticResource LockConverter}" Mode="OneWay">
-                                                            <Binding Path="user_id" />
-                                                            <Binding Path="Data.GetUser" Source="{StaticResource proxy}" />
-                                                        </MultiBinding>
-                                                    </Image.Visibility>
-                                                </Image>-->
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
