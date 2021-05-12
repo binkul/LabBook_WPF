@@ -57,7 +57,50 @@ namespace LabBook.ADO.Repository
 
         public UserDto Save(UserDto data)
         {
-            throw new NotImplementedException();
+            var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+            var result = RegisterStatus.Ok;
+
+            try
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                var sqlCmd = new SqlCommand(registerQuery, connection) { CommandType = CommandType.Text };
+                sqlCmd.Parameters.AddWithValue("@name", data.Name);
+                sqlCmd.Parameters.AddWithValue("@surname", data.Surname);
+                sqlCmd.Parameters.AddWithValue("@e_mail", data.Email);
+                sqlCmd.Parameters.AddWithValue("@login", data.Login);
+                sqlCmd.Parameters.AddWithValue("@password", Encrypt.MD5Encrypt(data.Password));
+                sqlCmd.Parameters.AddWithValue("@permission", data.Permission);
+                sqlCmd.Parameters.AddWithValue("@identifier", data.Identifier);
+                sqlCmd.Parameters.AddWithValue("@active", data.Active);
+                sqlCmd.Parameters.AddWithValue("@date", data.Date);
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                result = RegisterStatus.Error;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                result = RegisterStatus.Error;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            if (result == RegisterStatus.Ok)
+            {
+                User user = GetUserByLoginAndPassword(data.Login, data.Password);
+                data.Id = user.Id;
+            }
+
+            return data;
         }
 
         public RegisterStatus ExistUserByLogin(string login)
@@ -79,50 +122,6 @@ namespace LabBook.ADO.Repository
                         "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
                     result = RegisterStatus.Exist;
                 }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                result = RegisterStatus.Error;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                result = RegisterStatus.Error;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-            return result;
-        }
-
-        public RegisterStatus Register(UserDto data)
-        {
-            var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
-            
-            var result = ExistUserByLogin(data.Login);
-            if (result != RegisterStatus.Ok) return result;
-
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                    connection.Open();
-
-                var sqlCmd = new SqlCommand(registerQuery, connection) { CommandType = CommandType.Text };
-                sqlCmd.Parameters.AddWithValue("@name", data.Name);
-                sqlCmd.Parameters.AddWithValue("@surname", data.Surname);
-                sqlCmd.Parameters.AddWithValue("@e_mail", data.Email);
-                sqlCmd.Parameters.AddWithValue("@login", data.Login);
-                sqlCmd.Parameters.AddWithValue("@password", data.Password);
-                sqlCmd.Parameters.AddWithValue("@permission", data.Permission);
-                sqlCmd.Parameters.AddWithValue("@identifier", data.Identifieri);
-                sqlCmd.Parameters.AddWithValue("@active", data.Active);
-                sqlCmd.Parameters.AddWithValue("@date", data.Date);
-                sqlCmd.ExecuteNonQuery();
             }
             catch (SqlException ex)
             {

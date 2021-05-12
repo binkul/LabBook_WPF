@@ -9,6 +9,7 @@
     using System.Windows;
     using System.Windows.Input;
     using LabBook.Forms.MainForm.Command;
+    using System;
 
     public class WindowEditMV : INotifyPropertyChanged
     {
@@ -327,6 +328,14 @@
             }
         }
 
+        public User GetUser
+        {
+            get
+            {
+                return _user;
+            }
+        }
+
         public long DgRowIndex
         {
             get
@@ -356,6 +365,25 @@
             set
             {
                 _actualRow = value;
+                OnPropertyChanged(nameof(IsPermited));
+            }
+        }
+
+        public bool IsPermited
+        {
+            get
+            {
+                if (_actualRow == null)
+                    return false;
+                else
+                {
+                    if (Convert.ToBoolean(_actualRow["deleted"]))
+                        return false;
+                    else if (_user.Id == Convert.ToInt64(_actualRow["user_id"]))
+                        return true;
+                    else
+                        return false;
+                }
             }
         }
 

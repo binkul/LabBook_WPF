@@ -34,11 +34,16 @@ namespace LabBook.Forms.Login
             SaveLogins();
             User user = repository.GetUserByLoginAndPassword(CmbUserName.Text, TxtPassword.Password);
 
-            if (user != null)
+            if (user != null && user.IsActive)
             {
                 LabBookForm dashboard = new LabBookForm(user);
                 dashboard.Show();
                 this.Close();
+            }
+            else if (!user.IsActive)
+            {
+                MessageBox.Show("Użytkownik: '" + user.Login + "' jest jeszcze nieaktywny. Skontaktuj się z administratorem.",
+                    "Brak uprawnień", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {

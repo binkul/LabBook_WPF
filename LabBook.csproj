@@ -113,10 +113,13 @@
     <Compile Include="Forms\Tools\DateConverter.cs" />
     <Compile Include="Forms\Tools\DensityConverter.cs" />
     <Compile Include="Forms\Tools\DotConverter.cs" />
+    <Compile Include="Forms\Tools\IconSourcePermissionConverter.cs" />
     <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
     <Compile Include="Forms\Tools\IgnoreNewItemPlaceholderConverter.cs" />
+    <Compile Include="Forms\Tools\LockVisibilityConverter.cs" />
     <Compile Include="Forms\Tools\NaviCurrentConverter.cs" />
     <Compile Include="Forms\Tools\NaviTotalCountConverter.cs" />
+    <Compile Include="Forms\Tools\NotBoolConverter.cs" />
     <Compile Include="Forms\Tools\UserToNameConverter.cs" />
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
@@ -199,6 +202,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\test.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\lock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

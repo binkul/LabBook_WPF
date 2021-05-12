@@ -1,4 +1,5 @@
 ﻿using LabBook.ADO.Repository;
+using LabBook.Dto;
 using LabBook.Forms.Login;
 using LabBook.Security;
 using System;
@@ -66,6 +67,16 @@ namespace LabBook.Forms.Register
 
             if (status == RegisterStatus.Ok)
             {
+                var name = TxtName.Text;
+                var surName = TxtSurname.Text;
+                var email = TxtEmail.Text;
+                var login = TxtLogin.Text;
+                var identifier = name.ToUpper().Substring(0, 1) + surName.ToUpper().Substring(0, 1);
+                var password = TxtPassword.Password;
+
+                UserDto user = new UserDto(name, surName, email, login, "user", identifier, false, DateTime.Now, password);
+                _ = repository.Save(user);
+
                 LoginForm loginForm = new LoginForm();
                 loginForm.Show();
                 this.Close();

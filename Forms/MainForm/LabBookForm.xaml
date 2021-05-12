@@ -47,7 +47,12 @@
         <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
         <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
         <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
+        <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
         <Convertors:IgnoreNewItemPlaceholderConverter x:Key="IgnoreNewItemConverter" />
+        <Convertors:LockVisibilityConverter x:Key="LockConverter" />
+        <Convertors:IconSourcePermissionConverter x:Key="IconSourceConverter" />
+        <Image x:Key="DeleteImage" x:Shared="false" Source="/Img/delete.png" />
+        <Image x:Key="LockImage" x:Shared="false" Source="/Img/lock.png" />
         <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
@@ -88,7 +93,8 @@
                 <RibbonGroup Header="Operacje"  FontSize="10">
                     <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding Save}"/>
-                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"/>
+                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
+                                  IsEnabled="{Binding IsPermited, Mode=OneWay}"/>
                 </RibbonGroup>
                 <RibbonGroup Header="Dodawanie"  FontSize="10">
                     <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular"/>
@@ -175,10 +181,11 @@
             <!--#### Main controls visible on all Tabs ####-->
 
             <Label Content="{Binding SelectedItem.id, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource IdConverter}}" 
-               Margin="10,12,798.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85" Height="23"  FontSize="18"
-               Padding="0" Foreground="Blue" />
+                   Margin="10,12,798.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85" Height="23"  FontSize="18"
+                   Padding="0" Foreground="Blue" />
 
-            <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}" 
+            <TextBox x:Name="TxtTitle" Text="{Binding SelectedItem.title, ElementName=DgLabBook, Mode=TwoWay}"
+                     IsEnabled="{Binding IsPermited, Mode=OneWay}"
                      Margin="100,10,127.6,0" Padding="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" 
                      FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" Height="28"/>
 
@@ -186,20 +193,22 @@
                    Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
             <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Margin="100,53,0,0"
+                      IsEnabled="{Binding IsPermited, Mode=OneWay}"
                       DisplayMemberPath="name" SelectedValuePath="id" 
                       ItemsSource="{Binding GetExpCycleView}" 
                       SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" />
 
             <Label Content="Gęstość" Margin="384,52,0,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Width="69"
-               Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
+                   Height="23"  FontSize="18" Padding="0" Foreground="#FF0000E1" />
 
             <TextBox x:Name="TxtDensity" Margin="466,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"
+                     IsEnabled="{Binding IsPermited, Mode=OneWay}"
                      Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}}" 
-                  KeyUp="TxtBox_KeyUp" FontSize="14" HorizontalAlignment="Left" Width="86" Height="28" Padding="0,3,0,0" />
+                     KeyUp="TxtBox_KeyUp" FontSize="14" HorizontalAlignment="Left" Width="86" Height="28" Padding="0,3,0,0" />
 
             <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateConverter}}" 
-               Margin="0,11,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
-               Padding="0" Foreground="Red" />
+                   Margin="0,11,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
+                   Padding="0" Foreground="Red" />
 
             <TabControl Margin="0,83,-0.4,4">
                 <!-- Main Page -->
@@ -268,9 +277,28 @@
                                                         Width="{Binding Data.ColumnStatus, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
                                     <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>
-                                            <StackPanel Background="#FFE5E5E5">
-                                                <Image Source="/Img/delete.png" Width="16" Height="14" 
-                                                       Visibility="{Binding deleted, Converter={StaticResource VisibilityConverter}}"/>
+                                            <StackPanel Background="#FFE5E5E5" Orientation="Horizontal">
+                                                <Image Width="16" Height="14">
+                                                    <Image.Source>
+                                                        <MultiBinding Converter="{StaticResource IconSourceConverter}" Mode="OneWay" >
+                                                            <Binding Path="deleted" />
+                                                            <Binding Path="user_id" />
+                                                            <Binding Source="{StaticResource DeleteImage}" />
+                                                            <Binding Source="{StaticResource LockImage}" />
+                                                            <Binding Path="Data.GetUser" Source="{StaticResource proxy}" />
+                                                        </MultiBinding>
+                                                    </Image.Source>
+                                                </Image>
+                                                <!--<Image Source="/Img/delete.png" Width="16" Height="14" 
+                                                       Visibility="{Binding deleted, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+                                                <Image Source="/Img/lock.png" Width="16" Height="14" >
+                                                    <Image.Visibility >
+                                                        <MultiBinding Converter="{StaticResource LockConverter}" Mode="OneWay">
+                                                            <Binding Path="user_id" />
+                                                            <Binding Path="Data.GetUser" Source="{StaticResource proxy}" />
+                                                        </MultiBinding>
+                                                    </Image.Visibility>
+                                                </Image>-->
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -283,14 +311,15 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColTitle" Header="Tytuł" Binding="{Binding title, Mode=TwoWay}"
-                                    Width="{Binding Data.ColumnTitle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellLeft}"
-                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnTitle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                                 <DataGridTextColumn x:Name="ColUser" Header="Wykonał" IsReadOnly="True" 
-                                    Width="{Binding Data.ColumnUser, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellCenter}" 
-                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                                                    Width="{Binding Data.ColumnUser, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
                                     <DataGridTextColumn.Binding>
                                         <MultiBinding Converter="{StaticResource UserConverter}">
                                             <Binding Path="user_id" />
@@ -300,9 +329,9 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColCycle" Header="Cykl" IsReadOnly="True" 
-                                    Width="{Binding Data.ColumnCycle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellCenter}" 
-                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
+                                                    Width="{Binding Data.ColumnCycle, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
                                     <DataGridTextColumn.Binding>
                                         <MultiBinding Converter="{StaticResource CycleConverter}">
                                             <Binding Path="cycle_id" />
@@ -312,14 +341,15 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColDensity" Header="Gęstość" Binding="{Binding density, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
-                                    Width="{Binding Data.ColumnDensity, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellLeft}"
-                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnDensity, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                                 <DataGridTextColumn x:Name="ColDate" Header="Data" Binding="{Binding created, StringFormat={}{0:dd-MM-yyyy}}" IsReadOnly="True"
-                                    Width="{Binding Data.ColumnDate, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                    ElementStyle="{StaticResource AllignCellCenter}" 
-                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
+                                                    Width="{Binding Data.ColumnDate, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}" 
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}">
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColCycle_id" Width="0" Visibility="Hidden" Binding="{Binding cycle_id}"/>
@@ -354,6 +384,7 @@
                         <DataGrid x:Name="DgViscosity" Margin="5,10,5,55.6" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
                                   SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="True" CanUserResizeColumns="True" CanUserResizeRows="False"
                                   RowHeaderWidth="20" HeadersVisibility="Column"
+                                  IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                   ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetBrookView, UpdateSourceTrigger=PropertyChanged}" 
                                   SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
                                   SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgRowIndex, Mode=TwoWay, FallbackValue=0}" >
@@ -367,7 +398,7 @@
                                 <DataGridTextColumn Binding="{Binding id}" Visibility="Collapsed" />
                                 <DataGridTextColumn Binding="{Binding vis_type}" Visibility="Collapsed" />
                                 <DataGridTextColumn Binding="{Binding labbok_id}" Visibility="Collapsed" />
-                                <DataGridTemplateColumn HeaderStyle="{StaticResource AllignColmnHeaderCenter}" Width="0.4*">
+                                <DataGridTemplateColumn HeaderStyle="{StaticResource AllignColmnHeaderCenter}" Width="0.4*" >
                                     <DataGridTemplateColumn.Header >
                                         <StackPanel>
                                             <Image Source="/Img/delete.png" Width="16" Height="14"/>
@@ -375,7 +406,8 @@
                                     </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>
-                                            <Button Command="{Binding Source={StaticResource viscosity}, Path=DeleteBrookViscosity}" >
+                                            <Button Command="{Binding Source={StaticResource viscosity}, Path=DeleteBrookViscosity}" 
+                                                    IsEnabled="{Binding Data.IsPermited, Source={StaticResource proxy}, Mode=OneWay}" >
                                                 <StackPanel>
                                                     <Image Source="/Img/delete.png" Width="16" Height="14" />
                                                 </StackPanel>
