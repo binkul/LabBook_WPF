@@ -26,13 +26,11 @@ namespace LabBook.ADO.Repository
                                            + "permission, identifier, active, date) Values(@name, @surname, @e_mail, @login, @password, "
                                            + "@permission, @identifier, @active, @date)";
 
-        private readonly User _user;
+        //private readonly User _user;
 
-        public UserRepository() { }
-
-        public UserRepository(User user)
+        public UserRepository() //User user)
         {
-            _user = user;
+            //_user = user;
         }
 
         public bool Delete(long id)
@@ -42,7 +40,7 @@ namespace LabBook.ADO.Repository
 
         public DataTable GetAll()
         {
-            var adapter = new SqlDataAdapter(getAllQuery, _user.Connection);
+            var adapter = new SqlDataAdapter(getAllQuery, UserSingleton.Connection); // _user.Connection);
 
             var table = new DataTable();
             adapter.Fill(table);

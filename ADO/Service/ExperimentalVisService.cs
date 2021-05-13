@@ -1,8 +1,4 @@
-﻿using System;
-using LabBook.ADO.Common;
-using LabBook.ADO.Repository;
-using LabBook.Dto;
-using LabBook.Security;
+﻿using LabBook.ADO.Repository;
 using System.Data;
 using LabBook.ADO.Exceptions;
 
@@ -10,7 +6,6 @@ namespace LabBook.ADO.Service
 {
     public class ExperimentalVisService
     {
-        private readonly User _user;
         private ExperimentalVisRepository _repository;
         private readonly DataTable _dataTable;
         private readonly DataView _brookView;
@@ -19,10 +14,9 @@ namespace LabBook.ADO.Service
         private readonly DataView _iciView;
         private bool _modified = false;
 
-        public ExperimentalVisService(User user)
+        public ExperimentalVisService()
         {
-            _user = user;
-            _repository = new ExperimentalVisRepository(_user);
+            _repository = new ExperimentalVisRepository();
             _dataTable = _repository.CreateTable();
             _dataTable.RowChanged += _dataTable_RowChanged;
             _brookView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield'", Sort = "date_created, date_update" };
@@ -34,6 +28,14 @@ namespace LabBook.ADO.Service
         private void _dataTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             _modified = true;
+        }
+
+        public DataTable GetTable
+        {
+            get
+            {
+                return _dataTable;
+            }
         }
 
         public bool Modified
@@ -122,6 +124,7 @@ namespace LabBook.ADO.Service
             {
                 _dataTable.Rows.Clear();
                 _repository.RefreshMainTable(_dataTable, id);
+                _modified = false;
             }
             else
                 result = false;
@@ -131,7 +134,10 @@ namespace LabBook.ADO.Service
 
         public bool Delete(long id)
         {
-            return _repository.Delete(id);
+            bool tmp = _modified;
+            bool result = _repository.Delete(id);
+            _modified = tmp;
+            return result;
         }
     }
 }

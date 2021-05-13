@@ -123,6 +123,7 @@
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
     <Compile Include="Security\User.cs" />
+    <Compile Include="Security\UserSingleton.cs" />
     <Compile Include="System\Text\ASCII.cs" />
     <Page Include="Forms\Login\LoginForm.xaml">
       <SubType>Designer</SubType>

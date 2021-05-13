@@ -9,15 +9,15 @@ namespace LabBook.ADO.Service
 {
     public class LabBookService
     {
-        private readonly User _user;
+        //private readonly User _user;
         private readonly IRepository<LabBookDto> _repository;
         private bool _modified = false;
         private DataTable _dataTable;
 
-        public LabBookService(User user)
+        public LabBookService() //User user)
         {
-            _user = user;
-            _repository = new LabBookRepository(_user);
+            //_user = user;
+            _repository = new LabBookRepository(); // _user);
         }
 
         public bool Modified

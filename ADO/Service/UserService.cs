@@ -8,14 +8,14 @@ namespace LabBook.ADO.Service
 {
     public class UserService
     {
-        private readonly User _user;
+        //private readonly User _user;
         private readonly IRepository<UserDto> _userRepository;
         private DataTable dataTable;
 
-        public UserService(User user)
+        public UserService() //User user)
         {
-            _user = user;
-            _userRepository = new UserRepository(_user);
+            //_user = user;
+            _userRepository = new UserRepository(); // _user);
         }
 
         public DataView GetAll()

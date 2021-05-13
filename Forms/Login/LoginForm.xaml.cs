@@ -36,7 +36,8 @@ namespace LabBook.Forms.Login
 
             if (user != null && user.IsActive)
             {
-                LabBookForm dashboard = new LabBookForm(user);
+                _ = UserSingleton.CreateInstance(user.Id, user.Name, user.Surname, user.Email, user.Login, user.Permission, user.Identifier, user.IsActive, user.Connection);
+                LabBookForm dashboard = new LabBookForm(); // user);
                 dashboard.Show();
                 this.Close();
             }

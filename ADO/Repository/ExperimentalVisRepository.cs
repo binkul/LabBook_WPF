@@ -31,41 +31,37 @@ namespace LabBook.ADO.Repository
             "brook_x_vis=@brook_x_vis, brook_x_rpm=@brook_x_rpm, brook_x_disc=@brook_x_disc, krebs=@krebs, krebs_comment=@krebs_comment, " +
             "ici=@ici, ici_disc=@ici_disc, ici_comment=@ici_comment, temp=@temp Where id=@id ";
         private static readonly string _delQuery = "Delete LabBook.dbo.ExpViscosity Where id = ";
-        private readonly User _user;
-
-        public ExperimentalVisRepository(User user)
-        {
-            _user = user;
-        }
 
         public bool Delete(long id)
         {
             bool error = false;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _user.Connection;
-            cmd.CommandText = _delQuery + id;
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                _user.Connection.Open();
-                cmd.ExecuteNonQuery();
-                _user.Connection.Close();
-            }
-            catch (SqlException ex)
-            {
-                error = true;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                error = true;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                _user.Connection.Close();
+                try
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandText = _delQuery + id;
+                    cmd.Connection = connection;
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    error = true;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu Delete VisRepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = true;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu Delete VisRepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
 
             return error;
@@ -76,28 +72,30 @@ namespace LabBook.ADO.Repository
             var query = _allQueryByLabId + "-1";
             DataTable table = new DataTable();
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(query, _user.Connection);
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
 
-                adapter.Fill(table);
+                    adapter.Fill(table);
 
-                DataColumn[] klucz = new DataColumn[1];
-                DataColumn id = table.Columns["id"];
-                klucz[0] = id;
-                table.PrimaryKey = klucz;
+                    DataColumn[] klucz = new DataColumn[1];
+                    DataColumn id = table.Columns["id"];
+                    klucz[0] = id;
+                    table.PrimaryKey = klucz;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu CreateTable VisRepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu CreateTable VisRepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
             return table;
         }
 
@@ -105,21 +103,24 @@ namespace LabBook.ADO.Repository
         {
             var query = _allQueryByLabId + labBooklid;
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(query, _user.Connection);
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
 
-                adapter.Fill(dataTable);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                    adapter.Fill(dataTable);
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu RefreshMainTable VisRepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu RefreshMainTable VisRepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -128,28 +129,30 @@ namespace LabBook.ADO.Repository
             var query = _allQuery;
             var table = new DataTable();
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(query, _user.Connection);
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
 
-                adapter.Fill(table);
+                    adapter.Fill(table);
 
-                DataColumn[] klucz = new DataColumn[1];
-                DataColumn id = table.Columns["id"];
-                klucz[0] = id;
-                table.PrimaryKey = klucz;
+                    DataColumn[] klucz = new DataColumn[1];
+                    DataColumn id = table.Columns["id"];
+                    klucz[0] = id;
+                    table.PrimaryKey = klucz;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
             return table;
         }
 
@@ -171,58 +174,61 @@ namespace LabBook.ADO.Repository
         public ExceptionCode Save(DataRow row)
         {
             ExceptionCode error = ExceptionCode.NoError;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _user.Connection;
-            cmd.CommandText = _saveQuery;
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
-                cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
-                cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
-                cmd.Parameters.AddWithValue("@pH", row["pH"]);
-                cmd.Parameters.AddWithValue("@vis_type", row["vis_type"]);
-                cmd.Parameters.AddWithValue("@brook_1", row["brook_1"]);
-                cmd.Parameters.AddWithValue("@brook_5", row["brook_5"]);
-                cmd.Parameters.AddWithValue("@brook_10", row["brook_10"]);
-                cmd.Parameters.AddWithValue("@brook_20", row["brook_20"]);
-                cmd.Parameters.AddWithValue("@brook_30", row["brook_30"]);
-                cmd.Parameters.AddWithValue("@brook_40", row["brook_40"]);
-                cmd.Parameters.AddWithValue("@brook_50", row["brook_50"]);
-                cmd.Parameters.AddWithValue("@brook_60", row["brook_60"]);
-                cmd.Parameters.AddWithValue("@brook_70", row["brook_70"]);
-                cmd.Parameters.AddWithValue("@brook_80", row["brook_80"]);
-                cmd.Parameters.AddWithValue("@brook_90", row["brook_90"]);
-                cmd.Parameters.AddWithValue("@brook_100", row["brook_100"]);
-                cmd.Parameters.AddWithValue("@brook_comment", row["brook_comment"]);
-                cmd.Parameters.AddWithValue("@brook_disc", row["brook_disc"]);
-                cmd.Parameters.AddWithValue("@brook_x_vis", row["brook_x_vis"]);
-                cmd.Parameters.AddWithValue("@brook_x_rpm", row["brook_x_rpm"]);
-                cmd.Parameters.AddWithValue("@brook_x_disc", row["brook_x_disc"]);
-                cmd.Parameters.AddWithValue("@krebs", row["krebs"]);
-                cmd.Parameters.AddWithValue("@krebs_comment", row["krebs_comment"]);
-                cmd.Parameters.AddWithValue("@ici", row["ici"]);
-                cmd.Parameters.AddWithValue("@ici_disc", row["ici_disc"]);
-                cmd.Parameters.AddWithValue("@ici_comment", row["ici_comment"]);
-                cmd.Parameters.AddWithValue("@temp", row["temp"]);
-                _user.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-            catch (SqlException ex)
-            {
-                error = ExceptionCode.SqlError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                error = ExceptionCode.SqlConnectionError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                _user.Connection.Close();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+                cmd.CommandText = _saveQuery;
+                try
+                {
+                    cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
+                    cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
+                    cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
+                    cmd.Parameters.AddWithValue("@pH", row["pH"]);
+                    cmd.Parameters.AddWithValue("@vis_type", row["vis_type"]);
+                    cmd.Parameters.AddWithValue("@brook_1", row["brook_1"]);
+                    cmd.Parameters.AddWithValue("@brook_5", row["brook_5"]);
+                    cmd.Parameters.AddWithValue("@brook_10", row["brook_10"]);
+                    cmd.Parameters.AddWithValue("@brook_20", row["brook_20"]);
+                    cmd.Parameters.AddWithValue("@brook_30", row["brook_30"]);
+                    cmd.Parameters.AddWithValue("@brook_40", row["brook_40"]);
+                    cmd.Parameters.AddWithValue("@brook_50", row["brook_50"]);
+                    cmd.Parameters.AddWithValue("@brook_60", row["brook_60"]);
+                    cmd.Parameters.AddWithValue("@brook_70", row["brook_70"]);
+                    cmd.Parameters.AddWithValue("@brook_80", row["brook_80"]);
+                    cmd.Parameters.AddWithValue("@brook_90", row["brook_90"]);
+                    cmd.Parameters.AddWithValue("@brook_100", row["brook_100"]);
+                    cmd.Parameters.AddWithValue("@brook_comment", row["brook_comment"]);
+                    cmd.Parameters.AddWithValue("@brook_disc", row["brook_disc"]);
+                    cmd.Parameters.AddWithValue("@brook_x_vis", row["brook_x_vis"]);
+                    cmd.Parameters.AddWithValue("@brook_x_rpm", row["brook_x_rpm"]);
+                    cmd.Parameters.AddWithValue("@brook_x_disc", row["brook_x_disc"]);
+                    cmd.Parameters.AddWithValue("@krebs", row["krebs"]);
+                    cmd.Parameters.AddWithValue("@krebs_comment", row["krebs_comment"]);
+                    cmd.Parameters.AddWithValue("@ici", row["ici"]);
+                    cmd.Parameters.AddWithValue("@ici_disc", row["ici_disc"]);
+                    cmd.Parameters.AddWithValue("@ici_comment", row["ici_comment"]);
+                    cmd.Parameters.AddWithValue("@temp", row["temp"]);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    error = ExceptionCode.SqlError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu Save Visrepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = ExceptionCode.SqlConnectionError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu Save Visrepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
 
             return error;
@@ -236,59 +242,62 @@ namespace LabBook.ADO.Repository
         public ExceptionCode Update(DataRow row)
         {
             ExceptionCode error = ExceptionCode.NoError;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _user.Connection;
-            cmd.CommandText = _updateQuery;
 
-            try
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
-                cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
-                cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
-                cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
-                cmd.Parameters.AddWithValue("@pH", row["pH"]);
-                cmd.Parameters.AddWithValue("@vis_type", row["vis_type"]);
-                cmd.Parameters.AddWithValue("@brook_1", row["brook_1"]);
-                cmd.Parameters.AddWithValue("@brook_5", row["brook_5"]);
-                cmd.Parameters.AddWithValue("@brook_10", row["brook_10"]);
-                cmd.Parameters.AddWithValue("@brook_20", row["brook_20"]);
-                cmd.Parameters.AddWithValue("@brook_30", row["brook_30"]);
-                cmd.Parameters.AddWithValue("@brook_40", row["brook_40"]);
-                cmd.Parameters.AddWithValue("@brook_50", row["brook_50"]);
-                cmd.Parameters.AddWithValue("@brook_60", row["brook_60"]);
-                cmd.Parameters.AddWithValue("@brook_70", row["brook_70"]);
-                cmd.Parameters.AddWithValue("@brook_80", row["brook_80"]);
-                cmd.Parameters.AddWithValue("@brook_90", row["brook_90"]);
-                cmd.Parameters.AddWithValue("@brook_100", row["brook_100"]);
-                cmd.Parameters.AddWithValue("@brook_comment", row["brook_comment"]);
-                cmd.Parameters.AddWithValue("@brook_disc", row["brook_disc"]);
-                cmd.Parameters.AddWithValue("@brook_x_vis", row["brook_x_vis"]);
-                cmd.Parameters.AddWithValue("@brook_x_rpm", row["brook_x_rpm"]);
-                cmd.Parameters.AddWithValue("@brook_x_disc", row["brook_x_disc"]);
-                cmd.Parameters.AddWithValue("@krebs", row["krebs"]);
-                cmd.Parameters.AddWithValue("@krebs_comment", row["krebs_comment"]);
-                cmd.Parameters.AddWithValue("@ici", row["ici"]);
-                cmd.Parameters.AddWithValue("@ici_disc", row["ici_disc"]);
-                cmd.Parameters.AddWithValue("@ici_comment", row["ici_comment"]);
-                cmd.Parameters.AddWithValue("@temp", row["temp"]);
-                cmd.Parameters.AddWithValue("@id", row["id"]);
-                _user.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-            catch (SqlException ex)
-            {
-                error = ExceptionCode.SqlError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                error = ExceptionCode.SqlConnectionError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                _user.Connection.Close();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+                cmd.CommandText = _updateQuery;
+                try
+                {
+                    cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
+                    cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
+                    cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
+                    cmd.Parameters.AddWithValue("@pH", row["pH"]);
+                    cmd.Parameters.AddWithValue("@vis_type", row["vis_type"]);
+                    cmd.Parameters.AddWithValue("@brook_1", row["brook_1"]);
+                    cmd.Parameters.AddWithValue("@brook_5", row["brook_5"]);
+                    cmd.Parameters.AddWithValue("@brook_10", row["brook_10"]);
+                    cmd.Parameters.AddWithValue("@brook_20", row["brook_20"]);
+                    cmd.Parameters.AddWithValue("@brook_30", row["brook_30"]);
+                    cmd.Parameters.AddWithValue("@brook_40", row["brook_40"]);
+                    cmd.Parameters.AddWithValue("@brook_50", row["brook_50"]);
+                    cmd.Parameters.AddWithValue("@brook_60", row["brook_60"]);
+                    cmd.Parameters.AddWithValue("@brook_70", row["brook_70"]);
+                    cmd.Parameters.AddWithValue("@brook_80", row["brook_80"]);
+                    cmd.Parameters.AddWithValue("@brook_90", row["brook_90"]);
+                    cmd.Parameters.AddWithValue("@brook_100", row["brook_100"]);
+                    cmd.Parameters.AddWithValue("@brook_comment", row["brook_comment"]);
+                    cmd.Parameters.AddWithValue("@brook_disc", row["brook_disc"]);
+                    cmd.Parameters.AddWithValue("@brook_x_vis", row["brook_x_vis"]);
+                    cmd.Parameters.AddWithValue("@brook_x_rpm", row["brook_x_rpm"]);
+                    cmd.Parameters.AddWithValue("@brook_x_disc", row["brook_x_disc"]);
+                    cmd.Parameters.AddWithValue("@krebs", row["krebs"]);
+                    cmd.Parameters.AddWithValue("@krebs_comment", row["krebs_comment"]);
+                    cmd.Parameters.AddWithValue("@ici", row["ici"]);
+                    cmd.Parameters.AddWithValue("@ici_disc", row["ici_disc"]);
+                    cmd.Parameters.AddWithValue("@ici_comment", row["ici_comment"]);
+                    cmd.Parameters.AddWithValue("@temp", row["temp"]);
+                    cmd.Parameters.AddWithValue("@id", row["id"]);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    error = ExceptionCode.SqlError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu Update Visrepository.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = ExceptionCode.SqlConnectionError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu Update Visrepository.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
 
             return error;

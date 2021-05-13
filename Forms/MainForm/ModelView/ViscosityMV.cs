@@ -1,12 +1,9 @@
 ﻿using LabBook.ADO.Service;
 using LabBook.Forms.MainForm.Command;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -16,7 +13,7 @@ namespace LabBook.Forms.MainForm.ModelView
     {
         private ICommand _delBrookViscosity;
 
-        private ExperimentalVisService _service;
+        private readonly ExperimentalVisService _service = new ExperimentalVisService();
         private WindowEditMV _windowEditMV;
         private long _index = 0;
         private DataRowView _actualRow;
@@ -38,19 +35,6 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 foreach (string name in names)
                     PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public ExperimentalVisService ExpService
-        {
-            get
-            {
-                return _service;
-            }
-            set
-            {
-                _service = value;
-                OnPropertyChanged(nameof(GetBrookView));
             }
         }
 
@@ -181,8 +165,13 @@ namespace LabBook.Forms.MainForm.ModelView
             var id = Convert.ToInt64(row["id"]);
             var date = Convert.ToDateTime(row["created"]);
 
+            var maxId = _service.GetTable.AsEnumerable()
+                .Select(x => x["id"])
+                .DefaultIfEmpty(-1)
+                .Max(x => x);
+
             var view = e.NewItem as DataRowView;
-            view.Row["id"] = -1;
+            view.Row["id"] = Convert.ToInt64(maxId) + 1;
             view.Row["labbook_id"] = id;
             view.Row["vis_type"] = "brookfield";
             view.Row["date_created"] = date;
@@ -201,6 +190,7 @@ namespace LabBook.Forms.MainForm.ModelView
         public void Save()
         {
             _ = _service.SaveAndReload(LabBookId);
+            OnPropertyChanged(nameof(Modified));
         }
 
         public void Delete(long id)

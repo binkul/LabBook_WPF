@@ -11,12 +11,6 @@ namespace LabBook.ADO.Repository
     public class ExperimentCycleRepository : IRepository<ExperimentCycleDto>
     {
         private const string getAllQuery = "Select cy.id, cy.name, cy.user_id, cy.date From LabBook.dbo.ExpCycle cy Order by name";
-        private readonly User _user;
-
-        public ExperimentCycleRepository(User user)
-        {
-            _user = user;
-        }
 
         public bool Delete(long id)
         {
@@ -25,7 +19,7 @@ namespace LabBook.ADO.Repository
 
         public DataTable GetAll()
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, _user.Connection);
+            SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, UserSingleton.Connection);
 
             DataTable table = new DataTable();
             adapter.Fill(table);

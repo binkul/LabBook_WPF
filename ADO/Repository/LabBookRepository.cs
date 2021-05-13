@@ -19,17 +19,16 @@ namespace LabBook.ADO.Repository
                             "cycle_id=@cycle_id, created=@created, modified=@modified, deleted=@deleted Where id=@id";
         private readonly string _deleteQuery = "Update LabBook.dbo.ExpLabBook Set deleted='true' Where id=@id";
 
-        private readonly User _user;
+        //private readonly User _user;
 
-        public LabBookRepository(User user)
+        public LabBookRepository() //User user)
         {
-            _user = user;
+            //_user = user;
         }
-
 
         public DataTable GetAll()
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(_allQuery, _user.Connection);
+            SqlDataAdapter adapter = new SqlDataAdapter(_allQuery, UserSingleton.Connection); // _user.Connection);
 
             DataTable table = new DataTable();
             adapter.Fill(table);
@@ -66,7 +65,7 @@ namespace LabBook.ADO.Repository
         {
             ExceptionCode error = ExceptionCode.NoError;
             SqlCommand cmd = new SqlCommand();
-            cmd.Connection = _user.Connection;
+            cmd.Connection = UserSingleton.Connection; // _user.Connection;
             cmd.CommandText = _updateQuery;
 
             try
@@ -81,7 +80,9 @@ namespace LabBook.ADO.Repository
                 cmd.Parameters.AddWithValue("@modified", row["modified"]);
                 cmd.Parameters.AddWithValue("@deleted", row["deleted"]);
                 cmd.Parameters.AddWithValue("@id", row["id"]);
-                _user.Connection.Open();
+                if (UserSingleton.Connection.State == ConnectionState.Closed)
+                    UserSingleton.Connection.Open();
+                //_user.Connection.Open();
                 cmd.ExecuteNonQuery();
             }
             catch (SqlException ex)
@@ -98,7 +99,7 @@ namespace LabBook.ADO.Repository
             }
             finally
             {
-                _user.Connection.Close();
+                UserSingleton.Connection.Close(); // _user.Connection.Close();
             }
 
             return error;

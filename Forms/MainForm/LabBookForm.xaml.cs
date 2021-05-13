@@ -14,24 +14,25 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
-        private readonly User _user;
-        private readonly FilterMV _filterMV;
-        private readonly ViscosityMV _viscosityMV;
+        //private readonly User _user;
+        //private readonly FilterMV _filterMV;
+        //private readonly ViscosityMV _viscosityMV;
 
-        public LabBookForm(User user)
+        public LabBookForm() //User user)
         {
             InitializeComponent();
-            _user = user;
+            //_user = user;
 
-            WindowEditMV mainModelView = new WindowEditMV(_user);
-            this.DataContext = mainModelView;
+            //WindowEditMV mainModelView = new WindowEditMV(); // _user);
+            //this.DataContext = mainModelView;
 
-            _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
-            _viscosityMV.ExpService = mainModelView.GetVisService;
+            WindowEditMV mainModelView = this.DataContext as WindowEditMV;
+            ViscosityMV _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
+            //_viscosityMV.ExpService = mainModelView.GetVisService;
             _viscosityMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
 
-            _filterMV = this.Resources["filter"] as FilterMV;
+            FilterMV _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
 
             DgLabBook.Focus();

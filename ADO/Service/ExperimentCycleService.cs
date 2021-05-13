@@ -8,14 +8,12 @@ namespace LabBook.ADO.Service
 {
     public class ExperimentCycleService
     {
-        private readonly User _user;
         private readonly IRepository<ExperimentCycleDto> _expCycleRepository;
         private DataTable _dataTable;
 
-        public ExperimentCycleService(User user)
+        public ExperimentCycleService() 
         {
-            _user = user;
-            _expCycleRepository = new ExperimentCycleRepository(_user);
+            _expCycleRepository = new ExperimentCycleRepository();
         }
 
         public DataView GetAll()

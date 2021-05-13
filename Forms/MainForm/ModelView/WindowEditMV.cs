@@ -25,11 +25,10 @@
         private ViscosityMV _viscosityMV;
         private long _index = 0;
         private DataRowView _actualRow;
-        private readonly User _user;
-        private readonly LabBookService _labBookService;
-        private readonly ExperimentCycleService _expCycleService;
-        private readonly ExperimentalVisService _expVisService;
-        private readonly UserService _userService;
+        //private readonly User _user;
+        private readonly LabBookService _labBookService = new LabBookService();
+        private readonly ExperimentCycleService _expCycleService = new ExperimentCycleService();
+        private readonly UserService _userService = new UserService();
         private DataView _labBookView;
         private DataView _expCycleView;
         private DataView _userView;
@@ -37,13 +36,12 @@
 
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
-        public WindowEditMV(User user)
+        public WindowEditMV() //User user)
         {
-            _user = user;
-            _labBookService = new LabBookService(_user);
-            _expCycleService = new ExperimentCycleService(_user);
-            _expVisService = new ExperimentalVisService(_user);
-            _userService = new UserService(_user);
+            //_user = user;
+            //_labBookService = new LabBookService(); // _user);
+            //_expCycleService = new ExperimentCycleService();
+            //_userService = new UserService(); //_user);
             _labBookView = _labBookService.GetAll();
             _expCycleView = _expCycleService.GetAll();
             _userView = _userService.GetAll();
@@ -62,14 +60,6 @@
             {
                 foreach (string name in names)
                     PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public ExperimentalVisService GetVisService
-        {
-            get
-            {
-                return _expVisService;
             }
         }
 
@@ -328,13 +318,13 @@
             }
         }
 
-        public User GetUser
-        {
-            get
-            {
-                return _user;
-            }
-        }
+        //public User GetUser
+        //{
+        //    get
+        //    {
+        //        return _user;
+        //    }
+        //}
 
         public long DgRowIndex
         {
@@ -352,7 +342,10 @@
         {
             get
             {
-                return _labBookService.Modified || _viscosityMV.Modified;
+                if (_viscosityMV != null)
+                    return _labBookService.Modified || _viscosityMV.Modified;
+                else
+                    return false;
             }
         }
 
@@ -379,11 +372,21 @@
                 {
                     if (Convert.ToBoolean(_actualRow["deleted"]))
                         return false;
-                    else if (_user.Id == Convert.ToInt64(_actualRow["user_id"]))
+                    else if (UserSingleton.Id == Convert.ToInt64(_actualRow["user_id"])) // _user.Id == Convert.ToInt64(_actualRow["user_id"]))
+                        return true;
+                    else if (UserSingleton.Id != Convert.ToInt64(_actualRow["user_id"]) && UserSingleton.Permission.Equals("admin"))
                         return true;
                     else
                         return false;
                 }
+            }
+        }
+
+        public bool IsDeleted
+        {
+            get
+            {
+                return Convert.ToBoolean(_actualRow["deleted"]);
             }
         }
 
@@ -398,8 +401,7 @@
 
             if (ansver == MessageBoxResult.Yes)
             {
-
-
+                SaveAll();
                 WindowSetting.Save(_windowData);
             }
             else if (ansver == MessageBoxResult.Cancel)
