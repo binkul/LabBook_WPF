@@ -19,24 +19,34 @@ namespace LabBook.ADO.Repository
                             "cycle_id=@cycle_id, created=@created, modified=@modified, deleted=@deleted Where id=@id";
         private readonly string _deleteQuery = "Update LabBook.dbo.ExpLabBook Set deleted='true' Where id=@id";
 
-        //private readonly User _user;
-
-        public LabBookRepository() //User user)
-        {
-            //_user = user;
-        }
-
         public DataTable GetAll()
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(_allQuery, UserSingleton.Connection); // _user.Connection);
-
             DataTable table = new DataTable();
-            adapter.Fill(table);
 
-            DataColumn[] klucz = new DataColumn[1];
-            DataColumn id = table.Columns["id"];
-            klucz[0] = id;
-            table.PrimaryKey = klucz;
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    var adapter = new SqlDataAdapter(_allQuery, connection);
+                    adapter.Fill(table);
+
+                    DataColumn[] klucz = new DataColumn[1];
+                    DataColumn id = table.Columns["id"];
+                    klucz[0] = id;
+                    table.PrimaryKey = klucz;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+            }
 
             return table;
         }
@@ -64,42 +74,43 @@ namespace LabBook.ADO.Repository
         public ExceptionCode Update(DataRow row)
         {
             ExceptionCode error = ExceptionCode.NoError;
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = UserSingleton.Connection; // _user.Connection;
-            cmd.CommandText = _updateQuery;
 
-            try
+            using (SqlCommand cmd = new SqlCommand())
             {
-                cmd.Parameters.AddWithValue("@title", row["title"]);
-                cmd.Parameters.AddWithValue("@density", row["density"]);
-                cmd.Parameters.AddWithValue("@observation", row["observation"]);
-                cmd.Parameters.AddWithValue("@remarks", row["remarks"]);
-                cmd.Parameters.AddWithValue("@user_id", row["user_id"]);
-                cmd.Parameters.AddWithValue("@cycle_id", row["cycle_id"]);
-                cmd.Parameters.AddWithValue("@created", row["created"]);
-                cmd.Parameters.AddWithValue("@modified", row["modified"]);
-                cmd.Parameters.AddWithValue("@deleted", row["deleted"]);
-                cmd.Parameters.AddWithValue("@id", row["id"]);
-                if (UserSingleton.Connection.State == ConnectionState.Closed)
-                    UserSingleton.Connection.Open();
-                //_user.Connection.Open();
-                cmd.ExecuteNonQuery();
-            }
-            catch (SqlException ex)
-            {
-                error = ExceptionCode.SqlError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                    "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                error = ExceptionCode.SqlConnectionError;
-                MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                    "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                UserSingleton.Connection.Close(); // _user.Connection.Close();
+                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+                try
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = _updateQuery;
+                    cmd.Parameters.AddWithValue("@title", row["title"]);
+                    cmd.Parameters.AddWithValue("@density", row["density"]);
+                    cmd.Parameters.AddWithValue("@observation", row["observation"]);
+                    cmd.Parameters.AddWithValue("@remarks", row["remarks"]);
+                    cmd.Parameters.AddWithValue("@user_id", row["user_id"]);
+                    cmd.Parameters.AddWithValue("@cycle_id", row["cycle_id"]);
+                    cmd.Parameters.AddWithValue("@created", row["created"]);
+                    cmd.Parameters.AddWithValue("@modified", row["modified"]);
+                    cmd.Parameters.AddWithValue("@deleted", row["deleted"]);
+                    cmd.Parameters.AddWithValue("@id", row["id"]);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    error = ExceptionCode.SqlError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = ExceptionCode.SqlConnectionError;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
 
             return error;

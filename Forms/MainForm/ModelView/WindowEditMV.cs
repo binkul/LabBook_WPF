@@ -25,7 +25,6 @@
         private ViscosityMV _viscosityMV;
         private long _index = 0;
         private DataRowView _actualRow;
-        //private readonly User _user;
         private readonly LabBookService _labBookService = new LabBookService();
         private readonly ExperimentCycleService _expCycleService = new ExperimentCycleService();
         private readonly UserService _userService = new UserService();
@@ -36,12 +35,8 @@
 
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
-        public WindowEditMV() //User user)
+        public WindowEditMV()
         {
-            //_user = user;
-            //_labBookService = new LabBookService(); // _user);
-            //_expCycleService = new ExperimentCycleService();
-            //_userService = new UserService(); //_user);
             _labBookView = _labBookService.GetAll();
             _expCycleView = _expCycleService.GetAll();
             _userView = _userService.GetAll();
@@ -317,14 +312,6 @@
                 return _userView;
             }
         }
-
-        //public User GetUser
-        //{
-        //    get
-        //    {
-        //        return _user;
-        //    }
-        //}
 
         public long DgRowIndex
         {

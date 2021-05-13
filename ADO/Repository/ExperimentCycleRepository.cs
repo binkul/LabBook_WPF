@@ -1,10 +1,10 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Exceptions;
 using LabBook.Dto;
-using LabBook.Security;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 
 namespace LabBook.ADO.Repository
 {
@@ -19,15 +19,31 @@ namespace LabBook.ADO.Repository
 
         public DataTable GetAll()
         {
-            SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, UserSingleton.Connection);
-
             DataTable table = new DataTable();
-            adapter.Fill(table);
 
-            DataColumn[] klucz = new DataColumn[1];
-            DataColumn id = table.Columns["id"];
-            klucz[0] = id;
-            table.PrimaryKey = klucz;
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, connection);
+                    adapter.Fill(table);
+
+                    DataColumn[] klucz = new DataColumn[1];
+                    DataColumn id = table.Columns["id"];
+                    klucz[0] = id;
+                    table.PrimaryKey = klucz;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'.",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'.",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
 
             return table;
         }

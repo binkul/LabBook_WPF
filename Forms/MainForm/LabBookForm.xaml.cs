@@ -1,11 +1,8 @@
-﻿using LabBook.Security;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Data;
 using LabBook.Forms.MainForm.ModelView;
-using System.Data;
-using System;
 
 namespace LabBook.Forms.MainForm
 {
@@ -14,21 +11,14 @@ namespace LabBook.Forms.MainForm
     /// </summary>
     public partial class LabBookForm : Window
     {
-        //private readonly User _user;
-        //private readonly FilterMV _filterMV;
-        //private readonly ViscosityMV _viscosityMV;
 
-        public LabBookForm() //User user)
+        public LabBookForm()
         {
             InitializeComponent();
-            //_user = user;
-
-            //WindowEditMV mainModelView = new WindowEditMV(); // _user);
-            //this.DataContext = mainModelView;
 
             WindowEditMV mainModelView = this.DataContext as WindowEditMV;
             ViscosityMV _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
-            //_viscosityMV.ExpService = mainModelView.GetVisService;
+            
             _viscosityMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
 

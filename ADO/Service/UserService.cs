@@ -8,15 +8,8 @@ namespace LabBook.ADO.Service
 {
     public class UserService
     {
-        //private readonly User _user;
-        private readonly IRepository<UserDto> _userRepository;
+        private readonly IRepository<UserDto> _userRepository = new UserRepository();
         private DataTable dataTable;
-
-        public UserService() //User user)
-        {
-            //_user = user;
-            _userRepository = new UserRepository(); // _user);
-        }
 
         public DataView GetAll()
         {
@@ -25,6 +18,5 @@ namespace LabBook.ADO.Service
             view.Sort = "id";
             return view;
         }
-
     }
 }

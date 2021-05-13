@@ -36,13 +36,13 @@ namespace LabBook.ADO.Repository
         {
             bool error = false;
 
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            using (SqlCommand cmd = new SqlCommand())
             {
+                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
                 try
                 {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.CommandText = _delQuery + id;
                     cmd.Connection = connection;
+                    cmd.CommandText = _delQuery + id;
                     connection.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -77,7 +77,6 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-
                     adapter.Fill(table);
 
                     DataColumn[] klucz = new DataColumn[1];
@@ -96,6 +95,7 @@ namespace LabBook.ADO.Repository
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+
             return table;
         }
 
@@ -108,7 +108,6 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-
                     adapter.Fill(dataTable);
                 }
                 catch (SqlException ex)
@@ -134,7 +133,6 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-
                     adapter.Fill(table);
 
                     DataColumn[] klucz = new DataColumn[1];
@@ -175,13 +173,13 @@ namespace LabBook.ADO.Repository
         {
             ExceptionCode error = ExceptionCode.NoError;
 
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            using (SqlCommand cmd = new SqlCommand())
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = connection;
-                cmd.CommandText = _saveQuery;
+                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
                 try
                 {
+                    cmd.Connection = connection;
+                    cmd.CommandText = _saveQuery;
                     cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
                     cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
                     cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
@@ -243,13 +241,13 @@ namespace LabBook.ADO.Repository
         {
             ExceptionCode error = ExceptionCode.NoError;
 
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            using (SqlCommand cmd = new SqlCommand())
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = connection;
-                cmd.CommandText = _updateQuery;
+                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
                 try
                 {
+                    cmd.Connection = connection;
+                    cmd.CommandText = _updateQuery;
                     cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
                     cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
                     cmd.Parameters.AddWithValue("@date_update", row["date_update"]);

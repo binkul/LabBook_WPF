@@ -6,7 +6,7 @@ namespace LabBook.ADO.Service
 {
     public class ExperimentalVisService
     {
-        private ExperimentalVisRepository _repository;
+        private ExperimentalVisRepository _repository = new ExperimentalVisRepository();
         private readonly DataTable _dataTable;
         private readonly DataView _brookView;
         private readonly DataView _brookxView;
@@ -16,7 +16,6 @@ namespace LabBook.ADO.Service
 
         public ExperimentalVisService()
         {
-            _repository = new ExperimentalVisRepository();
             _dataTable = _repository.CreateTable();
             _dataTable.RowChanged += _dataTable_RowChanged;
             _brookView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield'", Sort = "date_created, date_update" };

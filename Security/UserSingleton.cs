@@ -19,9 +19,8 @@ namespace LabBook.Security
         private static string _permission;
         private static string _identifier;
         private static bool _isActive;
-        private static SqlConnection _connection;
 
-        private UserSingleton(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive, SqlConnection connection) 
+        private UserSingleton(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive) 
         {
             _id = id;
             _name = name;
@@ -31,17 +30,16 @@ namespace LabBook.Security
             _permission = permission;
             _identifier = identifier;
             _isActive = isActive;
-            _connection = connection;
         }
 
-        public static UserSingleton CreateInstance(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive, SqlConnection connection)
+        public static UserSingleton CreateInstance(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive)
         {
                 if (_instance == null)
                 {
                     lock (_syncRoot)
                     {
                         if (_instance == null)
-                            _instance = new UserSingleton(id, name, surname, email, login, permission, identifier, isActive, connection);
+                            _instance = new UserSingleton(id, name, surname, email, login, permission, identifier, isActive);
                     }
                 }
 
@@ -117,14 +115,6 @@ namespace LabBook.Security
             get
             {
                 return _isActive;
-            }
-        }
-
-        public static SqlConnection Connection
-        {
-            get
-            {
-                return _connection;
             }
         }
     }

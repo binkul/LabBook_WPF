@@ -4,8 +4,6 @@ using LabBook.Forms.Register;
 using LabBook.Security;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -34,22 +32,22 @@ namespace LabBook.Forms.Login
             SaveLogins();
             User user = repository.GetUserByLoginAndPassword(CmbUserName.Text, TxtPassword.Password);
 
-            if (user != null && user.IsActive)
-            {
-                _ = UserSingleton.CreateInstance(user.Id, user.Name, user.Surname, user.Email, user.Login, user.Permission, user.Identifier, user.IsActive, user.Connection);
-                LabBookForm dashboard = new LabBookForm(); // user);
-                dashboard.Show();
-                this.Close();
-            }
-            else if (!user.IsActive)
-            {
-                MessageBox.Show("Użytkownik: '" + user.Login + "' jest jeszcze nieaktywny. Skontaktuj się z administratorem.",
-                    "Brak uprawnień", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
+            if (user == null)
             {
                 MessageBox.Show("Nieprawidłowy login lub hasło. Spróbuj ponownie",
                     "Błąd logowania", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else if (user.IsActive)
+            {
+                _ = UserSingleton.CreateInstance(user.Id, user.Name, user.Surname, user.Email, user.Login, user.Permission, user.Identifier, user.IsActive);
+                LabBookForm dashboard = new LabBookForm();
+                dashboard.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Użytkownik: '" + user.Login + "' jest jeszcze nieaktywny. Skontaktuj się z administratorem.",
+                    "Brak uprawnień", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

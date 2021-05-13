@@ -14,9 +14,8 @@ namespace LabBook.Security
         public string Permission { get; }
         public string Identifier { get; }
         public bool IsActive { get; }
-        public SqlConnection Connection { get;}
 
-        public User(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive, SqlConnection connection)
+        public User(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive)
         {
             Id = id;
             Name = name;
@@ -26,7 +25,6 @@ namespace LabBook.Security
             Permission = permission;
             Identifier = identifier;
             IsActive = isActive;
-            Connection = connection;
         }
 
         public override bool Equals(object obj)
