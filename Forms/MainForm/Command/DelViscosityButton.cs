@@ -29,17 +29,17 @@ namespace LabBook.Forms.MainForm.Command
 
         public bool CanExecute(object parameter)
         {
-            return _modelView.DgRowIndex < _modelView.GetBrookView.Count;
+            return _modelView.DgBrookfieldRowIndex < _modelView.GetBrookView.Count;
         }
 
         public void Execute(object parameter)
         {
-            if (_modelView.ActualRow == null || _modelView.ActualRow.IsNew) return;
+            if (_modelView.ActualBrookfieldRow == null || _modelView.ActualBrookfieldRow.IsNew) return;
 
             if (MessageBox.Show("Czy usunąć zaznaczony rekord?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                var id = Convert.ToInt64(_modelView.ActualRow.Row["id"]);
-                _modelView.GetBrookView.Delete((int)_modelView.DgRowIndex);
+                var id = Convert.ToInt64(_modelView.ActualBrookfieldRow.Row["id"]);
+                _modelView.GetBrookView.Delete((int)_modelView.DgBrookfieldRowIndex);
                 _modelView.Delete(id);
             }
         }

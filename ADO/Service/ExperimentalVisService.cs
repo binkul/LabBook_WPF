@@ -1,6 +1,7 @@
 ﻿using LabBook.ADO.Repository;
 using System.Data;
 using LabBook.ADO.Exceptions;
+using LabBook.Dto;
 
 namespace LabBook.ADO.Service
 {
@@ -18,10 +19,10 @@ namespace LabBook.ADO.Service
         {
             _dataTable = _repository.CreateTable();
             _dataTable.RowChanged += _dataTable_RowChanged;
-            _brookView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield'", Sort = "date_created, date_update" };
-            _brookxView = new DataView(_dataTable) { RowFilter = "vis_type = 'brookfield_x'", Sort = "date_created, date_update" };
-            _krebsView = new DataView(_dataTable) { RowFilter = "vis_type = 'krebs'", Sort = "date_created, date_update" };
-            _iciView = new DataView(_dataTable) { RowFilter = "vis_type = 'ici'", Sort = "date_created, date_update" };
+            _brookView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.brookfield + "'", Sort = "date_created, date_update" };
+            _brookxView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.brookfield_x + "'", Sort = "date_created, date_update" };
+            _krebsView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.krebs + "'", Sort = "date_created, date_update" };
+            _iciView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.ici + "'", Sort = "date_created, date_update" };
         }
 
         private void _dataTable_RowChanged(object sender, DataRowChangeEventArgs e)

@@ -1,10 +1,6 @@
 ﻿using LabBook.Security;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -26,13 +22,12 @@ namespace LabBook.Forms.Tools
         {
             var del = System.Convert.ToBoolean(values[0]);
             var id = System.Convert.ToInt64(values[1]);
-            //var user = (User)values[2];
 
             if (del)
                 return _sourceDel;
-            else if (id == UserSingleton.Id) // user.Id)
+            else if (id == UserSingleton.Id)
                 return _sourceOk;
-            else if (id != UserSingleton.Id && UserSingleton.Permission.Equals("admin")) // id != user.Id && user.Permission.Equals("admin"))
+            else if (id != UserSingleton.Id && UserSingleton.Permission.Equals("admin"))
                 return _sourceUnLock;
             else
                 return _sourceLock;

@@ -359,7 +359,7 @@
                 {
                     if (Convert.ToBoolean(_actualRow["deleted"]))
                         return false;
-                    else if (UserSingleton.Id == Convert.ToInt64(_actualRow["user_id"])) // _user.Id == Convert.ToInt64(_actualRow["user_id"]))
+                    else if (UserSingleton.Id == Convert.ToInt64(_actualRow["user_id"]))
                         return true;
                     else if (UserSingleton.Id != Convert.ToInt64(_actualRow["user_id"]) && UserSingleton.Permission.Equals("admin"))
                         return true;

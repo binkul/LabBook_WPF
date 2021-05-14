@@ -9,23 +9,39 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
+    public static class ViscosityType
+    {
+        public static string Brookfield = "brookfield";
+        public static string BrookfieldX = "brookfield_x";
+        public static string Krebs = "krebs";
+        public static string ICI = "ici";
+    }
+
     public class ViscosityMV : INotifyPropertyChanged
     {
         private ICommand _delBrookViscosity;
 
         private readonly ExperimentalVisService _service = new ExperimentalVisService();
         private WindowEditMV _windowEditMV;
-        private long _index = 0;
-        private DataRowView _actualRow;
+        private long _brookfieldIndex = 0;
+        private long _krebsIndex = 0;
+        private long _iciIndex = 0;
+        private DataRowView _actualBrookfieldRow;
+        private DataRowView _actualKrebsRow;
+        private DataRowView _actualIcidRow;
         private long _labBookId;
         private bool _profilStd = true;
         private bool _profilExt = false;
         private bool _profilFull = false;
-        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewItemCommand { get; set; }
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewBrookfieldCommand { get; set; }
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewKrebsCommand { get; set; }
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewIciCommand { get; set; }
 
         public ViscosityMV()
         {
-            OnInitializingNewItemCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewItemCommandExecuted);
+            OnInitializingNewBrookfieldCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewBrookfieldCommandExecuted);
+            OnInitializingNewKrebsCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewKrebsCommandExecuted);
+            OnInitializingNewIciCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewIciCommandExecuted);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -60,28 +76,78 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public long DgRowIndex
+        public long DgBrookfieldRowIndex
         {
             get
             {
-                return _index;
+                return _brookfieldIndex;
             }
             set
             {
-                _index = value;
+                _brookfieldIndex = value;
             }
         }
-
-        public DataRowView ActualRow
+        
+        public long DgKrebsRowIndex
         {
             get
             {
-                return _actualRow;
+                return _krebsIndex;
+            }
+            set
+            {
+                _krebsIndex = value;
+            }
+        }
+        
+        public long DgIciRowIndex
+        {
+            get
+            {
+                return _iciIndex;
+            }
+            set
+            {
+                _iciIndex = value;
+            }
+        }
+
+        public DataRowView ActualBrookfieldRow
+        {
+            get
+            {
+                return _actualBrookfieldRow;
             }
             set
             {
                 if (value != null)
-                    _actualRow = value;
+                    _actualBrookfieldRow = value;
+            }
+        }
+        
+        public DataRowView ActualKrebsRow
+        {
+            get
+            {
+                return _actualKrebsRow;
+            }
+            set
+            {
+                if (value != null)
+                    _actualKrebsRow = value;
+            }
+        }
+        
+        public DataRowView ActualIciRow
+        {
+            get
+            {
+                return _actualIcidRow;
+            }
+            set
+            {
+                if (value != null)
+                    _actualIcidRow = value;
             }
         }
 
@@ -91,6 +157,28 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 if (_service != null)
                     return _service.GetBrookfield;
+                else
+                    return null;
+            }
+        }
+
+        public DataView GetKrebsView
+        {
+            get
+            {
+                if (_service != null)
+                    return _service.GetKrebs;
+                else
+                    return null;
+            }
+        }
+
+        public DataView GetIciView
+        {
+            get
+            {
+                if (_service != null)
+                    return _service.GetICI;
                 else
                     return null;
             }
@@ -159,7 +247,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public void OnInitializingNewItemCommandExecuted(InitializingNewItemEventArgs e)
+        public void OnInitializingNewBrookfieldCommandExecuted(InitializingNewItemEventArgs e)
         {
             var row = _windowEditMV.ActualRow;
             var id = Convert.ToInt64(row["id"]);
@@ -173,9 +261,19 @@ namespace LabBook.Forms.MainForm.ModelView
             var view = e.NewItem as DataRowView;
             view.Row["id"] = Convert.ToInt64(maxId) + 1;
             view.Row["labbook_id"] = id;
-            view.Row["vis_type"] = "brookfield";
+            view.Row["vis_type"] = ViscosityType.Brookfield;
             view.Row["date_created"] = date;
             view.Row["date_update"] = DateTime.Now;
+        }
+
+        public void OnInitializingNewKrebsCommandExecuted(InitializingNewItemEventArgs e)
+        {
+
+        }
+
+        public void OnInitializingNewIciCommandExecuted(InitializingNewItemEventArgs e)
+        {
+
         }
 
         public ICommand DeleteBrookViscosity
@@ -195,7 +293,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public void Delete(long id)
         {
-            if (ActualRow != null)
+            if (ActualBrookfieldRow != null)
                 _service.Delete(id);
         }
     }

@@ -16,9 +16,10 @@ namespace LabBook.Forms.MainForm
         {
             InitializeComponent();
 
-            WindowEditMV mainModelView = this.DataContext as WindowEditMV;
+            WindowEditMV mainModelView = new WindowEditMV();
             ViscosityMV _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
-            
+
+            this.DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
 

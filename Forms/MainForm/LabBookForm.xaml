@@ -23,9 +23,9 @@
         Top="{Binding FormYpos, Mode=TwoWay}" 
         Left="{Binding FormXpos, Mode=TwoWay}"
         WindowStartupLocation="CenterScreen" >
-    <Window.DataContext> 
+    <!--<Window.DataContext> 
         <vm:WindowEditMV />
-    </Window.DataContext>
+    </Window.DataContext>-->
     <i:Interaction.Triggers>
         <!-- Closing Form event -->
         <i:EventTrigger EventName="Closing">
@@ -342,17 +342,43 @@
 
                     </Grid>
                 </TabItem>
-                
+
                 <!-- Comments page -->
                 <TabItem Header="Wnioski" Margin="-1.8,0,-2.4,-0.8">
-                    <Grid Background="#FFE5E5E5" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="167*"/>
-                            <ColumnDefinition Width="585*"/>
-                        </Grid.ColumnDefinitions>
-
-
-                    </Grid>
+                    <UniformGrid Columns="1" Rows="2" Background="#FFE5E5E5" >
+                        <Grid >
+                            <Label Content="Obserwacje" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" 
+                                   Margin="-28,44,0,0" Foreground="#FF141EDD" FontWeight="Bold" FontSize="14" >
+                                <Label.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="270"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Label.RenderTransform>
+                            </Label>
+                            <TextBox x:Name="TxComments" Background="White" Margin="31,5,5,5.2" AcceptsReturn="True" FontSize="14"
+                                     Text="{Binding SelectedItem.observation, ElementName=DgLabBook, Mode=TwoWay}"
+                                     IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        </Grid>
+                        <Grid >
+                            <Label Content="Wnioski" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.951" 
+                                   Margin="-5,38,0,0" Foreground="#FF141EDD" FontWeight="Bold" FontSize="14" >
+                                <Label.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="270"/>
+                                        <TranslateTransform />
+                                    </TransformGroup>
+                                </Label.RenderTransform>
+                            </Label>
+                            <TextBox x:Name="TxConclusion" Background="White" Margin="31,5,5,5.2" AcceptsReturn="True" FontSize="14"
+                                      Text="{Binding SelectedItem.remarks, ElementName=DgLabBook, Mode=TwoWay}"
+                                     IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        </Grid>
+                    </UniformGrid>
                 </TabItem>
 
                 <!-- Viscosity Brookfield page -->
@@ -364,11 +390,11 @@
                                   RowHeaderWidth="20" HeadersVisibility="Column"
                                   IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                   ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetBrookView, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
-                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgRowIndex, Mode=TwoWay, FallbackValue=0}" >
+                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualBrookfieldRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
+                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgBrookfieldRowIndex, Mode=TwoWay, FallbackValue=0}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="InitializingNewItem">
-                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewItemCommand}" PassEventArgsToCommand="True" />
+                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewBrookfieldCommand}" PassEventArgsToCommand="True" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
 
@@ -376,7 +402,7 @@
                                 <DataGridTextColumn Binding="{Binding id}" Visibility="Collapsed" />
                                 <DataGridTextColumn Binding="{Binding vis_type}" Visibility="Collapsed" />
                                 <DataGridTextColumn Binding="{Binding labbok_id}" Visibility="Collapsed" />
-                                
+
                                 <DataGridTemplateColumn HeaderStyle="{StaticResource AllignColmnHeaderCenter}" Width="0.4*" 
                                                         Visibility="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                                     <DataGridTemplateColumn.Header >
@@ -394,7 +420,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                
+
                                 <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
@@ -502,6 +528,46 @@
                     </Grid>
                 </TabItem>
 
+                <!-- Viscosity Krebs and ICI page -->
+                <TabItem Header="Krebs/ICI" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
+                    <UniformGrid Columns="1" Rows="2" >
+                        
+                        <!-- Viscosity krebs -->
+                        <DataGrid x:Name="DgKrebs" Margin="5,5,5,5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
+                                  SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
+                                  RowHeaderWidth="20" HeadersVisibility="Column"
+                                  IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetKrebsView, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualKrebsRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
+                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgKrebsRowIndex, Mode=TwoWay, FallbackValue=0}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="InitializingNewItem">
+                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewKrebsCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+
+                        </DataGrid>
+
+                        <!-- Viscosity Ici -->
+                        <DataGrid x:Name="DgIci" Margin="5,2,5,5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
+                                  SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
+                                  RowHeaderWidth="20" HeadersVisibility="Column"
+                                  IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetIciView, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualIciRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
+                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgIciRowIndex, Mode=TwoWay, FallbackValue=0}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="InitializingNewItem">
+                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewIciCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+
+                        </DataGrid>
+                        
+                    </UniformGrid>
+                </TabItem>
             </TabControl>
 
         </Grid>
