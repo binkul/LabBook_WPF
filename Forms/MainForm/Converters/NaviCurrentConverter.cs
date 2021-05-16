@@ -2,18 +2,20 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class DotConverter : IValueConverter
+    public class NaviCurrentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.ToString().Replace(".", ",");
+            long number = System.Convert.ToInt64(value);
+            number++;
+            return number;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.ToString().Replace(",", ".");
+            throw new NotImplementedException();
         }
     }
 }

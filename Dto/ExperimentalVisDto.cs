@@ -2,14 +2,6 @@
 
 namespace LabBook.Dto
 {
-    public enum ViscosityType
-    {
-        brookfield,
-        brookfield_x,
-        krebs,
-        ici
-    }
-
     public class ExperimentalVisDto
     {
         private long _id = -1;

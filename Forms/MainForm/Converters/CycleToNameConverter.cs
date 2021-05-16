@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class UserToNameConverter : IMultiValueConverter
+    public class CycleToNameConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -16,8 +16,8 @@ namespace LabBook.Forms.Tools
 
             var result = table.AsEnumerable()
                 .FirstOrDefault(row => row.Field<long>("id") == id);
-                
-            return result != null ? result["identifier"] : "Brak";
+
+            return result != null ? result["name"] : "Brak";
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

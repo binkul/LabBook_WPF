@@ -13,7 +13,7 @@ namespace LabBook.ADO.Service
 
         public DataView GetAll()
         {
-            _dataTable = _expCycleRepository.GetAll();
+            _dataTable = _expCycleRepository.GetAll(ExperimentCycleRepository.AllQuery);
             DataView view = new DataView(_dataTable);
             view.Sort = "name";
             return view;

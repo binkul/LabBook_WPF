@@ -28,7 +28,7 @@ namespace LabBook.ADO.Service
 
         public DataView GetAll()
         {
-            _dataTable = _repository.GetAll();
+            _dataTable = _repository.GetAll(LabBookRepository.AllQuery);
             _dataTable.RowChanged += DataTable_RowChanged;
             DataView view = new DataView(_dataTable);
             view.Sort = "id";
@@ -50,7 +50,7 @@ namespace LabBook.ADO.Service
                 foreach (DataRow row in updateRows.Rows)
                 {
 
-                    if (_repository.Update(row) != ExceptionCode.NoError)
+                    if (_repository.Update(row, LabBookRepository.UpdateQuery) != ExceptionCode.NoError)
                         result = false;
                 }
             }

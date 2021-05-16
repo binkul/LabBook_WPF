@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class CycleToNameConverter : IMultiValueConverter
+    public class UserToNameConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,8 +16,8 @@ namespace LabBook.Forms.Tools
 
             var result = table.AsEnumerable()
                 .FirstOrDefault(row => row.Field<long>("id") == id);
-
-            return result != null ? result["name"] : "Brak";
+                
+            return result != null ? result["identifier"] : "Brak";
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

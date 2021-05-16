@@ -2,17 +2,13 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class BoolToVisibiltyConverter : IValueConverter
+    public class IdToNumerDConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var tmp = System.Convert.ToBoolean(value);
-            if (tmp)
-                return System.Windows.Visibility.Visible;
-            else
-                return System.Windows.Visibility.Hidden;
+            return "D-" + value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

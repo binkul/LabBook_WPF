@@ -1,7 +1,6 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Exceptions;
 using LabBook.Dto;
-using LabBook.Security;
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -9,63 +8,28 @@ using System.Windows;
 
 namespace LabBook.ADO.Repository
 {
-    public class ExperimentalVisRepository : IRepository<ExperimentalVisDto>
+    public class ExperimentalVisRepository : RepositoryCommon<ExperimentalVisDto>
     {
-        private static readonly string _allQuery = "Select * from labbook.dbo.ExpViscosity";
+        public static readonly string AllQuery = "Select * from labbook.dbo.ExpViscosity";
         private static readonly string _allQueryByLabId = "Select id, labbook_id, date_created, date_update, " +
             "DATEDIFF(DAY, date_created, date_update) as days, pH, vis_type, brook_1, brook_5, brook_10, brook_20, " +
             "brook_30, brook_40, brook_50, brook_60, brook_70, brook_80, brook_90, brook_100, brook_comment, " +
             "brook_disc, brook_x_vis, brook_x_rpm, brook_x_disc, krebs, krebs_comment, ici, ici_disc, ici_comment, temp " +
             "From labbook.dbo.ExpViscosity Where labbook_id = ";
-        private static readonly string _saveQuery = "Insert Into LabBook.dbo.ExpViscosity(labbook_id, date_created, date_update, " +
+        public static readonly string SaveQuery = "Insert Into LabBook.dbo.ExpViscosity(labbook_id, date_created, date_update, " +
             "pH, vis_type, brook_1, brook_5, brook_10, brook_20, brook_30, brook_40, brook_50, brook_60, brook_70, brook_80, " +
             "brook_90, brook_100, brook_comment, brook_disc, brook_x_vis, brook_x_rpm, brook_x_disc, krebs, krebs_comment, " +
             "ici, ici_disc, ici_comment, temp) Values(@labbook_id, @date_created, @date_update, @pH, @vis_type, @brook_1, " +
             "@brook_5, @brook_10, @brook_20, @brook_30, @brook_40, @brook_50, @brook_60, @brook_70, @brook_80, " +
             "@brook_90, @brook_100, @brook_comment, @brook_disc, @brook_x_vis, @brook_x_rpm, @brook_x_disc, @krebs, " +
             "@krebs_comment, @ici, @ici_disc, @ici_comment, @temp)";
-        private static readonly string _updateQuery = "Update LabBook.dbo.ExpViscosity Set labbook_id=@labbook_id, date_created=@date_created, " +
+        public static readonly string UpdateQuery = "Update LabBook.dbo.ExpViscosity Set labbook_id=@labbook_id, date_created=@date_created, " +
             "date_update=@date_update, pH=@pH, vis_type=@vis_type, brook_1=@brook_1, brook_5=@brook_5, brook_10=@brook_10, " +
             "brook_20=@brook_20, brook_30=@brook_30, brook_40=@brook_40, brook_50=@brook_50, brook_60=@brook_60, brook_70=@brook_70, " +
             "brook_80=@brook_80, brook_90=@brook_90, brook_100=@brook_100, brook_comment=@brook_comment, brook_disc=@brook_disc, " +
             "brook_x_vis=@brook_x_vis, brook_x_rpm=@brook_x_rpm, brook_x_disc=@brook_x_disc, krebs=@krebs, krebs_comment=@krebs_comment, " +
             "ici=@ici, ici_disc=@ici_disc, ici_comment=@ici_comment, temp=@temp Where id=@id ";
-        private static readonly string _delQuery = "Delete LabBook.dbo.ExpViscosity Where id = ";
-
-        public bool Delete(long id)
-        {
-            bool error = false;
-
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
-                try
-                {
-                    cmd.Connection = connection;
-                    cmd.CommandText = _delQuery + id;
-                    connection.Open();
-                    cmd.ExecuteNonQuery();
-                }
-                catch (SqlException ex)
-                {
-                    error = true;
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu Delete VisRepository.",
-                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (Exception ex)
-                {
-                    error = true;
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu Delete VisRepository.",
-                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-
-            return error;
-        }
+        public static readonly string DelQuery = "Delete LabBook.dbo.ExpViscosity Where id = ";
 
         public DataTable CreateTable()
         {
@@ -99,9 +63,9 @@ namespace LabBook.ADO.Repository
             return table;
         }
 
-        public void RefreshMainTable(DataTable dataTable, long labBooklid)
+        public void RefreshMainTable(DataTable dataTable, long labBooklId)
         {
-            var query = _allQueryByLabId + labBooklid;
+            var query = _allQueryByLabId + labBooklId;
 
             using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
@@ -123,53 +87,7 @@ namespace LabBook.ADO.Repository
             }
         }
 
-        public DataTable GetAll()
-        {
-            var query = _allQuery;
-            var table = new DataTable();
-
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
-            {
-                try
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.Fill(table);
-
-                    DataColumn[] klucz = new DataColumn[1];
-                    DataColumn id = table.Columns["id"];
-                    klucz[0] = id;
-                    table.PrimaryKey = klucz;
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
-                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
-                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            return table;
-        }
-
-        public DataTable GetAllxViscosity()
-        {
-            return null;
-        }
-
-        public DataTable GetAllKrebs()
-        {
-            return null;
-        }
-
-        public DataTable GetAllICI()
-        {
-            return null;
-        }
-
-        public ExceptionCode Save(DataRow row)
+        override public ExceptionCode Save(DataRow row, string query)
         {
             ExceptionCode error = ExceptionCode.NoError;
 
@@ -179,7 +97,7 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     cmd.Connection = connection;
-                    cmd.CommandText = _saveQuery;
+                    cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
                     cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
                     cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
@@ -232,12 +150,7 @@ namespace LabBook.ADO.Repository
             return error;
         }
 
-        public ExperimentalVisDto Save(ExperimentalVisDto data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ExceptionCode Update(DataRow row)
+        override public ExceptionCode Update(DataRow row, string query)
         {
             ExceptionCode error = ExceptionCode.NoError;
 
@@ -247,7 +160,7 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     cmd.Connection = connection;
-                    cmd.CommandText = _updateQuery;
+                    cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
                     cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
                     cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
@@ -299,11 +212,6 @@ namespace LabBook.ADO.Repository
             }
 
             return error;
-        }
-
-        public ExperimentalVisDto Update(ExperimentalVisDto data)
-        {
-            throw new NotImplementedException();
         }
     }
 }

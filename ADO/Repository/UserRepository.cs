@@ -16,59 +16,18 @@ namespace LabBook.ADO.Repository
         Error
     }
 
-    public class UserRepository : IRepository<UserDto>
+    public class UserRepository : RepositoryCommon<UserDto>
     {
-        private const string getAllQuery = "Select us.id, (us.name + ' ' + us.surname) as name, us.identifier From LabBook.dbo.Users us";
+        public static readonly string AllQuery = "Select us.id, (us.name + ' ' + us.surname) as name, us.identifier From LabBook.dbo.Users us";
         private const string existQuery = "Select Count(1) From LabBook.dbo.Users usr Where usr.login=@username";
         private const string loginQuery = "Select us.id, us.name, us.surname, us.e_mail, us.login, us.permission, us.identifier, us.active "
                                            + "From LabBook.dbo.Users us Where us.login='@username' and us.password='@password'";
-        private const string registerQuery = "Insert Into LabBook.dbo.Users(name, surname, e_mail, login, password, "
+        public static readonly string RegisterQuery = "Insert Into LabBook.dbo.Users(name, surname, e_mail, login, password, "
                                            + "permission, identifier, active, date) Values(@name, @surname, @e_mail, @login, @password, "
                                            + "@permission, @identifier, @active, @date)";
 
 
-        public bool Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataTable GetAll()
-        {
-           var table = new DataTable();
-           
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
-            {
-                try
-                {
-                    var adapter = new SqlDataAdapter(getAllQuery, connection);
-
-                    adapter.Fill(table);
-
-                    DataColumn[] klucz = new DataColumn[1];
-                    DataColumn id = table.Columns["id"];
-                    klucz[0] = id;
-                    table.PrimaryKey = klucz;
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
-                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
-                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-
-            return table;
-        }
-
-        public UserDto Save(UserDto data)
+        override public UserDto Save(UserDto data, string query)
         {
             var result = RegisterStatus.Ok;
 
@@ -76,7 +35,7 @@ namespace LabBook.ADO.Repository
             {
                 try
                 {
-                    var sqlCmd = new SqlCommand(registerQuery, connection) { CommandType = CommandType.Text };
+                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
                     sqlCmd.Parameters.AddWithValue("@name", data.Name);
                     sqlCmd.Parameters.AddWithValue("@surname", data.Surname);
                     sqlCmd.Parameters.AddWithValue("@e_mail", data.Email);
@@ -203,21 +162,6 @@ namespace LabBook.ADO.Repository
             }
 
             return user;
-        }
-
-        public UserDto Update(UserDto data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ExceptionCode Save(DataRow data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ExceptionCode Update(DataRow data)
-        {
-            throw new NotImplementedException();
         }
     }
 }

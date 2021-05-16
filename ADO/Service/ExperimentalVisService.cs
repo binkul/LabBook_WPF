@@ -1,7 +1,7 @@
 ﻿using LabBook.ADO.Repository;
 using System.Data;
 using LabBook.ADO.Exceptions;
-using LabBook.Dto;
+using LabBook.Forms.MainForm.ModelView;
 
 namespace LabBook.ADO.Service
 {
@@ -9,20 +9,14 @@ namespace LabBook.ADO.Service
     {
         private ExperimentalVisRepository _repository = new ExperimentalVisRepository();
         private readonly DataTable _dataTable;
-        private readonly DataView _brookView;
-        private readonly DataView _brookxView;
-        private readonly DataView _krebsView;
-        private readonly DataView _iciView;
+        private readonly DataView _dataView;
         private bool _modified = false;
 
         public ExperimentalVisService()
         {
             _dataTable = _repository.CreateTable();
             _dataTable.RowChanged += _dataTable_RowChanged;
-            _brookView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.brookfield + "'", Sort = "date_created, date_update" };
-            _brookxView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.brookfield_x + "'", Sort = "date_created, date_update" };
-            _krebsView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.krebs + "'", Sort = "date_created, date_update" };
-            _iciView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.ici + "'", Sort = "date_created, date_update" };
+            _dataView = new DataView(_dataTable) { RowFilter = "vis_type = '" + ViscosityType.Brookfield + "'", Sort = "date_created, date_update" };
         }
 
         private void _dataTable_RowChanged(object sender, DataRowChangeEventArgs e)
@@ -36,6 +30,26 @@ namespace LabBook.ADO.Service
             {
                 return _dataTable;
             }
+        }
+
+        public void SetBrookfieldVisible()
+        {
+            _dataView.RowFilter = "vis_type = '" + ViscosityType.Brookfield + "'";
+        }
+
+        public void SetBrookfieldXVisible()
+        {
+            _dataView.RowFilter = "vis_type = '" + ViscosityType.BrookfieldX + "'";
+        }
+
+        public void SetKrebsVisible()
+        {
+            _dataView.RowFilter = "vis_type = '" + ViscosityType.Krebs + "'";
+        }
+
+        public void SetIciVisible()
+        {
+            _dataView.RowFilter = "vis_type = '" + ViscosityType.ICI + "'";
         }
 
         public bool Modified
@@ -55,35 +69,11 @@ namespace LabBook.ADO.Service
             _modified = false;
         }
 
-        public DataView GetBrookfield
+        public DataView GetView
         {
             get
             {
-                return _brookView;
-            }
-        }
-
-        public DataView GetBrookfieldx
-        {
-            get
-            {
-                return _brookxView;
-            }
-        }
-
-        public DataView GetKrebs
-        {
-            get
-            {
-                return _krebsView;
-            }
-        }
-
-        public DataView GetICI
-        {
-            get
-            {
-                return _iciView;
+                return _dataView;
             }
         }
 
@@ -96,7 +86,7 @@ namespace LabBook.ADO.Service
             {
                 foreach (DataRow row in newRows.Rows)
                 {
-                    if (_repository.Save(row) != ExceptionCode.NoError)
+                    if (_repository.Save(row, ExperimentalVisRepository.SaveQuery) != ExceptionCode.NoError)
                         result = false;
                 }
             }
@@ -106,7 +96,7 @@ namespace LabBook.ADO.Service
             {
                 foreach (DataRow row in updateRows.Rows)
                 {
-                    if (_repository.Update(row) != ExceptionCode.NoError)
+                    if (_repository.Update(row, ExperimentalVisRepository.SaveQuery) != ExceptionCode.NoError)
                         result = false;
                 }
             }
@@ -135,7 +125,7 @@ namespace LabBook.ADO.Service
         public bool Delete(long id)
         {
             bool tmp = _modified;
-            bool result = _repository.Delete(id);
+            bool result = _repository.Delete(id, ExperimentalVisRepository.DelQuery);
             _modified = tmp;
             return result;
         }

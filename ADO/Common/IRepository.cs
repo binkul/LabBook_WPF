@@ -5,11 +5,11 @@ namespace LabBook.ADO.Common
 {
     public interface IRepository<T>
     {
-        DataTable GetAll();
-        bool Delete(long id);
-        T Save(T data);
-        ExceptionCode Save(DataRow data);
-        T Update(T data);
-        ExceptionCode Update(DataRow data);
+        DataTable GetAll(string query);
+        bool Delete(long id, string query);
+        T Save(T data, string query);
+        ExceptionCode Save(DataRow data, string query);
+        T Update(T data, string query);
+        ExceptionCode Update(DataRow data, string query);
     }
 }

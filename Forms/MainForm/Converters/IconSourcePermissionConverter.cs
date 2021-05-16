@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
     public class IconSourcePermissionConverter : IMultiValueConverter
     {

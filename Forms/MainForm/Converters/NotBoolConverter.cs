@@ -2,24 +2,24 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Tools
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class DateConverter : IValueConverter
+    public class NotBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null)
-            {
-                DateTime test = (DateTime)value;
-                string date = test.ToString("dd-MM-yyyy");
-                return (date);
-            }
-            return string.Empty;
+                return !System.Convert.ToBoolean(value);
+            else
+                return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value != null)
+                return !System.Convert.ToBoolean(value);
+            else
+                return false;
         }
     }
 }

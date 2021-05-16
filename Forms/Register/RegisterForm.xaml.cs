@@ -75,7 +75,7 @@ namespace LabBook.Forms.Register
                 var password = TxtPassword.Password;
 
                 UserDto user = new UserDto(name, surName, email, login, "user", identifier, false, DateTime.Now, password);
-                _ = repository.Save(user);
+                _ = repository.Save(user, UserRepository.RegisterQuery);
 
                 LoginForm loginForm = new LoginForm();
                 loginForm.Show();

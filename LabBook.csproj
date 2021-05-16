@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ADO\Common\IRepository.cs" />
+    <Compile Include="ADO\Common\RepositoryCommon.cs" />
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
@@ -92,12 +93,14 @@
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\Command\SaveButton.cs" />
+    <Compile Include="Forms\MainForm\Converters\ColumnToVisibilityConverter.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm\BindingProxy.cs" />
     <Compile Include="Forms\MainForm\ModelView\FilterMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
+    <Compile Include="Forms\MainForm\ModelView\ViscosityColumn.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\WindowEditMV.cs" />
     <Compile Include="Forms\MainForm\Model\WindowData.cs" />
@@ -106,20 +109,20 @@
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Tools\BoolToVisibiltyConverter.cs" />
-    <Compile Include="Forms\Tools\CycleToNameConverter.cs" />
-    <Compile Include="Forms\Tools\DataGridLenghtToDoubleConverter.cs" />
-    <Compile Include="Forms\Tools\DataRowViewToLongConverter.cs" />
-    <Compile Include="Forms\Tools\DateConverter.cs" />
-    <Compile Include="Forms\Tools\DensityConverter.cs" />
-    <Compile Include="Forms\Tools\DotConverter.cs" />
-    <Compile Include="Forms\Tools\IconSourcePermissionConverter.cs" />
-    <Compile Include="Forms\Tools\IdToNumerDConverter.cs" />
-    <Compile Include="Forms\Tools\IgnoreNewItemPlaceholderConverter.cs" />
-    <Compile Include="Forms\Tools\NaviCurrentConverter.cs" />
-    <Compile Include="Forms\Tools\NaviTotalCountConverter.cs" />
-    <Compile Include="Forms\Tools\NotBoolConverter.cs" />
-    <Compile Include="Forms\Tools\UserToNameConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\BoolToVisibiltyConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\CycleToNameConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DataGridLenghtToDoubleConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DataRowViewToLongConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DateConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DensityConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DotConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\IconSourcePermissionConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\IdToNumerDConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\IgnoreNewItemPlaceholderConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\NaviCurrentConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\NaviTotalCountConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\NotBoolConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\UserToNameConverter.cs" />
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
     <Compile Include="Security\User.cs" />

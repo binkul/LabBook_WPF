@@ -10,7 +10,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
-        xmlns:Convertors="clr-namespace:LabBook.Forms.Tools"
+        xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
         xmlns:vm ="clr-namespace:LabBook.Forms.MainForm.ModelView"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wi="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
@@ -35,20 +35,21 @@
     <Window.Resources>
         <vm:FilterMV x:Key="filter" />
         <vm:ViscosityMV x:Key="viscosity" />
-        <Convertors:DotConverter x:Key="DecimalConverter" />
-        <Convertors:DensityConverter x:Key="DensityConverter" />
-        <Convertors:DateConverter x:Key="DateConverter" />
-        <Convertors:UserToNameConverter x:Key="UserConverter" />
+        <Convertors:ColumnToVisibilityConverter x:Key="VisibilityColumnConverter" />
         <Convertors:CycleToNameConverter x:Key="CycleConverter" />
+        <Convertors:UserToNameConverter x:Key="UserConverter" />
         <Convertors:IdToNumerDConverter x:Key="IdConverter" />
-        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
-        <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
-        <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
-        <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
-        <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
-        <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
         <Convertors:IgnoreNewItemPlaceholderConverter x:Key="IgnoreNewItemConverter" />
+        <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
+        <Convertors:DensityConverter x:Key="DensityConverter" />
+        <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
         <Convertors:IconSourcePermissionConverter x:Key="IconSourceConverter" />
+        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
+        <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
+        <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
+        <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
+        <Convertors:DotConverter x:Key="DecimalConverter" />
+        <Convertors:DateConverter x:Key="DateConverter" />
         <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
             <Setter Property="HorizontalGridLinesBrush" Value="#FF8E8E8E" />
@@ -382,16 +383,16 @@
                 </TabItem>
 
                 <!-- Viscosity Brookfield page -->
-                <TabItem Header="Brookfield" Margin="-1.8,0,-2.4,-0.8" >
+                <TabItem Header="Lepkość" Margin="-1.8,0,-2.4,-0.8" >
                     <Grid Background="#FFE5E5E5" >
 
                         <DataGrid x:Name="DgViscosity" Margin="5,10,5,55.6" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
                                   SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="True" CanUserResizeColumns="True" CanUserResizeRows="False"
                                   RowHeaderWidth="20" HeadersVisibility="Column"
                                   IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
-                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetBrookView, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualBrookfieldRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
-                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgBrookfieldRowIndex, Mode=TwoWay, FallbackValue=0}" >
+                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetViscosityView, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualDataGridRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
+                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DataGriddRowIndex, Mode=TwoWay, FallbackValue=0}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="InitializingNewItem">
                                     <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewBrookfieldCommand}" PassEventArgsToCommand="True" />
@@ -423,149 +424,191 @@
 
                                 <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
                                 <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
                                 <DataGridTextColumn Header="Doba" Binding="{Binding days}" Width="0.7*" IsReadOnly="True"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
                                 <DataGridTextColumn Header="Dysk" Binding="{Binding brook_disc}" Width="0.7*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_disc}" />
+                                
                                 <DataGridTextColumn Header="Uwagi" Binding="{Binding brook_comment}" Width="2*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_comment}" />
+                                
                                 <DataGridTextColumn Header="1 rpm" Binding="{Binding brook_1, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_1}" />
+
                                 <DataGridTextColumn Header="5 rpm" Binding="{Binding brook_5, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_5}" />
+
                                 <DataGridTextColumn Header="10 rpm" Binding="{Binding brook_10, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilExtOrFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_10}" />
+
                                 <DataGridTextColumn Header="20 rpm" Binding="{Binding brook_20, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_20}" />
+
                                 <DataGridTextColumn Header="30 rpm" Binding="{Binding brook_30, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_30}" />
+
                                 <DataGridTextColumn Header="40 rpm" Binding="{Binding brook_40, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_40}" />
+
                                 <DataGridTextColumn Header="50 rpm" Binding="{Binding brook_50, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilExtOrFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_50}" />
+
                                 <DataGridTextColumn Header="60 rpm" Binding="{Binding brook_60, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_60}" />
+
                                 <DataGridTextColumn Header="70 rpm" Binding="{Binding brook_70, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_70}" />
+
                                 <DataGridTextColumn Header="80 rpm" Binding="{Binding brook_80, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_80}" />
+
                                 <DataGridTextColumn Header="90 rpm" Binding="{Binding brook_90, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_90}" />
+
                                 <DataGridTextColumn Header="100 rpm" Binding="{Binding brook_100, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
-                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=ProfilExtOrFull, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
-                                </DataGridTextColumn>
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_100}" />
+
+                                <DataGridTextColumn Header="Dysk" Binding="{Binding brook_x_disc}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_x_disc}" />
+                                
+                                <DataGridTextColumn Header="Lepkość" Binding="{Binding brook_x_vis, Converter={StaticResource DecimalConverter}}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_x_vis}" />
+
+                                <DataGridTextColumn Header="rpm" Binding="{Binding brook_x_rpm, Converter={StaticResource DecimalConverter}}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_x_rpm}" />
+
+                                <DataGridTextColumn Header="Krebs" Binding="{Binding krebs, Converter={StaticResource DecimalConverter}}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=krebs}" />
+
+                                <DataGridTextColumn Header="Uwagi" Binding="{Binding krebs_comment, Converter={StaticResource DecimalConverter}}" Width="3*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=krebs_comment}" />
+                                
+                                <DataGridTextColumn Header="ICI" Binding="{Binding ici, Converter={StaticResource DecimalConverter}}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=ici}" />
+
+                                <DataGridTextColumn Header="Dysk" Binding="{Binding ici_disc, Converter={StaticResource DecimalConverter}}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=ici_disc}" />
+                                
+                                <DataGridTextColumn Header="Uwagi" Binding="{Binding ici_comment, Converter={StaticResource DecimalConverter}}" Width="3*"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                    Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=ici_comment}" />
+
                                 <DataGridTextColumn Header="pH" Binding="{Binding pH, Converter={StaticResource DecimalConverter}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
                                 <DataGridTextColumn Header="Temp." Binding="{Binding temp}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                                </DataGridTextColumn>
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                             </DataGrid.Columns>
 
                         </DataGrid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Height="51" Margin="0,0,0,-0.4" Width="742" HorizontalAlignment="Left" >
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Height="51" Margin="0,0,0,0" Width="742" HorizontalAlignment="Left" >
 
                             <Label Content="Pokaż" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Height="23"  FontSize="18" Padding="0" 
                                    Foreground="#FF0000E1" Margin="4,10,0,0" />
 
-                            <RadioButton Content="Standard" HorizontalAlignment="Left" Height="17" Margin="20,0,0,20" VerticalAlignment="Bottom" Width="87"
+                            <RadioButton Content="Standard" HorizontalAlignment="Left" Height="17" Margin="20,0,0,20.2" VerticalAlignment="Bottom" Width="80"
                                          GroupName="Profil" 
                                          IsChecked="{Binding ProfilStandard, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Profil" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20" VerticalAlignment="Bottom" Width="87"
+                            <RadioButton Content="Profil" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="80"
                                          GroupName="Profil"
                                          IsChecked="{Binding ProfilExtend, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Pełny" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20" VerticalAlignment="Bottom" Width="87"
+                            <RadioButton Content="Pełny" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="80"
                                          GroupName="Profil"
                                          IsChecked="{Binding ProfilFull, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Dodatkowy" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="99"
+                                         GroupName="Profil"
+                                         IsChecked="{Binding ProfilX, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="Krebs" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="90"
+                                         GroupName="Profil"
+                                         IsChecked="{Binding ProfilKrebs, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                            <RadioButton Content="ICI" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="90"
+                                         GroupName="Profil"
+                                         IsChecked="{Binding ProfilIci, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>
 
                 <!-- Viscosity Krebs and ICI page -->
-                <TabItem Header="Krebs/ICI" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
+                <TabItem Header="Krycie" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
                     <UniformGrid Columns="1" Rows="2" >
-                        
-                        <!-- Viscosity krebs -->
-                        <DataGrid x:Name="DgKrebs" Margin="5,5,5,5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
-                                  SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
-                                  RowHeaderWidth="20" HeadersVisibility="Column"
-                                  IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
-                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetKrebsView, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualKrebsRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
-                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgKrebsRowIndex, Mode=TwoWay, FallbackValue=0}" >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="InitializingNewItem">
-                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewKrebsCommand}" PassEventArgsToCommand="True" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
 
 
-                        </DataGrid>
-
-                        <!-- Viscosity Ici -->
-                        <DataGrid x:Name="DgIci" Margin="5,2,5,5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
-                                  SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
-                                  RowHeaderWidth="20" HeadersVisibility="Column"
-                                  IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
-                                  ItemsSource="{Binding Source={StaticResource viscosity}, Path=GetIciView, UpdateSourceTrigger=PropertyChanged}" 
-                                  SelectedItem="{Binding Source={StaticResource viscosity}, Path=ActualIciRow, Mode=OneWayToSource, Converter={StaticResource IgnoreNewItemConverter}}"
-                                  SelectedIndex="{Binding Source={StaticResource viscosity}, Path=DgIciRowIndex, Mode=TwoWay, FallbackValue=0}" >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="InitializingNewItem">
-                                    <cmd:EventToCommand Command="{Binding Source={StaticResource viscosity}, Path=OnInitializingNewIciCommand}" PassEventArgsToCommand="True" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-
-
-                        </DataGrid>
-                        
                     </UniformGrid>
                 </TabItem>
             </TabControl>
