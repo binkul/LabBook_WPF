@@ -4,16 +4,16 @@ namespace LabBook.Dto
 {
     public class LabBookDto
     {
-        long Id { get; set; }
-        string Title { get; set; }
-        decimal Density { get; set; }
-        string Observation { get; set; }
-        string Remarks { get; set; }
-        long UserId { get; set; }
-        long CycleId { get; set; }
-        DateTime Created { get; set; }
-        DateTime Modified { get; set; }
-        bool Deleted { get; set; }
+        public long Id { get; set; } = 0;
+        public string Title { get; set; }
+        public decimal Density { get; set; } = 0;
+        public string Observation { get; set; }
+        public string Remarks { get; set; }
+        public long UserId { get; set; }
+        public long CycleId { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Modified { get; set; } = DateTime.Now;
+        public bool Deleted { get; set; } = false;
 
         public LabBookDto(long id, string title, decimal density, string observation, string remarks, long userId, long cycleId, DateTime created, DateTime modified, bool deleted)
         {
@@ -27,6 +27,13 @@ namespace LabBook.Dto
             Created = created;
             Modified = modified;
             Deleted = deleted;
+        }
+
+        public LabBookDto(string title, long userId, long cycleId)
+        {
+            Title = title;
+            UserId = userId;
+            CycleId = cycleId;
         }
     }
 }

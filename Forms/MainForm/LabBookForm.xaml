@@ -100,11 +100,13 @@
                     <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding Save}"/>
                     <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
-                                  IsEnabled="{Binding IsPermited, Mode=OneWay}"/>
+                                  Command="{Binding Delete}" />
                 </RibbonGroup>
                 <RibbonGroup Header="Dodawanie"  FontSize="10">
-                    <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular"/>
-                    <RibbonButton Label="Rezerwacja" LargeImageSource="/Img/new-reservation.png"  FontSize="12" FontWeight="Regular"/>
+                    <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular" 
+                                  Command="{Binding AddNew}"/>
+                    <RibbonButton Label="Rezerwacja" LargeImageSource="/Img/new-reservation.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding AddNewSerie}"/>
                 </RibbonGroup>
             </RibbonTab>
 

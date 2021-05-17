@@ -81,22 +81,20 @@ namespace LabBook.ADO.Service
         {
             var result = true;
 
-            var newRows = _dataTable.GetChanges(DataRowState.Added);
-            if (newRows != null)
+            foreach (DataRow row in _dataTable.Rows)
             {
-                foreach (DataRow row in newRows.Rows)
+                if (row.RowState == DataRowState.Added)
                 {
-                    if (_repository.Save(row, ExperimentalVisRepository.SaveQuery) != ExceptionCode.NoError)
+                    if (_repository.Save(row, ExperimentalVisRepository.SaveQuery) == ExceptionCode.NoError)
+                        row.AcceptChanges();
+                    else
                         result = false;
                 }
-            }
-
-            var updateRows = _dataTable.GetChanges(DataRowState.Modified);
-            if (updateRows != null)
-            {
-                foreach (DataRow row in updateRows.Rows)
+                else if (row.RowState == DataRowState.Modified)
                 {
-                    if (_repository.Update(row, ExperimentalVisRepository.SaveQuery) != ExceptionCode.NoError)
+                    if (_repository.Update(row, ExperimentalVisRepository.UpdateQuery) == ExceptionCode.NoError)
+                        row.AcceptChanges();
+                    else
                         result = false;
                 }
             }

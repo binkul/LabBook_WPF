@@ -10,6 +10,7 @@
     using System.Windows.Input;
     using LabBook.Forms.MainForm.Command;
     using System;
+    using LabBook.Dto;
 
     public class WindowEditMV : INotifyPropertyChanged
     {
@@ -20,6 +21,9 @@
         private ICommand _moveLast;
         private ICommand _moveFirst;
         private ICommand _saveButton;
+        private ICommand _deleteButton;
+        private ICommand _addNewButton;
+        private ICommand _newSerieButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -464,10 +468,82 @@
             }
         }
 
+        public ICommand AddNew
+        {
+            get
+            {
+                if (_addNewButton == null) _addNewButton = new NewButton(this);
+                return _addNewButton;
+            }
+        }
+
+        public ICommand Delete
+        {
+            get
+            {
+                if (_deleteButton == null) _deleteButton = new DeleteButton(this);
+                return _deleteButton;
+            }
+        }
+
+        public ICommand AddNewSerie
+        {
+            get
+            {
+                if (_newSerieButton == null) _newSerieButton = new NewSerieButton(this);
+                return _newSerieButton;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
             _viscosityMV.Save();
+        }
+
+        public void DeleteExperiment()
+        {
+            if (_actualRow == null) return;
+
+            var id = Convert.ToInt64(_actualRow["id"]);
+            _labBookService.Delete(id);
+        }
+
+        public void AddNewRecord()
+        {
+            var cycleView = _expCycleView[0];
+            var cycleId = Convert.ToInt64(cycleView["id"]);
+            var userId = UserSingleton.Id;
+            var title = "Pusty";
+            var labBook = new LabBookDto(title, userId, cycleId);
+
+            LabBookDto record = _labBookService.AddNew(labBook);
+
+            var index = 0;
+            foreach (DataRowView row in _labBookView)
+            {
+                if (Convert.ToInt64(row["id"]) == record.Id)
+                {
+                    DgRowIndex = index;
+                    UpdateRowIndex();
+                    break;
+                }
+                index++;
+            }
+        }
+
+        public void AddNewSeriesRecords()
+        {
+            var cycleView = _expCycleView[0];
+            var cycleId = Convert.ToInt64(cycleView["id"]);
+            var userId = UserSingleton.Id;
+            var title = "Pusty";
+            var labBook = new LabBookDto(title, userId, cycleId);
+
+            _labBookService.AddNewSeries(labBook);
+
+            DgRowIndex = _labBookView.Count - 1;
+            UpdateRowIndex();
         }
 
         public void UpdateRowIndex()

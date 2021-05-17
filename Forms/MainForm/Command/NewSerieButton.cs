@@ -4,11 +4,11 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm.Command
 {
-    public class SaveButton : ICommand
+    public class NewSerieButton : ICommand
     {
         private readonly WindowEditMV _modelView;
 
-        public SaveButton(WindowEditMV modelView)
+        public NewSerieButton(WindowEditMV modelView)
         {
             if (modelView == null) throw new ArgumentNullException("Model widoku jest null");
             _modelView = modelView;
@@ -16,7 +16,7 @@ namespace LabBook.Forms.MainForm.Command
 
         public bool CanExecute(object parameter)
         {
-            return _modelView.Modified;
+            return true;
         }
 
         public event EventHandler CanExecuteChanged
@@ -33,7 +33,7 @@ namespace LabBook.Forms.MainForm.Command
 
         public void Execute(object parameter)
         {
-            _modelView.SaveAll();
+            _modelView.AddNewSeriesRecords();
         }
     }
 }

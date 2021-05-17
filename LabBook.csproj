@@ -90,8 +90,11 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
+    <Compile Include="Forms\MainForm\Command\DeleteButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
+    <Compile Include="Forms\MainForm\Command\NewButton.cs" />
+    <Compile Include="Forms\MainForm\Command\NewSerieButton.cs" />
     <Compile Include="Forms\MainForm\Command\SaveButton.cs" />
     <Compile Include="Forms\MainForm\Converters\ColumnToVisibilityConverter.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
