@@ -90,11 +90,16 @@
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
+    <Compile Include="Forms\InputBox\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm\Command\CopyFromButton.cs" />
     <Compile Include="Forms\MainForm\Command\DeleteButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewSerieButton.cs" />
+    <Compile Include="Forms\MainForm\Command\RefreshButton.cs" />
     <Compile Include="Forms\MainForm\Command\SaveButton.cs" />
     <Compile Include="Forms\MainForm\Converters\ColumnToVisibilityConverter.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
@@ -131,6 +136,10 @@
     <Compile Include="Security\User.cs" />
     <Compile Include="Security\UserSingleton.cs" />
     <Compile Include="System\Text\ASCII.cs" />
+    <Page Include="Forms\InputBox\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\Login\LoginForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,6 +226,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\unlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\load.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

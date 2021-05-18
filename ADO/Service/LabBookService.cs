@@ -2,9 +2,11 @@
 using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
+using LabBook.Forms.InputBox;
 using System;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace LabBook.ADO.Service
 {
@@ -108,9 +110,36 @@ namespace LabBook.ADO.Service
             return result;
         }
 
-        public void AddNewSeries(LabBookDto labBook)
+        public bool AddNewSeries(LabBookDto labBook)
         {
-            
+            var tmp = "";
+            var count = 0;
+            InputBox inputBox = new InputBox("Podaj ilość pustych rekordów:", "Ilość");
+            if (inputBox.ShowDialog() == true)
+                tmp = inputBox.Answer;
+
+            if (!int.TryParse(tmp, out count))
+            {
+                MessageBox.Show("Wprowadzona wartość nie jest liczbą całkowitą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (count == 0) return false;
+
+            for (var i = 0; i < count; i++)
+            {
+                _ = AddNew(labBook);
+            }
+
+            return true;
+        }
+
+        public void RefreshAll()
+        {
+            LabBookRepository repoTmp = (LabBookRepository)_repository;
+            repoTmp.RefreshMainTable(_dataTable);
+            _dataTable.AcceptChanges();
+            _modified = false;
         }
     }
 }

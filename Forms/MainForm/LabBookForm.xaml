@@ -101,12 +101,16 @@
                                   Command="{Binding Save}"/>
                     <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
                                   Command="{Binding Delete}" />
+                    <RibbonButton Label="Odświerz" LargeImageSource="/Img/load.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding Refresh}" />
                 </RibbonGroup>
                 <RibbonGroup Header="Dodawanie"  FontSize="10">
                     <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular" 
                                   Command="{Binding AddNew}"/>
                     <RibbonButton Label="Rezerwacja" LargeImageSource="/Img/new-reservation.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding AddNewSerie}"/>
+                    <RibbonButton Label="Kopia z ..." LargeImageSource="/Img/copy.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding CopyFrom}"/>
                 </RibbonGroup>
             </RibbonTab>
 
@@ -607,7 +611,7 @@
                 </TabItem>
 
                 <!-- Viscosity Krebs and ICI page -->
-                <TabItem Header="Krycie" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
+                <TabItem Header="Krycie i połysk" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
                     <UniformGrid Columns="1" Rows="2" >
 
 

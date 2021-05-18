@@ -24,6 +24,8 @@
         private ICommand _deleteButton;
         private ICommand _addNewButton;
         private ICommand _newSerieButton;
+        private ICommand _refreshButton;
+        private ICommand _copyFromButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -495,6 +497,24 @@
             }
         }
 
+        public ICommand Refresh
+        {
+            get
+            {
+                if (_refreshButton == null) _refreshButton = new RefreshButton(this);
+                return _refreshButton;
+            }
+        }
+
+        public ICommand CopyFrom
+        {
+            get
+            {
+                if (_copyFromButton == null) _copyFromButton = new CopyFromButton(this);
+                return _copyFromButton;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
@@ -540,10 +560,34 @@
             var title = "Pusty";
             var labBook = new LabBookDto(title, userId, cycleId);
 
-            _labBookService.AddNewSeries(labBook);
+            if (_labBookService.AddNewSeries(labBook))
+            {
+                DgRowIndex = _labBookView.Count - 1;
+                UpdateRowIndex();
+            }
+        }
 
-            DgRowIndex = _labBookView.Count - 1;
+        public void RefreshAll()
+        {
+            if (Modified)
+            {
+                MessageBoxResult answer = MessageBox.Show("Czy zapisać zmiany - przy odświżaniu wszelkie zmiany zostana utracone", "Zapis zmian",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                if (answer == MessageBoxResult.Yes)
+                {
+                    SaveAll();
+                }
+                else if (answer == MessageBoxResult.Cancel)
+                    return;
+            }
+            _labBookService.RefreshAll();
+            DgRowIndex = 0;
             UpdateRowIndex();
+        }
+
+        public void CopyFromNumberD()
+        {
+
         }
 
         public void UpdateRowIndex()
