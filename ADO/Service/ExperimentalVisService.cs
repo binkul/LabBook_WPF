@@ -80,6 +80,7 @@ namespace LabBook.ADO.Service
         public bool Save()
         {
             var result = true;
+            if (!_modified) return result;
 
             foreach (DataRow row in _dataTable.Rows)
             {
