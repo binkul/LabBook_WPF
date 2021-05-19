@@ -18,13 +18,17 @@ namespace LabBook.Forms.MainForm
 
             WindowEditMV mainModelView = new WindowEditMV();
             ViscosityMV _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
+            GlossMV _glossMV = this.Resources["gloss"] as GlossMV;
 
             this.DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
+            _glossMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
+            mainModelView.SetGlossMV = _glossMV;
 
             FilterMV _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
+
 
             DgLabBook.Focus();
         }

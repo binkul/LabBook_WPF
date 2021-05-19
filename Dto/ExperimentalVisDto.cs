@@ -1,270 +1,195 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LabBook.Dto
 {
     public class ExperimentalVisDto
     {
-        private long _id = -1;
-        private long _labBookId;
-        private DateTime _created;
-        private DateTime _updated;
-        private decimal _pH = -1;
-        private string _type;
-        private decimal _brook1 = -1;
-        private decimal _brook5 = -1;
-        private decimal _brook10 = -1;
-        private decimal _brook20 = -1;
-        private decimal _brook30 = -1;
-        private decimal _brook40 = -1;
-        private decimal _brook50 = -1;
-        private decimal _brook60 = -1;
-        private decimal _brook70 = -1;
-        private decimal _brook80 = -1;
-        private decimal _brook90 = -1;
-        private decimal _brook100 = -1;
-        private string _brookComment;
-        private string _brookDisc;
-        private decimal _brookXvisc = -1;
-        private string _brookXrpm;
-        private string _brookXdisc;
-        private decimal _krebs = -1;
-        private string _krebsComment;
-        private decimal _ICI = -1;
-        private string _ICIdisc;
-        private string _ICIcomment;
-        private string _temperature;
+        private long Id { get; set; } = -1;
+        private long LabBookId { get; set; } = 1;
+        private DateTime Created { get; set; } = DateTime.Now;
+        private DateTime Updated { get; set; } = DateTime.Now;
+        private decimal pH { get; set; }
+        private string Type { get; set; }
+        private decimal Brook1 { get; set; }
+        private decimal Brook5 { get; set; }
+        private decimal Brook10 { get; set; }
+        private decimal Brook20 { get; set; }
+        private decimal Brook30 { get; set; }
+        private decimal Brook40 { get; set; }
+        private decimal Brook50 { get; set; }
+        private decimal Brook60 { get; set; }
+        private decimal Brook70 { get; set; }
+        private decimal Brook80 { get; set; }
+        private decimal Brook90 { get; set; }
+        private decimal Brook100 { get; set; }
+        private string BrookComment { get; set; }
+        private string BrookDisc { get; set; }
+        private decimal BrookXvisc { get; set; }
+        private string BrookXrpm { get; set; }
+        private string BrookXdisc { get; set; }
+        private decimal Krebs { get; set; }
+        private string KrebsComment { get; set; }
+        private decimal ICI { get; set; }
+        private string ICIdisc { get; set; }
+        private string ICIcomment { get; set; }
+        private string Temperature { get; set; }
 
         public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, string type, decimal brook1, decimal brook5, 
             decimal brook10, decimal brook20, decimal brook30, decimal brook40, decimal brook50, decimal brook60, decimal brook70, decimal brook80, decimal brook90, 
             decimal brook100, string brookComment, string brookDisc, decimal brookXvisc, string brookXrpm, string brookXdisc, decimal krebs, string krebsComment, 
             decimal iCI, string iCIdisc, string iCIcomment, string temperature)
         {
-            _id = iD;
-            _labBookId = labBookId;
-            _created = created;
-            _updated = updated;
-            _pH = pH;
-            _type = type;
-            _brook1 = brook1;
-            _brook5 = brook5;
-            _brook10 = brook10;
-            _brook20 = brook20;
-            _brook30 = brook30;
-            _brook40 = brook40;
-            _brook50 = brook50;
-            _brook60 = brook60;
-            _brook70 = brook70;
-            _brook80 = brook80;
-            _brook90 = brook90;
-            _brook100 = brook100;
-            _brookComment = brookComment;
-            _brookDisc = brookDisc;
-            _brookXvisc = brookXvisc;
-            _brookXrpm = brookXrpm;
-            _brookXdisc = brookXdisc;
-            _krebs = krebs;
-            _krebsComment = krebsComment;
-            _ICI = iCI;
-            _ICIdisc = iCIdisc;
-            _ICIcomment = iCIcomment;
-            _temperature = temperature;
+            Id = iD;
+            LabBookId = labBookId;
+            Created = created;
+            Updated = updated;
+            this.pH = pH;
+            Type = type;
+            Brook1 = brook1;
+            Brook5 = brook5;
+            Brook10 = brook10;
+            Brook20 = brook20;
+            Brook30 = brook30;
+            Brook40 = brook40;
+            Brook50 = brook50;
+            Brook60 = brook60;
+            Brook70 = brook70;
+            Brook80 = brook80;
+            Brook90 = brook90;
+            Brook100 = brook100;
+            BrookComment = brookComment;
+            BrookDisc = brookDisc;
+            BrookXvisc = brookXvisc;
+            BrookXrpm = brookXrpm;
+            BrookXdisc = brookXdisc;
+            Krebs = krebs;
+            KrebsComment = krebsComment;
+            ICI = iCI;
+            ICIdisc = iCIdisc;
+            ICIcomment = iCIcomment;
+            Temperature = temperature;
         }
 
         public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, string type, decimal brook1, decimal brook5,
             decimal brook10, decimal brook20, decimal brook50, decimal brook100, string brookComment, string brookDisc, string temperature)
         {
-            _id = iD;
-            _labBookId = labBookId;
-            _created = created;
-            _updated = updated;
-            _pH = pH;
-            _type = type;
-            _brook1 = brook1;
-            _brook5 = brook5;
-            _brook10 = brook10;
-            _brook20 = brook20;
-            _brook50 = brook50;
-            _brook100 = brook100;
-            _brookComment = brookComment;
-            _brookDisc = brookDisc;
-            _temperature = temperature;
+            Id = iD;
+            LabBookId = labBookId;
+            Created = created;
+            Updated = updated;
+            this.pH = pH;
+            Type = type;
+            Brook1 = brook1;
+            Brook5 = brook5;
+            Brook10 = brook10;
+            Brook20 = brook20;
+            Brook50 = brook50;
+            Brook100 = brook100;
+            BrookComment = brookComment;
+            BrookDisc = brookDisc;
+            Temperature = temperature;
         }
 
         public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, string type, decimal brook1, decimal brook5,
             decimal brook20, string brookComment, string brookDisc, string temperature)
         {
-            _id = iD;
-            _labBookId = labBookId;
-            _created = created;
-            _updated = updated;
-            _pH = pH;
-            _type = type;
-            _brook1 = brook1;
-            _brook5 = brook5;
-            _brook20 = brook20;
-            _brookComment = brookComment;
-            _brookDisc = brookDisc;
-            _temperature = temperature;
+            Id = iD;
+            LabBookId = labBookId;
+            Created = created;
+            Updated = updated;
+            this.pH = pH;
+            Type = type;
+            Brook1 = brook1;
+            Brook5 = brook5;
+            Brook20 = brook20;
+            BrookComment = brookComment;
+            BrookDisc = brookDisc;
+            Temperature = temperature;
         }
 
         public ExperimentalVisDto(long iD, long labBookId, DateTime created, DateTime updated, decimal pH, string type, 
             decimal brookXvisc, string brookXrpm, string brookXdisc, string temperature)
         {
-            _id = iD;
-            _labBookId = labBookId;
-            _created = created;
-            _updated = updated;
-            _pH = pH;
-            _type = type;
-            _brookXvisc = brookXvisc;
-            _brookXrpm = brookXrpm;
-            _brookXdisc = brookXdisc;
-            _temperature = temperature;
+            Id = iD;
+            LabBookId = labBookId;
+            Created = created;
+            Updated = updated;
+            this.pH = pH;
+            Type = type;
+            BrookXvisc = brookXvisc;
+            BrookXrpm = brookXrpm;
+            BrookXdisc = brookXdisc;
+            Temperature = temperature;
         }
 
-        public long GetId()
+        public override bool Equals(object obj)
         {
-            return _id;
+            return obj is ExperimentalVisDto dto &&
+                   Id == dto.Id &&
+                   LabBookId == dto.LabBookId &&
+                   Created == dto.Created &&
+                   Updated == dto.Updated &&
+                   pH == dto.pH &&
+                   Type == dto.Type &&
+                   Brook1 == dto.Brook1 &&
+                   Brook5 == dto.Brook5 &&
+                   Brook10 == dto.Brook10 &&
+                   Brook20 == dto.Brook20 &&
+                   Brook30 == dto.Brook30 &&
+                   Brook40 == dto.Brook40 &&
+                   Brook50 == dto.Brook50 &&
+                   Brook60 == dto.Brook60 &&
+                   Brook70 == dto.Brook70 &&
+                   Brook80 == dto.Brook80 &&
+                   Brook90 == dto.Brook90 &&
+                   Brook100 == dto.Brook100 &&
+                   BrookComment == dto.BrookComment &&
+                   BrookDisc == dto.BrookDisc &&
+                   BrookXvisc == dto.BrookXvisc &&
+                   BrookXrpm == dto.BrookXrpm &&
+                   BrookXdisc == dto.BrookXdisc &&
+                   Krebs == dto.Krebs &&
+                   KrebsComment == dto.KrebsComment &&
+                   ICI == dto.ICI &&
+                   ICIdisc == dto.ICIdisc &&
+                   ICIcomment == dto.ICIcomment &&
+                   Temperature == dto.Temperature;
         }
 
-        public long GetLabBookId()
+        public override int GetHashCode()
         {
-            return _labBookId;
-        }
-
-        public DateTime GetCreated()
-        {
-            return _created;
-        }
-
-        public DateTime GetUpdated()
-        {
-            return _updated;
-        }
-
-        public decimal GetpH()
-        {
-            return _pH;
-        }
-
-        public string GetViscosityType()
-        {
-            return _type;
-        }
-
-        public decimal GetBrookfield1()
-        {
-            return _brook1;
-        }
-
-        public decimal GetBrookfield5()
-        {
-            return _brook5;
-        }
-
-        public decimal GetBrookfield10()
-        {
-            return _brook10;
-        }
-
-        public decimal GetBrookfield20()
-        {
-            return _brook20;
-        }
-
-        public decimal GetBrookfield30()
-        {
-            return _brook30;
-        }
-
-        public decimal GetBrookfield40()
-        {
-            return _brook40;
-        }
-
-        public decimal GetBrookfield50()
-        {
-            return _brook50;
-        }
-
-        public decimal GetBrookfield60()
-        {
-            return _brook60;
-        }
-
-        public decimal GetBrookfield70()
-        {
-            return _brook70;
-        }
-
-        public decimal GetBrookfield80()
-        {
-            return _brook80;
-        }
-
-        public decimal GetBrookfield90()
-        {
-            return _brook90;
-        }
-
-        public decimal GetBrookfield100()
-        {
-            return _brook100;
-        }
-
-        public string GetBrookComment()
-        {
-            return _brookComment;
-        }
-
-        public string GetBrookDisc()
-        {
-            return _brookDisc;
-        }
-
-        public decimal GetBrookX()
-        {
-            return _brookXvisc;
-        }
-
-        public string GetBrookXRpm()
-        {
-            return _brookXrpm;
-        }
-
-        public string GetBrookXDisc()
-        {
-            return _brookXdisc;
-        }
-
-        public decimal GetKrebs()
-        {
-            return _krebs;
-        }
-
-        public string GetKrebsComment()
-        {
-            return _krebsComment;
-        }
-
-        public decimal GetICI()
-        {
-            return _ICI;
-        }
-
-        public string GetICIcomment()
-        {
-            return _ICIcomment;
-        }
-
-        public string GetICIdisc()
-        {
-            return _ICIdisc;
-        }
-
-        public string GetTemperature()
-        {
-            return _temperature;
+            int hashCode = -590270970;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+            hashCode = hashCode * -1521134295 + LabBookId.GetHashCode();
+            hashCode = hashCode * -1521134295 + Created.GetHashCode();
+            hashCode = hashCode * -1521134295 + Updated.GetHashCode();
+            hashCode = hashCode * -1521134295 + pH.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Type);
+            hashCode = hashCode * -1521134295 + Brook1.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook5.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook10.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook20.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook30.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook40.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook50.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook60.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook70.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook80.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook90.GetHashCode();
+            hashCode = hashCode * -1521134295 + Brook100.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(BrookComment);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(BrookDisc);
+            hashCode = hashCode * -1521134295 + BrookXvisc.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(BrookXrpm);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(BrookXdisc);
+            hashCode = hashCode * -1521134295 + Krebs.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(KrebsComment);
+            hashCode = hashCode * -1521134295 + ICI.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ICIdisc);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ICIcomment);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Temperature);
+            return hashCode;
         }
     }
 }

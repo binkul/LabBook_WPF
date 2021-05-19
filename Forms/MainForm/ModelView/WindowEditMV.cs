@@ -29,6 +29,7 @@
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
+        private GlossMV _glossMV;
         private long _index = 0;
         private DataRowView _actualRow;
         private readonly LabBookService _labBookService = new LabBookService();
@@ -69,6 +70,14 @@
             set
             {
                 _viscosityMV = value;
+            }
+        }
+
+        public GlossMV SetGlossMV
+        {
+            set
+            {
+                _glossMV = value;
             }
         }
 
@@ -335,8 +344,8 @@
         {
             get
             {
-                if (_viscosityMV != null)
-                    return _labBookService.Modified || _viscosityMV.Modified;
+                if (_viscosityMV != null && _glossMV != null)
+                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified;
                 else
                     return false;
             }
