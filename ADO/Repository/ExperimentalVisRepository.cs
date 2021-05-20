@@ -23,7 +23,7 @@ namespace LabBook.ADO.Repository
             "@brook_5, @brook_10, @brook_20, @brook_30, @brook_40, @brook_50, @brook_60, @brook_70, @brook_80, " +
             "@brook_90, @brook_100, @brook_comment, @brook_disc, @brook_x_vis, @brook_x_rpm, @brook_x_disc, @krebs, " +
             "@krebs_comment, @ici, @ici_disc, @ici_comment, @temp)";
-        public static readonly string UpdateQuery = "Update LabBook.dbo.ExpViscosity Set labbook_id=@labbook_id, date_created=@date_created, " +
+        public static readonly string UpdateQuery = "Update LabBook.dbo.ExpViscosity Set labbook_id=@labbook_id, " +
             "date_update=@date_update, pH=@pH, vis_type=@vis_type, brook_1=@brook_1, brook_5=@brook_5, brook_10=@brook_10, " +
             "brook_20=@brook_20, brook_30=@brook_30, brook_40=@brook_40, brook_50=@brook_50, brook_60=@brook_60, brook_70=@brook_70, " +
             "brook_80=@brook_80, brook_90=@brook_90, brook_100=@brook_100, brook_comment=@brook_comment, brook_disc=@brook_disc, " +
@@ -162,7 +162,6 @@ namespace LabBook.ADO.Repository
                     cmd.Connection = connection;
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@labbook_id", row["labbook_id"]);
-                    cmd.Parameters.AddWithValue("@date_created", row["date_created"]);
                     cmd.Parameters.AddWithValue("@date_update", row["date_update"]);
                     cmd.Parameters.AddWithValue("@pH", row["pH"]);
                     cmd.Parameters.AddWithValue("@vis_type", row["vis_type"]);

@@ -1,4 +1,5 @@
-﻿using LabBook.ADO.Repository;
+﻿using LabBook.ADO.Exceptions;
+using LabBook.ADO.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -61,6 +62,59 @@ namespace LabBook.ADO.Service
             {
                 return _modified;
             }
+        }
+
+        public void RefreshMainTable(long id)
+        {
+            _ = Save();
+
+            _glossTable.Rows.Clear();
+            _repository.RefreshMainTable(_glossTable, id);
+            _modified = false;
+        }
+
+        public bool SaveAndReload(long id)
+        {
+            var result = true;
+
+            if (Save())
+            {
+                _glossTable.Rows.Clear();
+                _repository.RefreshMainTable(_glossTable, id);
+                _modified = false;
+            }
+            else
+                result = false;
+
+            return result;
+        }
+
+        public bool Save()
+        {
+            var result = true;
+            if (!_modified) return result;
+
+            foreach (DataRow row in _glossTable.Rows)
+            {
+                if (row.RowState == DataRowState.Added)
+                {
+                    if (_repository.Save(row, ExperimentalGlossRepository.SaveQuery) == ExceptionCode.NoError)
+                        row.AcceptChanges();
+                    else
+                        result = false;
+                }
+                else if (row.RowState == DataRowState.Modified)
+                {
+                    if (_repository.Update(row, ExperimentalGlossRepository.UpdateQuery) == ExceptionCode.NoError)
+                        row.AcceptChanges();
+                    else
+                        result = false;
+                }
+            }
+
+            if (result) _modified = false;
+
+            return result;
         }
 
         public bool Delete(long id)

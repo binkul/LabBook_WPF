@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -28,7 +29,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private WindowEditMV _windowEditMV;
         private long _dataGridRowIndex = 0;
         private DataRowView _actualDatGridRow;
-        private long _labBookId;
+        //private long _labBookId;
         private bool _profilStd = true;
         private bool _profilExt = false;
         private bool _profilFull = false;
@@ -62,19 +63,19 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public long LabBookId
-        {
-            get
-            {
-                return _labBookId;
-            }
-            set
-            {
-                _labBookId = value;
-                if (_service != null)
-                    _service.RefreshMainTable(_labBookId);
-            }
-        }
+        //public long LabBookId
+        //{
+        //    get
+        //    {
+        //        return _labBookId;
+        //    }
+        //    set
+        //    {
+        //        _labBookId = value;
+        //        if (_service != null)
+        //            _service.RefreshMainTable(_labBookId);
+        //    }
+        //}
 
         public long DataGriddRowIndex
         {
@@ -251,6 +252,7 @@ namespace LabBook.Forms.MainForm.ModelView
             var date = Convert.ToDateTime(row["created"]);
 
             var maxId = _service.GetTable.AsEnumerable()
+                .Where(x => x.RowState != DataRowState.Deleted)
                 .Select(x => x["id"])
                 .DefaultIfEmpty(-1)
                 .Max(x => x);
@@ -299,16 +301,27 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public void RefreshMainTable(long labBookId)
+        {
+            _service.RefreshMainTable(labBookId);
+        }
+
         public void Save()
         {
-            _ = _service.SaveAndReload(LabBookId);
+            _ = _service.SaveAndReload(_windowEditMV.LabBookId);
             OnPropertyChanged(nameof(Modified));
         }
 
-        public void Delete(long id)
+        public void Delete()
         {
-            if (ActualDataGridRow != null)
+            if (ActualDataGridRow == null || ActualDataGridRow.IsNew) return;
+
+            if (MessageBox.Show("Czy usunąć zaznaczony rekord?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var id = Convert.ToInt64(ActualDataGridRow.Row["id"]);
+                GetViscosityView.Delete((int)DataGriddRowIndex);
                 _service.Delete(id);
+            }
         }
     }
 }

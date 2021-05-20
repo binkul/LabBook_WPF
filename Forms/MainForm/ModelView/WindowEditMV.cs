@@ -31,6 +31,7 @@
         private ViscosityMV _viscosityMV;
         private GlossMV _glossMV;
         private long _index = 0;
+        private long _labBookId = 0;
         private DataRowView _actualRow;
         private readonly LabBookService _labBookService = new LabBookService();
         private readonly ExperimentCycleService _expCycleService = new ExperimentCycleService();
@@ -328,6 +329,24 @@
             }
         }
 
+        public long LabBookId
+        {
+            get
+            {
+                return _labBookId;
+            }
+            set
+            {
+                _labBookId = value;
+
+                if (_viscosityMV != null)
+                    _viscosityMV.RefreshMainTable(_labBookId);
+
+                if (_glossMV != null)
+                    _glossMV.RefreshMainTable(_labBookId);
+            }
+        }
+
         public long DgRowIndex
         {
             get
@@ -528,6 +547,7 @@
         {
             _ = _labBookService.Update();
             _viscosityMV.Save();
+            _glossMV.Save();
         }
 
         public void DeleteExperiment()

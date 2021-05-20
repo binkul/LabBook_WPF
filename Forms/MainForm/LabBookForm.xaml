@@ -257,7 +257,7 @@
                                   FrozenColumnCount="1" HeadersVisibility="Column"
                                   SelectedIndex="{Binding DgRowIndex, Mode=TwoWay, FallbackValue=0}"
                                   SelectedItem="{Binding ActualRow, Mode=OneWayToSource}"
-                                  SelectedValue="{Binding Source={StaticResource viscosity}, Path=LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
+                                  SelectedValue="{Binding LabBookId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <cmd:EventToCommand Command="{Binding OnSelectionChangedCommand}" PassEventArgsToCommand="True" />
@@ -675,7 +675,7 @@
                                             <ComboBox ItemsSource="{Binding Source={StaticResource gloss}, Path=GetClassView}" 
                                                       SelectedValuePath="id"
                                                       DisplayMemberPath="name" 
-                                                      SelectedValue="{Binding gloss_class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                      SelectedValue="{Binding gloss_class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

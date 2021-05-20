@@ -34,14 +34,7 @@ namespace LabBook.Forms.MainForm.Command
 
         public void Execute(object parameter)
         {
-            if (_modelView.ActualDataGridRow == null || _modelView.ActualDataGridRow.IsNew) return;
-
-            if (MessageBox.Show("Czy usunąć zaznaczony rekord?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                var id = Convert.ToInt64(_modelView.ActualDataGridRow.Row["id"]);
-                _modelView.GetGlossView.Delete((int)_modelView.DataGriddRowIndex);
-                _modelView.Delete(id);
-            }
+            _modelView.Delete();
         }
     }
 }

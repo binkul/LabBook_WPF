@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -103,10 +104,27 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public void Delete(long id)
+        public void RefreshMainTable(long labBookId)
         {
-            if (ActualDataGridRow != null)
+            _service.RefreshMainTable(labBookId);
+        }
+
+        public void Save()
+        {
+            _ = _service.SaveAndReload(_windowEditMV.LabBookId);
+            OnPropertyChanged(nameof(Modified));
+        }
+
+        public void Delete()
+        {
+            if (ActualDataGridRow == null || ActualDataGridRow.IsNew) return;
+
+            if (MessageBox.Show("Czy usunąć zaznaczony rekord?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var id = Convert.ToInt64(ActualDataGridRow.Row["id"]);
+                GetGlossView.Delete((int)DataGriddRowIndex);
                 _service.Delete(id);
+            }
         }
 
         public void OnInitializingNewBrookfieldCommandExecuted(InitializingNewItemEventArgs e)
@@ -116,10 +134,10 @@ namespace LabBook.Forms.MainForm.ModelView
             var date = Convert.ToDateTime(row["created"]);
 
             var maxId = _service.GetGlossTable.AsEnumerable()
+                .Where(x => x.RowState != DataRowState.Deleted)
                 .Select(x => x["id"])
                 .DefaultIfEmpty(-1)
                 .Max(x => x);
-
 
             var view = e.NewItem as DataRowView;
             view.Row["id"] = Convert.ToInt64(maxId) + 1;
@@ -128,6 +146,5 @@ namespace LabBook.Forms.MainForm.ModelView
             view.Row["date_created"] = date;
             view.Row["date_update"] = DateTime.Now;
         }
-
     }
 }
