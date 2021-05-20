@@ -39,7 +39,7 @@ namespace LabBook.ADO.Service
             }
         }
 
-        public DataView GetOpacityView
+        public DataView GetGlossView
         {
             get
             {
@@ -62,5 +62,14 @@ namespace LabBook.ADO.Service
                 return _modified;
             }
         }
+
+        public bool Delete(long id)
+        {
+            bool tmp = _modified;
+            bool result = _repository.Delete(id, ExperimentalGlossRepository.DelQuery);
+            _modified = tmp;
+            return result;
+        }
+
     }
 }

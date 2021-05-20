@@ -13,6 +13,8 @@ namespace LabBook.ADO.Repository
             "DATEDIFF(DAY, date_created, date_update) as days, gloss_20, gloss_60, gloss_85, gloss_class, comment " +
             "From labbook.dbo.ExpGloss Where labbook_id = ";
         public static readonly string ClassQuery = "Select * From LabBook.dbo.CmbGlosClass Order By name";
+        public static readonly string DelQuery = "Delete LabBook.dbo.ExpGloss Where id = ";
+
 
         public DataTable CreateTable()
         {

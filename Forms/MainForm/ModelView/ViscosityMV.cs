@@ -36,6 +36,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private bool _profilKrebs = false;
         private bool _profilIci = false;
         private string _profileType = ViscosityType.Brookfield;
+        public event PropertyChangedEventHandler PropertyChanged;
         public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewBrookfieldCommand { get; set; }
 
         public ViscosityMV()
@@ -43,7 +44,6 @@ namespace LabBook.Forms.MainForm.ModelView
             OnInitializingNewBrookfieldCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewBrookfieldCommandExecuted);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         
         protected void OnPropertyChanged(params string[] names)
         {
