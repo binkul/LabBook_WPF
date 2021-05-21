@@ -29,7 +29,6 @@ namespace LabBook.Forms.MainForm.ModelView
         private WindowEditMV _windowEditMV;
         private long _dataGridRowIndex = 0;
         private DataRowView _actualDatGridRow;
-        //private long _labBookId;
         private bool _profilStd = true;
         private bool _profilExt = false;
         private bool _profilFull = false;
@@ -62,20 +61,6 @@ namespace LabBook.Forms.MainForm.ModelView
                 _windowEditMV = value;
             }
         }
-
-        //public long LabBookId
-        //{
-        //    get
-        //    {
-        //        return _labBookId;
-        //    }
-        //    set
-        //    {
-        //        _labBookId = value;
-        //        if (_service != null)
-        //            _service.RefreshMainTable(_labBookId);
-        //    }
-        //}
 
         public long DataGriddRowIndex
         {

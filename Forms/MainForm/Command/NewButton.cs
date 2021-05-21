@@ -16,7 +16,10 @@ namespace LabBook.Forms.MainForm.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (_modelView.TabIndex == 0)
+                return true;
+            else
+                return false;
         }
 
         public event EventHandler CanExecuteChanged

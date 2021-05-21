@@ -9,50 +9,38 @@ using System.Threading.Tasks;
 
 namespace LabBook.ADO.Service
 {
-    public class ExperimentalGlossService
+    public class ExperimentalOpacityService
     {
-        private ExperimentalGlossRepository _repository = new ExperimentalGlossRepository();
-        private readonly DataTable _glossTable;
-        private readonly DataTable _classTable;
-        private readonly DataView _glossView;
-        private readonly DataView _classView;
+        private ExperimentalOpacityRepository _repository = new ExperimentalOpacityRepository();
+        private readonly DataTable _opacityTable;
+        private readonly DataView _opacityView;
         private bool _modified = false;
 
-        public ExperimentalGlossService()
+        public ExperimentalOpacityService()
         {
-            _glossTable = _repository.CreateTable();
-            _classTable = _repository.GetAll(ExperimentalGlossRepository.ClassQuery);
-            _glossTable.RowChanged += OpacityTable_RowChanged;
-            _glossView = new DataView(_glossTable) { Sort = "date_created, date_update" };
-            _classView = new DataView(_classTable) { Sort = "name" };
+            _opacityTable = _repository.CreateTable();
+            _opacityTable.RowChanged += _opacityTable_RowChanged;
+            _opacityView = new DataView(_opacityTable) { Sort = "date_created, date_update" };
         }
 
-        private void OpacityTable_RowChanged(object sender, DataRowChangeEventArgs e)
+        private void _opacityTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             Modified = true;
         }
 
-        public DataTable GetGlossTable
+        public DataTable GetOpacityTable
         {
             get
             {
-                return _glossTable;
+                return _opacityTable;
             }
         }
 
-        public DataView GetGlossView
+        public DataView GetOpacityView
         {
             get
             {
-                return _glossView;
-            }
-        }
-
-        public DataView GetClassView
-        {
-            get
-            {
-                return _classView;
+                return _opacityView;
             }
         }
 
@@ -72,8 +60,8 @@ namespace LabBook.ADO.Service
         {
             _ = Save();
 
-            _glossTable.Rows.Clear();
-            _repository.RefreshMainTable(_glossTable, id);
+            _opacityTable.Rows.Clear();
+            _repository.RefreshMainTable(_opacityTable, id);
             _modified = false;
         }
 
@@ -83,8 +71,8 @@ namespace LabBook.ADO.Service
 
             if (Save())
             {
-                _glossTable.Rows.Clear();
-                _repository.RefreshMainTable(_glossTable, id);
+                _opacityTable.Rows.Clear();
+                _repository.RefreshMainTable(_opacityTable, id);
                 _modified = false;
             }
             else
@@ -98,18 +86,18 @@ namespace LabBook.ADO.Service
             var result = true;
             if (!_modified) return result;
 
-            foreach (DataRow row in _glossTable.Rows)
+            foreach (DataRow row in _opacityTable.Rows)
             {
                 if (row.RowState == DataRowState.Added)
                 {
-                    if (_repository.Save(row, ExperimentalGlossRepository.SaveQuery) == ExceptionCode.NoError)
+                    if (_repository.Save(row, ExperimentalOpacityRepository.SaveQuery) == ExceptionCode.NoError)
                         row.AcceptChanges();
                     else
                         result = false;
                 }
                 else if (row.RowState == DataRowState.Modified)
                 {
-                    if (_repository.Update(row, ExperimentalGlossRepository.UpdateQuery) == ExceptionCode.NoError)
+                    if (_repository.Update(row, ExperimentalOpacityRepository.UpdateQuery) == ExceptionCode.NoError)
                         row.AcceptChanges();
                     else
                         result = false;
@@ -124,7 +112,7 @@ namespace LabBook.ADO.Service
         public bool Delete(long id)
         {
             bool tmp = _modified;
-            bool result = _repository.Delete(id, ExperimentalGlossRepository.DelQuery);
+            bool result = _repository.Delete(id, ExperimentalOpacityRepository.DelQuery);
             _modified = tmp;
             return result;
         }

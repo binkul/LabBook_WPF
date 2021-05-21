@@ -30,8 +30,10 @@
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
         private GlossMV _glossMV;
+        private OpacityMV _opacityMV;
         private long _index = 0;
         private long _labBookId = 0;
+        private int _tabIndex;
         private DataRowView _actualRow;
         private readonly LabBookService _labBookService = new LabBookService();
         private readonly ExperimentCycleService _expCycleService = new ExperimentCycleService();
@@ -79,6 +81,14 @@
             set
             {
                 _glossMV = value;
+            }
+        }
+
+        public OpacityMV SetOpacityMV
+        {
+            set
+            {
+                _opacityMV = value;
             }
         }
 
@@ -344,6 +354,9 @@
 
                 if (_glossMV != null)
                     _glossMV.RefreshMainTable(_labBookId);
+
+                if (_opacityMV != null)
+                    _opacityMV.RefreshMainTable(_labBookId);
             }
         }
 
@@ -356,6 +369,18 @@
             set
             {
                 _index = value;
+            }
+        }
+
+        public int TabIndex
+        {
+            get
+            {
+                return _tabIndex;
+            }
+            set
+            {
+                _tabIndex = value;
             }
         }
 
@@ -548,6 +573,7 @@
             _ = _labBookService.Update();
             _viscosityMV.Save();
             _glossMV.Save();
+            _opacityMV.Save();
         }
 
         public void DeleteExperiment()

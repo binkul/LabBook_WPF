@@ -79,16 +79,19 @@
     <Compile Include="ADO\Common\RepositoryCommon.cs" />
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
+    <Compile Include="ADO\Repository\ExperimentalOpacityRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
     <Compile Include="ADO\Service\ExperimentalGlossService.cs" />
+    <Compile Include="ADO\Service\ExperimentalOpacityService.cs" />
     <Compile Include="ADO\Service\ExperimentalVisService.cs" />
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
     <Compile Include="Dto\ExperimentalGlossDto.cs" />
+    <Compile Include="Dto\ExperimentalOpacityDto.cs" />
     <Compile Include="Dto\ExperimentalVisDto.cs" />
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Forms\MainForm\Command\CopyFromButton.cs" />
     <Compile Include="Forms\MainForm\Command\DeleteButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelGlossButton.cs" />
+    <Compile Include="Forms\MainForm\Command\DelOpacityButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewButton.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="Forms\MainForm\BindingProxy.cs" />
     <Compile Include="Forms\MainForm\ModelView\FilterMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\GlossMV.cs" />
+    <Compile Include="Forms\MainForm\ModelView\OpacityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityColumn.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityMV.cs" />

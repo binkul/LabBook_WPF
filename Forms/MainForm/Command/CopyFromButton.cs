@@ -7,7 +7,6 @@ namespace LabBook.Forms.MainForm.Command
     public class CopyFromButton : ICommand
     {
         private readonly WindowEditMV _modelView;
-        public event EventHandler CanExecuteChanged;
 
         public CopyFromButton(WindowEditMV modelView)
         {
@@ -17,7 +16,22 @@ namespace LabBook.Forms.MainForm.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (_modelView.TabIndex == 0)
+                return true;
+            else
+                return false;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
         }
 
         public void Execute(object parameter)
