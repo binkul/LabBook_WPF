@@ -116,6 +116,7 @@
     <Compile Include="Forms\MainForm\BindingProxy.cs" />
     <Compile Include="Forms\MainForm\ModelView\FilterMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\GlossMV.cs" />
+    <Compile Include="Forms\MainForm\ModelView\OpacityColumn.cs" />
     <Compile Include="Forms\MainForm\ModelView\OpacityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityColumn.cs" />

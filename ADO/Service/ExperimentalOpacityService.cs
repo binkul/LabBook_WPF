@@ -1,11 +1,6 @@
 ﻿using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.ADO.Service
 {
@@ -13,14 +8,26 @@ namespace LabBook.ADO.Service
     {
         private ExperimentalOpacityRepository _repository = new ExperimentalOpacityRepository();
         private readonly DataTable _opacityTable;
+        private readonly DataTable _classTable;
+        private readonly DataTable _yieldTable;
+        private readonly DataTable _appTypeTable;
         private readonly DataView _opacityView;
+        private readonly DataView _classView;
+        private readonly DataView _yieldView;
+        private readonly DataView _appTypeView;
         private bool _modified = false;
 
         public ExperimentalOpacityService()
         {
             _opacityTable = _repository.CreateTable();
+            _classTable = _repository.GetAll(ExperimentalOpacityRepository.ClassQuery);
+            _yieldTable = _repository.GetAll(ExperimentalOpacityRepository.YieldQuery);
+            _appTypeTable = _repository.GetAll(ExperimentalOpacityRepository.AppTypeQuery);
             _opacityTable.RowChanged += _opacityTable_RowChanged;
             _opacityView = new DataView(_opacityTable) { Sort = "date_created, date_update" };
+            _classView = new DataView(_classTable) { Sort = "name" };
+            _yieldView = new DataView(_yieldTable) { Sort = "name" };
+            _appTypeView = new DataView(_appTypeTable) { Sort = "name" };
         }
 
         private void _opacityTable_RowChanged(object sender, DataRowChangeEventArgs e)
@@ -41,6 +48,30 @@ namespace LabBook.ADO.Service
             get
             {
                 return _opacityView;
+            }
+        }
+
+        public DataView GetClassView
+        {
+            get
+            {
+                return _classView;
+            }
+        }
+
+        public DataView GetYieldView
+        {
+            get
+            {
+                return _yieldView;
+            }
+        }
+
+        public DataView GetAppTypeView
+        {
+            get
+            {
+                return _appTypeView;
             }
         }
 

@@ -1,11 +1,6 @@
 ﻿using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.ADO.Service
 {
@@ -128,6 +123,5 @@ namespace LabBook.ADO.Service
             _modified = tmp;
             return result;
         }
-
     }
 }

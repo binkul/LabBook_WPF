@@ -135,6 +135,41 @@ namespace LabBook.ADO.Service
             return true;
         }
 
+        public LabBookDto CopyFromNumberD()
+        {
+            string tmp = "";
+            long id = 0;
+
+            InputBox inputBox = new InputBox("Podaj numer D do skopiowania:", "Numer D");
+            if (inputBox.ShowDialog() == true)
+                tmp = inputBox.Answer;
+
+            if (!long.TryParse(tmp, out id))
+            {
+                MessageBox.Show("Wprowadzona wartość nie jest liczbą całkowitą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
+            LabBookRepository repository = (LabBookRepository)_repository;
+            LabBookDto labBookDto = repository.GetById(LabBookRepository.GetByIdQuery, id);
+
+            if (labBookDto != null)
+            {
+                labBookDto.Created = DateTime.Now;
+                labBookDto.Modified = DateTime.Now;
+                labBookDto.Deleted = false;
+                labBookDto.Density = 0;
+                AddNew(labBookDto);
+            }
+            else if (labBookDto == null)
+            {
+                MessageBox.Show("Brak takiego numeru. Nie mozna wykonac kopii.", "Brak wartości", MessageBoxButton.OK, MessageBoxImage.Information);
+                return null;
+            }
+
+            return labBookDto;
+        }
+
         public void RefreshAll()
         {
             LabBookRepository repoTmp = (LabBookRepository)_repository;

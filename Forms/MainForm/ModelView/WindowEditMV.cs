@@ -389,7 +389,7 @@
             get
             {
                 if (_viscosityMV != null && _glossMV != null)
-                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified;
+                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified;
                 else
                     return false;
             }
@@ -642,7 +642,21 @@
 
         public void CopyFromNumberD()
         {
+            LabBookDto record = _labBookService.CopyFromNumberD();
+            if (record == null)
+                return;
 
+            var index = 0;
+            foreach (DataRowView row in _labBookView)
+            {
+                if (Convert.ToInt64(row["id"]) == record.Id)
+                {
+                    DgRowIndex = index;
+                    UpdateRowIndex();
+                    break;
+                }
+                index++;
+            }
         }
 
         public void UpdateRowIndex()

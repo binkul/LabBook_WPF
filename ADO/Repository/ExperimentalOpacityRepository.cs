@@ -13,14 +13,17 @@ namespace LabBook.ADO.Repository
         private static readonly string _allQueryByLabId = "Select id, labbook_id, date_created, date_update, DATEDIFF(DAY, date_created, date_update) as days, " +
             "contrast_75, tw_75, sp_75, contrast_100, tw_100, sp_100, contrast_150, tw_150, sp_150, contrast_240, tw_240, sp_240, other_a_contrast, other_a_type, " +
             "other_b_contrast, other_b_type, contrast_class, contrast_yield, comment From labbook.dbo.ExpContrast Where labbook_id = ";
+        public static readonly string ClassQuery = "Select * From LabBook.dbo.CmbContrastClass Order by Name";
+        public static readonly string YieldQuery = "Select * From LabBook.dbo.CmbContrastYield Order by Name";
+        public static readonly string AppTypeQuery = "Select * From LabBook.dbo.CmbContrastType Order by Name";
         public static readonly string DelQuery = "Delete LabBook.dbo.ExpContrast Where id = ";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.ExpContrast(labbook_id, date_created, date_update, contrast_75, tw_75, sp_75, contrast_100, " +
             "tw_100, sp_100, contrast_150, tw_150, sp_150, contrast_240, tw_240, sp_240, other_a_contrast, other_a_type, other_b_contrast, other_b_type, contrast_class, " +
             "contrast_yield, comment) Values(@labbook_id, @date_created, @date_update, @contrast_75, @tw_75, @sp_75, @contrast_100, @tw_100, @sp_100, @contrast_150, @tw_150, " +
             "@sp_150, @contrast_240, @tw_240, @sp_240, @other_a_contrast, @other_a_type, @other_b_contrast, @other_b_type, @contrast_class, @contrast_yield, @comment)";
         public static readonly string UpdateQuery = "Update LabBook.dbo.ExpContrast Set labbook_id=@labbook_id, date_update=@date_update, " +
-            "contrast_75=@contrast_75, tw_75=@tw_75, sp_75=@sp_75, contrast_100=@contrast_100, tw_100=@tw_100, sp_100=@sp100, contrast_150=@contrast_150, tw_150=@tw_150, " +
-            "sp_150=@sp150, contrast_240=@contrast_240, tw_240=@tw_240, sp_240=@sp240, other_a_contrast=@other_a_contrast, other_a_type=@other_a_type, other_b_contrast=@other_b_contrast, " +
+            "contrast_75=@contrast_75, tw_75=@tw_75, sp_75=@sp_75, contrast_100=@contrast_100, tw_100=@tw_100, sp_100=@sp_100, contrast_150=@contrast_150, tw_150=@tw_150, " +
+            "sp_150=@sp_150, contrast_240=@contrast_240, tw_240=@tw_240, sp_240=@sp_240, other_a_contrast=@other_a_contrast, other_a_type=@other_a_type, other_b_contrast=@other_b_contrast, " +
             "other_b_type=@other_b_type, contrast_class=@contrast_class, contrast_yield=@contrast_yield, comment=@comment Where id=@id";
 
         public DataTable CreateTable()

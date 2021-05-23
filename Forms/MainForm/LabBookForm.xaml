@@ -96,6 +96,8 @@
 
         <!--#### Ribbon menu ####-->
         <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14">
+            
+            <!--#### Plik menu ####-->
             <RibbonTab Header="Plik" >
                 <RibbonGroup Header="Operacje"  FontSize="10">
                     <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
@@ -115,10 +117,38 @@
                 </RibbonGroup>
             </RibbonTab>
 
+            <!--#### Edycja menu ####-->
             <RibbonTab Header="Edycja" >
 
             </RibbonTab>
 
+            <!--#### Widok menu ####-->
+            <RibbonTab Header="Widok" >
+                <RibbonGroup Header="Kolumny lepkość" FontSize="10" >
+                    <RadioButton Content="Standard" GroupName="Profil" FontSize="12" Margin="0,10,11,0"
+                                         IsChecked="{Binding ProfilStandard, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}" />
+                    <RadioButton Content="Profil" GroupName="Profil" FontSize="12" Margin="0,5,0,0"
+                                         IsChecked="{Binding ProfilExtend, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton Content="Pełny" GroupName="Profil" FontSize="12" Margin="0,5,0,0"
+                                         IsChecked="{Binding ProfilFull, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton Content="Dodatkowy" GroupName="Profil" FontSize="12" Margin="0,10,0,0"
+                                         IsChecked="{Binding ProfilX, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton Content="Krebs" GroupName="Profil" FontSize="12" Margin="0,5,0,0"
+                                         IsChecked="{Binding ProfilKrebs, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton Content="ICI" GroupName="Profil" FontSize="12" Margin="0,5,0,0"
+                                         IsChecked="{Binding ProfilIci, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
+                </RibbonGroup>
+                <RibbonGroup Header="Kolumny krycie"  FontSize="10" >
+                    <RadioButton Content="Podstawowy" GroupName="OpacityVis" FontSize="12" HorizontalAlignment="Left" Margin="0,10,0,0"
+                                 IsChecked="{Binding VisibilityStandard, Mode=TwoWay, Source={StaticResource opacity}, UpdateSourceTrigger=PropertyChanged}"  />
+                    <RadioButton Content="Rozszerzony" GroupName="OpacityVis" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" 
+                                 IsChecked="{Binding VisibilityExtend, Mode=TwoWay, Source={StaticResource opacity}, UpdateSourceTrigger=PropertyChanged}" />
+                    <RadioButton Content="Dodatkowy" GroupName="OpacityVis" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" 
+                                 IsChecked="{Binding VisibilityExtra, Mode=TwoWay, Source={StaticResource opacity}, UpdateSourceTrigger=PropertyChanged}" />
+                </RibbonGroup>
+            </RibbonTab>
+
+            <!--#### Okna menu ####-->
             <RibbonTab Header="Okna" >
 
             </RibbonTab>
@@ -394,7 +424,7 @@
                 <TabItem Header="Lepkość" Margin="-1.8,0,-2.4,-0.8" >
                     <Grid Background="#FFE5E5E5" >
 
-                        <DataGrid x:Name="DgViscosity" Margin="5,10,5,55.6" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
+                        <DataGrid x:Name="DgViscosity" Margin="5,10,5,5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
                                   SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" CanUserAddRows="true" CanUserDeleteRows="True" CanUserResizeColumns="True" CanUserResizeRows="False"
                                   RowHeaderWidth="20" HeadersVisibility="Column"
                                   IsReadOnly="{Binding IsPermited, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
@@ -447,13 +477,13 @@
                                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
                                                     Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
                                                                  Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_disc}" />
-                                
+
                                 <DataGridTextColumn Header="Uwagi" Binding="{Binding brook_comment}" Width="2*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
                                                     Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
                                                                  Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_comment}" />
-                                
+
                                 <DataGridTextColumn Header="1 rpm" Binding="{Binding brook_1, Converter={StaticResource DecimalConverter}}" Width="0.9*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
@@ -531,7 +561,7 @@
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
                                                     Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
                                                                  Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=brook_x_disc}" />
-                                
+
                                 <DataGridTextColumn Header="Lepkość" Binding="{Binding brook_x_vis, Converter={StaticResource DecimalConverter}}" Width="*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
@@ -555,7 +585,7 @@
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
                                                     Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
                                                                  Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=krebs_comment}" />
-                                
+
                                 <DataGridTextColumn Header="ICI" Binding="{Binding ici, Converter={StaticResource DecimalConverter}}" Width="*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
@@ -567,7 +597,7 @@
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
                                                     Visibility="{Binding Source={StaticResource viscosity}, Path=GetDgColumns, Mode=OneWay, 
                                                                  Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=ici_disc}" />
-                                
+
                                 <DataGridTextColumn Header="Uwagi" Binding="{Binding ici_comment, Converter={StaticResource DecimalConverter}}" Width="3*"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
@@ -585,30 +615,6 @@
                             </DataGrid.Columns>
 
                         </DataGrid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Height="51" Margin="0,0,0,0" Width="742" HorizontalAlignment="Left" >
-
-                            <Label Content="Pokaż" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Height="23"  FontSize="18" Padding="0" 
-                                   Foreground="#FF0000E1" Margin="4,10,0,0" />
-
-                            <RadioButton Content="Standard" HorizontalAlignment="Left" Height="17" Margin="20,0,0,20.2" VerticalAlignment="Bottom" Width="80"
-                                         GroupName="Profil" 
-                                         IsChecked="{Binding ProfilStandard, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Profil" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="80"
-                                         GroupName="Profil"
-                                         IsChecked="{Binding ProfilExtend, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Pełny" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="80"
-                                         GroupName="Profil"
-                                         IsChecked="{Binding ProfilFull, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Dodatkowy" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="99"
-                                         GroupName="Profil"
-                                         IsChecked="{Binding ProfilX, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="Krebs" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="90"
-                                         GroupName="Profil"
-                                         IsChecked="{Binding ProfilKrebs, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                            <RadioButton Content="ICI" HorizontalAlignment="Left" Height="17" Margin="0,0,0,20.2" VerticalAlignment="Bottom" Width="90"
-                                         GroupName="Profil"
-                                         IsChecked="{Binding ProfilIci, Mode=TwoWay, Source={StaticResource viscosity}, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
                     </Grid>
                 </TabItem>
 
@@ -727,24 +733,144 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-
-                                <DataGridTemplateColumn >
-                                    
-                                </DataGridTemplateColumn>
-                                
                                 <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
                                 <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
-                                <DataGridTextColumn Header="Doba" Binding="{Binding days}" Width="0.7*" IsReadOnly="True"
+                                <DataGridTextColumn Header="Doba" Binding="{Binding days}" Width="0.6*" IsReadOnly="True"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                <DataGridTextColumn Header="Krycie 75" Binding="{Binding contrast_75}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_75}" />
+                                <DataGridTextColumn Header="Tw 75" Binding="{Binding tw_75}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=tw_75}" />
+                                <DataGridTextColumn Header="Sp 75" Binding="{Binding sp_75}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=sp_75}" />
+                                <DataGridTextColumn Header="Krycie 100" Binding="{Binding contrast_100}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_100}" />
+                                <DataGridTextColumn Header="Tw 100" Binding="{Binding tw_100}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=tw_100}" />
+                                <DataGridTextColumn Header="Sp 100" Binding="{Binding sp_100}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=sp_100}" />
+                                <DataGridTextColumn Header="Krycie 150" Binding="{Binding contrast_150}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_150}" />
+                                <DataGridTextColumn Header="Tw 150" Binding="{Binding tw_150}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=tw_150}" />
+                                <DataGridTextColumn Header="Sp 150" Binding="{Binding sp_150}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=sp_150}" />
+                                <DataGridTextColumn Header="Krycie 240" Binding="{Binding contrast_240}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_240}" />
+                                <DataGridTextColumn Header="Tw 240" Binding="{Binding tw_240}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=tw_240}" />
+                                <DataGridTextColumn Header="Sp 240" Binding="{Binding sp_240}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=sp_240}" />
+                                <DataGridTemplateColumn Header="Klasa"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                        Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_class}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource opacity}, Path=GetClassView}" 
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding contrast_class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Wydajność"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                        Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=contrast_yield}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource opacity}, Path=GetYieldView}" 
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding contrast_yield, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Krycie A" Binding="{Binding other_a_contrast}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=other_a_contrast}" />
+                                <DataGridTemplateColumn Header="Aplikator A"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                        Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=other_a_type}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource opacity}, Path=GetAppTypeView}" 
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding other_a_type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Krycie B" Binding="{Binding other_b_contrast}" Width="*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=other_b_contrast}"/>
+                                <DataGridTemplateColumn Header="Aplikator B"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                        Visibility="{Binding Source={StaticResource opacity}, Path=GetDgColumns, Mode=OneWay, 
+                                                                 Converter={StaticResource VisibilityColumnConverter}, ConverterParameter=other_b_type}" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource opacity}, Path=GetAppTypeView}" 
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding other_b_type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Uwagi" Binding="{Binding comment}" Width="2.5*"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                             </DataGrid.Columns>
                         </DataGrid>
-                        
+
                     </UniformGrid>
                 </TabItem>
             </TabControl>

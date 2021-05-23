@@ -17,7 +17,9 @@ namespace LabBook.ADO.Repository
         public static readonly string UpdateQuery = "Update LabBook.dbo.ExpLabBook Set title=@title, density=@density, observation=@observation, remarks=@remarks, user_id=@user_id, " +
                             "cycle_id=@cycle_id, created=@created, modified=@modified, deleted=@deleted Where id=@id";
         public static readonly string DeleteQuery = "Update LabBook.dbo.ExpLabBook Set deleted='true' Where id=";
-        private static readonly string _getIdByUser = "Select Max(id) as id From LabBook.dbo.ExpLabBook Where user_id = @id";
+        private static readonly string _getIdByUserIdQuery = "Select Max(id) as id From LabBook.dbo.ExpLabBook Where user_id = @id";
+        public static readonly string GetByIdQuery = "Select id, title, density, remarks, observation, user_id, " +
+                            "cycle_id, created, modified, deleted From LabBook.dbo.ExpLabBook Where id = @id";
 
         override public ExceptionCode Update(DataRow row, string query)
         {
@@ -72,7 +74,7 @@ namespace LabBook.ADO.Repository
             {
                 try
                 {
-                    var sqlCmd = new SqlCommand(_getIdByUser, connection) { CommandType = CommandType.Text };
+                    var sqlCmd = new SqlCommand(_getIdByUserIdQuery, connection) { CommandType = CommandType.Text };
                     sqlCmd.Parameters.AddWithValue("@id", userId);
                     connection.Open();
                     id = Convert.ToInt64(sqlCmd.ExecuteScalar());
@@ -110,11 +112,11 @@ namespace LabBook.ADO.Repository
                     cmd.CommandText = query;
                     cmd.Parameters.AddWithValue("@title", data.Title);
                     cmd.Parameters.AddWithValue("@density", data.Density);
-                    if (data.Observation == null)
+                    if (string.IsNullOrEmpty(data.Observation))
                         cmd.Parameters.AddWithValue("@observation", DBNull.Value);
                     else
                         cmd.Parameters.AddWithValue("@observation", data.Observation);
-                    if (data.Observation == null)
+                    if (string.IsNullOrEmpty(data.Observation))
                         cmd.Parameters.AddWithValue("@remarks", DBNull.Value);
                     else
                         cmd.Parameters.AddWithValue("@remarks", data.Remarks);
@@ -171,6 +173,54 @@ namespace LabBook.ADO.Repository
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        public LabBookDto GetById(string query, long id)
+        {
+            LabBookDto labBookDto = null;
+
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    sqlCmd.Parameters.AddWithValue("@id", id);
+                    connection.Open();
+
+                    SqlDataReader reader = sqlCmd.ExecuteReader();
+                    if (!reader.HasRows)
+                        return labBookDto;
+
+                    reader.Read();
+                    var nrD = Convert.ToInt64(reader.GetInt64(0));
+                    var title = Convert.ToString(reader.GetString(1));
+                    var density = reader.GetValue(2) != DBNull.Value ? Convert.ToDecimal(reader.GetDecimal(2)) : 0;
+                    var remarks = reader.GetValue(3) != DBNull.Value ? Convert.ToString(reader.GetString(3)) : null;
+                    var observation = reader.GetValue(4) != DBNull.Value ? Convert.ToString(reader.GetString(4)) : null;
+                    var userId = Convert.ToInt64(reader.GetInt64(5));
+                    var cycleId = Convert.ToInt64(reader.GetInt64(6));
+                    var created = Convert.ToDateTime(reader.GetDateTime(7));
+                    var updated = Convert.ToDateTime(reader.GetDateTime(8));
+                    var deleted = Convert.ToBoolean(reader.GetBoolean(9));
+                    reader.Close();
+                    labBookDto = new LabBookDto(nrD, title, density, observation, remarks, userId, cycleId, created, updated, deleted);
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return labBookDto;
         }
     }
 }
