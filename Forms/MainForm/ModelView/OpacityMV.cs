@@ -31,11 +31,11 @@ namespace LabBook.Forms.MainForm.ModelView
         private DataRowView _actualDatGridRow;
         private readonly ExperimentalOpacityService _service = new ExperimentalOpacityService();
         public event PropertyChangedEventHandler PropertyChanged;
-        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewBrookfieldCommand { get; set; }
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewOpacityCommand { get; set; }
 
         public OpacityMV()
         {
-            OnInitializingNewBrookfieldCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewBrookfieldCommandExecuted);
+            OnInitializingNewOpacityCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewOpacityCommandExecuted);
         }
 
         protected void OnPropertyChanged(params string[] names)
@@ -217,7 +217,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public void OnInitializingNewBrookfieldCommandExecuted(InitializingNewItemEventArgs e)
+        public void OnInitializingNewOpacityCommandExecuted(InitializingNewItemEventArgs e)
         {
             var row = _windowEditMV.ActualRow;
             var id = Convert.ToInt64(row["id"]);

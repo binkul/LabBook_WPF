@@ -1,6 +1,7 @@
 ﻿using LabBook.ADO.Service;
 using LabBook.Forms.MainForm.Command;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -10,20 +11,31 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
-    public class GlossMV : INotifyPropertyChanged
+    public static class SpectroType
     {
-        private ICommand _delGloss;
+        public const string Dry = "dry";
+        public const string Full = "full";
+        public const string XYZ = "xyz";
+    }
 
-        private readonly ExperimentalGlossService _service = new ExperimentalGlossService();
+    public class SpectroMV : INotifyPropertyChanged
+    {
+        private ICommand _delSpectro;
+
+        private readonly ExperimentalSpectroService _service = new ExperimentalSpectroService();
         private WindowEditMV _windowEditMV;
         private long _dataGridRowIndex;
         private DataRowView _actualDatGridRow;
+        private bool _spectroDry = true;
+        private bool _spectroFull = false;
+        private bool _spectroXYZ = false;
+        private string _spectroColumns = SpectroType.Dry;
         public event PropertyChangedEventHandler PropertyChanged;
-        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewGlossCommand { get; set; }
+        public RelayCommand<InitializingNewItemEventArgs> OnInitializingNewSpectroCommand { get; set; }
 
-        public GlossMV()
+        public SpectroMV()
         {
-            OnInitializingNewGlossCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewGlossCommandExecuted);
+            OnInitializingNewSpectroCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewSpectroCommandExecuted);
         }
 
         protected void OnPropertyChanged(params string[] names)
@@ -76,37 +88,88 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public DataView GetGlossView
+        public DataView GetSpectroView
         {
             get
             {
                 if (_service != null)
-                    return _service.GetGlossView;
+                    return _service.GetSpectroView;
                 else
                     return null;
             }
         }
 
-        public DataView GetClassView
+        public IDictionary<string, bool> GetDgColumns
         {
             get
             {
-                return _service.GetClassView;
+                return SpectroColumn.GetColumn(_spectroColumns);
             }
         }
 
-        public ICommand DeleteGloss
+        public bool VisibilityDry
         {
             get
             {
-                if (_delGloss == null) _delGloss = new DelGlossButton(this);
-                return _delGloss;
+                return _spectroDry;
+            }
+            set
+            {
+                _spectroDry = value;
+                if (value)
+                {
+                    _spectroColumns = SpectroType.Dry;
+                    OnPropertyChanged(nameof(VisibilityDry), nameof(GetDgColumns));
+                }
+            }
+        }
+
+        public bool VisibilityFull
+        {
+            get
+            {
+                return _spectroFull;
+            }
+            set
+            {
+                _spectroFull = value;
+                if (value)
+                {
+                    _spectroColumns = SpectroType.Full;
+                    OnPropertyChanged(nameof(VisibilityFull), nameof(GetDgColumns));
+                }
+            }
+        }
+
+        public bool VisibilityXYZ
+        {
+            get
+            {
+                return _spectroXYZ;
+            }
+            set
+            {
+                _spectroXYZ = value;
+                if (value)
+                {
+                    _spectroColumns = SpectroType.XYZ;
+                    OnPropertyChanged(nameof(VisibilityXYZ), nameof(GetDgColumns));
+                }
             }
         }
 
         public void RefreshMainTable(long labBookId)
         {
             _service.RefreshMainTable(labBookId);
+        }
+
+        public ICommand DeleteSpectro
+        {
+            get
+            {
+                if (_delSpectro == null) _delSpectro = new DelSpectroButton(this);
+                return _delSpectro;
+            }
         }
 
         public void Save()
@@ -122,18 +185,18 @@ namespace LabBook.Forms.MainForm.ModelView
             if (MessageBox.Show("Czy usunąć zaznaczony rekord?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 var id = Convert.ToInt64(ActualDataGridRow.Row["id"]);
-                GetGlossView.Delete((int)DataGriddRowIndex);
+                GetSpectroView.Delete((int)DataGriddRowIndex);
                 _service.Delete(id);
             }
         }
 
-        public void OnInitializingNewGlossCommandExecuted(InitializingNewItemEventArgs e)
+        private void OnInitializingNewSpectroCommandExecuted(InitializingNewItemEventArgs e)
         {
             var row = _windowEditMV.ActualRow;
             var id = Convert.ToInt64(row["id"]);
             var date = Convert.ToDateTime(row["created"]);
 
-            var maxId = _service.GetGlossTable.AsEnumerable()
+            var maxId = _service.GetSpectroTable.AsEnumerable()
                 .Where(x => x.RowState != DataRowState.Deleted)
                 .Select(x => x["id"])
                 .DefaultIfEmpty(-1)
@@ -142,7 +205,6 @@ namespace LabBook.Forms.MainForm.ModelView
             var view = e.NewItem as DataRowView;
             view.Row["id"] = Convert.ToInt64(maxId) + 1;
             view.Row["labbook_id"] = id;
-            view.Row["gloss_class"] = 1;
             view.Row["date_created"] = date;
             view.Row["date_update"] = DateTime.Now;
         }

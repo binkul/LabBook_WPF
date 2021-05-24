@@ -80,18 +80,21 @@
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalOpacityRepository.cs" />
+    <Compile Include="ADO\Repository\ExperimentalSpectroRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
     <Compile Include="ADO\Service\ExperimentalGlossService.cs" />
     <Compile Include="ADO\Service\ExperimentalOpacityService.cs" />
+    <Compile Include="ADO\Service\ExperimentalSpectroService.cs" />
     <Compile Include="ADO\Service\ExperimentalVisService.cs" />
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
     <Compile Include="Dto\ExperimentalGlossDto.cs" />
     <Compile Include="Dto\ExperimentalOpacityDto.cs" />
+    <Compile Include="Dto\ExperimentalSpectroDto.cs" />
     <Compile Include="Dto\ExperimentalVisDto.cs" />
     <Compile Include="Dto\ExperimentCycleDto.cs" />
     <Compile Include="Dto\LabBookDto.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Forms\MainForm\Command\DeleteButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelGlossButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelOpacityButton.cs" />
+    <Compile Include="Forms\MainForm\Command\DelSpectroButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
     <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewButton.cs" />
@@ -110,6 +114,7 @@
     <Compile Include="Forms\MainForm\Command\RefreshButton.cs" />
     <Compile Include="Forms\MainForm\Command\SaveButton.cs" />
     <Compile Include="Forms\MainForm\Converters\ColumnToVisibilityConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\DateTimeConverter.cs" />
     <Compile Include="Forms\MainForm\LabBookForm.xaml.cs">
       <DependentUpon>LabBookForm.xaml</DependentUpon>
     </Compile>
@@ -119,6 +124,8 @@
     <Compile Include="Forms\MainForm\ModelView\OpacityColumn.cs" />
     <Compile Include="Forms\MainForm\ModelView\OpacityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\RelayCommand.cs" />
+    <Compile Include="Forms\MainForm\ModelView\SpectroColumn.cs" />
+    <Compile Include="Forms\MainForm\ModelView\SpectroMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityColumn.cs" />
     <Compile Include="Forms\MainForm\ModelView\ViscosityMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\WindowEditMV.cs" />
@@ -132,7 +139,6 @@
     <Compile Include="Forms\MainForm\Converters\CycleToNameConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DataGridLenghtToDoubleConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DataRowViewToLongConverter.cs" />
-    <Compile Include="Forms\MainForm\Converters\DateConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DensityConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DotConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\IconSourcePermissionConverter.cs" />
