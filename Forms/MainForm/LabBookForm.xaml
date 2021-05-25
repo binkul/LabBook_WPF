@@ -469,11 +469,11 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
+                                <DataGridTextColumn Header="Start" Binding="{Binding date_created, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
-                                <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
+                                <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
@@ -742,10 +742,10 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
+                                <DataGridTextColumn Header="Start" Binding="{Binding date_created, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
-                                <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
+                                <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
                                 <DataGridTextColumn Header="Doba" Binding="{Binding days}" Width="0.6*" IsReadOnly="True"
@@ -920,10 +920,10 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTextColumn Header="Start" Binding="{Binding date_created, StringFormat={}{0:dd-MM-yyyy}}"
+                            <DataGridTextColumn Header="Start" Binding="{Binding date_created, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
-                            <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, StringFormat={}{0:dd-MM-yyyy}}"
+                            <DataGridTextColumn Header="Pomiar" Binding="{Binding date_update, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellLeft}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
                             <DataGridTextColumn Header="Doba" Binding="{Binding days}" Width="0.7*" IsReadOnly="True"
