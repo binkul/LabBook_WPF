@@ -7,9 +7,11 @@ namespace LabBook.ADO.Common
     {
         DataTable GetAll(string query);
         bool Delete(long id, string query);
-        T Save(T data, string query);
+        T Save(T data);
         ExceptionCode Save(DataRow data, string query);
-        T Update(T data, string query);
+        void Update(T data);
         ExceptionCode Update(DataRow data, string query);
+        bool ExistById(long id, string query);
+        T GetById(long id, string query);
     }
 }

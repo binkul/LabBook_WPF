@@ -78,6 +78,7 @@
     <Compile Include="ADO\Common\IRepository.cs" />
     <Compile Include="ADO\Common\RepositoryCommon.cs" />
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
+    <Compile Include="ADO\Repository\ExperimentalCommonRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalOpacityRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalSpectroRepository.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
+    <Compile Include="ADO\Service\ExperimentalCommonService.cs" />
     <Compile Include="ADO\Service\ExperimentalGlossService.cs" />
     <Compile Include="ADO\Service\ExperimentalOpacityService.cs" />
     <Compile Include="ADO\Service\ExperimentalSpectroService.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Forms\MainForm\Model\ExpCommon.cs" />
     <Compile Include="Dto\ExperimentalGlossDto.cs" />
     <Compile Include="Dto\ExperimentalOpacityDto.cs" />
     <Compile Include="Dto\ExperimentalSpectroDto.cs" />

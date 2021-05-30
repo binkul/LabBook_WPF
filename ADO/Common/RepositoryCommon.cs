@@ -73,7 +73,7 @@ namespace LabBook.ADO.Common
             return table;
         }
 
-        virtual public T Save(T data, string query)
+        virtual public T Save(T data)
         {
             throw new NotImplementedException();
         }
@@ -83,12 +83,50 @@ namespace LabBook.ADO.Common
             throw new NotImplementedException();
         }
 
-        virtual public T Update(T data, string query)
+        virtual public void Update(T data)
         {
             throw new NotImplementedException();
         }
 
         virtual public ExceptionCode Update(DataRow data, string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        virtual public bool ExistById(long id, string query)
+        {
+            bool result = false;
+
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    sqlCmd.Parameters.AddWithValue("@id", id);
+                    connection.Open();
+
+                    if (Convert.ToInt32(sqlCmd.ExecuteScalar()) >= 1)
+                        result = true;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
+
+        virtual public T GetById(long id, string query)
         {
             throw new NotImplementedException();
         }

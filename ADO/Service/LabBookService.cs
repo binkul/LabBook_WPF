@@ -84,7 +84,7 @@ namespace LabBook.ADO.Service
 
         public LabBookDto AddNew(LabBookDto labBook)
         {
-            var result = _repository.Save(labBook, LabBookRepository.SaveQuery);
+            var result = _repository.Save(labBook);
 
             if (result != null)
             {

@@ -98,7 +98,7 @@ namespace LabBook.ADO.Repository
             return id;
         }
 
-        public override LabBookDto Save(LabBookDto data, string query)
+        public override LabBookDto Save(LabBookDto data)
         {
             LabBookDto labBook = null;
             var error = false;
@@ -109,7 +109,7 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     cmd.Connection = connection;
-                    cmd.CommandText = query;
+                    cmd.CommandText = SaveQuery;
                     cmd.Parameters.AddWithValue("@title", data.Title);
                     cmd.Parameters.AddWithValue("@density", data.Density);
                     if (string.IsNullOrEmpty(data.Observation))

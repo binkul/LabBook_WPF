@@ -27,7 +27,7 @@ namespace LabBook.ADO.Repository
                                            + "@permission, @identifier, @active, @date)";
 
 
-        override public UserDto Save(UserDto data, string query)
+        override public UserDto Save(UserDto data)
         {
             var result = RegisterStatus.Ok;
 
@@ -35,7 +35,7 @@ namespace LabBook.ADO.Repository
             {
                 try
                 {
-                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    var sqlCmd = new SqlCommand(RegisterQuery, connection) { CommandType = CommandType.Text };
                     sqlCmd.Parameters.AddWithValue("@name", data.Name);
                     sqlCmd.Parameters.AddWithValue("@surname", data.Surname);
                     sqlCmd.Parameters.AddWithValue("@e_mail", data.Email);
