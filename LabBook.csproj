@@ -94,6 +94,7 @@
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Forms\MainForm\ModelView\CommonMV.cs" />
     <Compile Include="Forms\MainForm\Model\ExpCommon.cs" />
     <Compile Include="Dto\ExperimentalGlossDto.cs" />
     <Compile Include="Dto\ExperimentalOpacityDto.cs" />

@@ -32,6 +32,7 @@
         private GlossMV _glossMV;
         private OpacityMV _opacityMV;
         private SpectroMV _spectroMV;
+        private CommonMV _commonMV;
         private long _index = 0;
         private long _labBookId = 0;
         private int _tabIndex;
@@ -98,6 +99,14 @@
             set
             {
                 _spectroMV = value;
+            }
+        }
+
+        public CommonMV SetCommonMV
+        {
+            set
+            {
+                _commonMV = value;
             }
         }
 

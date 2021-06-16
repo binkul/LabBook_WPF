@@ -38,6 +38,7 @@
         <vm:GlossMV x:Key="gloss" />
         <vm:OpacityMV x:Key="opacity" />
         <vm:SpectroMV x:Key="spectro" />
+        <vm:CommonMV x:Key="common" />
         <Convertors:ColumnToVisibilityConverter x:Key="VisibilityColumnConverter" />
         <Convertors:CycleToNameConverter x:Key="CycleConverter" />
         <Convertors:UserToNameConverter x:Key="UserConverter" />
@@ -97,7 +98,7 @@
 
         <!--#### Ribbon menu ####-->
         <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14">
-            
+
             <!--#### Plik menu ####-->
             <RibbonTab Header="Plik" >
                 <RibbonGroup Header="Operacje"  FontSize="10">
@@ -883,6 +884,7 @@
                     </UniformGrid>
                 </TabItem>
 
+                <!-- Page Spectro-->
                 <TabItem Header="Spectro" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5" >
                     <!-- DataGrid Gloss -->
                     <DataGrid Margin="5" HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
@@ -901,7 +903,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding id}" Visibility="Collapsed" />
                             <DataGridTextColumn Binding="{Binding labbok_id}" Visibility="Collapsed" />
-                            
+
                             <DataGridTemplateColumn HeaderStyle="{StaticResource AllignColmnHeaderCenter}" Width="0.4*" 
                                                         Visibility="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                                 <DataGridTemplateColumn.Header >
@@ -1001,7 +1003,31 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-            
+
+                <!-- Page Common -->
+                <TabItem Header="Badania inne" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Rectangle Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" Stroke="#FF393BD7" StrokeThickness="2" />
+                        <Label Grid.Row="0" Grid.Column="0" Content="Szorowanie" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24"/>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Szczotka" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold"/>
+                        <TextBox Grid.Row="0" Grid.Column="0" Text="Szczotka" Margin="61,26,4,27" Height="20" VerticalAlignment="Top" />
+                        <Label Grid.Row="0" Grid.Column="0" Content="Gąbka" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
+                        <TextBox Grid.Row="0" Grid.Column="0" Text="Gąbka" Margin="61,48,4,8" Height="20" VerticalAlignment="Top" />
+                        <Label Grid.Row="0" Grid.Column="0" Content="Klasa" Margin="0,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
+                        <ComboBox Grid.Row="0" Grid.Column="0" Margin="61,72,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84" />
+                    </Grid>
+                </TabItem>
+
             </TabControl>
 
         </Grid>

@@ -43,8 +43,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             OnInitializingNewBrookfieldCommand = new RelayCommand<InitializingNewItemEventArgs>(this.OnInitializingNewBrookfieldCommandExecuted);
         }
-
-        
+    
         protected void OnPropertyChanged(params string[] names)
         {
             if (PropertyChanged != null)

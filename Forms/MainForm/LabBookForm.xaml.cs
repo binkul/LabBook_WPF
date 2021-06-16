@@ -21,16 +21,19 @@ namespace LabBook.Forms.MainForm
             GlossMV _glossMV = this.Resources["gloss"] as GlossMV;
             OpacityMV _opacityMV = this.Resources["opacity"] as OpacityMV;
             SpectroMV _spectroMV = this.Resources["spectro"] as SpectroMV;
+            CommonMV _commonMV = this.Resources["common"] as CommonMV;
 
             this.DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
             _glossMV.SetWindowEditMV = mainModelView;
             _opacityMV.SetWindowEditMV = mainModelView;
             _spectroMV.SetWindowEditMV = mainModelView;
+            _commonMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
             mainModelView.SetGlossMV = _glossMV;
             mainModelView.SetOpacityMV = _opacityMV;
             mainModelView.SetSpectroMV = _spectroMV;
+            mainModelView.SetCommonMV = _commonMV;
 
             FilterMV _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
