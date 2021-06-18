@@ -378,6 +378,9 @@
 
                 if (_spectroMV != null)
                     _spectroMV.RefreshMainTable(_labBookId);
+
+                if (_commonMV != null)
+                    _commonMV.RefreshData(_labBookId);
             }
         }
 
@@ -409,8 +412,8 @@
         {
             get
             {
-                if (_viscosityMV != null && _glossMV != null)
-                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified || _spectroMV.Modified;
+                if (_viscosityMV != null && _glossMV != null && _opacityMV != null && _spectroMV != null && _commonMV != null)
+                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified || _spectroMV.Modified ||_commonMV.Modified;
                 else
                     return false;
             }
@@ -596,6 +599,7 @@
             _glossMV.Save();
             _opacityMV.Save();
             _spectroMV.Save();
+            _commonMV.Save();
         }
 
         public void DeleteExperiment()

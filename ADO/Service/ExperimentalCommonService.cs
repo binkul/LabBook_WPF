@@ -3,6 +3,7 @@ using LabBook.ADO.Repository;
 using LabBook.Forms.MainForm.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,31 +13,43 @@ namespace LabBook.ADO.Service
     public class ExperimentalCommonService
     {
         private readonly IRepository<ExpCommon> _repository = new ExperimentalCommonRepository();
-        private bool _modified = false;
 
         public ExperimentalCommonService()
         {
         }
 
-        public ExpCommon GetCurrent(long id)
+        public ExpCommon GetCurrent(long labBookId)
         {
-            if (!_repository.ExistById(id, ExperimentalCommonRepository.ExistByIdQuery))
-                return _repository.Save(new ExpCommon(id));
+            if (!_repository.ExistById(labBookId, ExperimentalCommonRepository.ExistByLabBookIdQuery))
+                return new ExpCommon(labBookId);
             else
-                return _repository.GetById(id, ExperimentalCommonRepository.GetByLabbokIdQuery);
+                return _repository.GetById(labBookId, ExperimentalCommonRepository.GetByLabbokIdQuery);
         }
 
-        public bool Modified
+        public ExpCommon RefreshData(long labBookId)
         {
-            get
+            return _repository.GetById(labBookId, ExperimentalCommonRepository.GetByLabbokIdQuery);
+        }
+
+        public ExpCommon Save(long labBookId, ExpCommon expCommon)
+        {
+            if (expCommon.Id == CommonConstant.IdNewAdded)
             {
-                return _modified;
+                expCommon.LabBookId = labBookId;
+                return _repository.Save(expCommon);
             }
-            private set
+            else
             {
-                _modified = value;
+                _repository.Update(expCommon);
+                return expCommon;
             }
         }
 
+        public DataView GetScrubingClass()
+        {
+            ExperimentalCommonRepository repository = (ExperimentalCommonRepository)_repository;
+            DataTable table = repository.GetScrubingClass();
+            return new DataView(table) { Sort = "name" };
+        }
     }
 }

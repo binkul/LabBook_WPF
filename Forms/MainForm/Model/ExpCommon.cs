@@ -1,11 +1,12 @@
-﻿using System;
+﻿using LabBook.ADO.Common;
+using System;
 using System.Collections.Generic;
 
 namespace LabBook.Forms.MainForm.Model
 {
     public class ExpCommon
     {
-        public long Id { get; set; } = -1;
+        public long Id { get; set; } = CommonConstant.IdNewAdded;
         public long LabBookId { get; set; } = 1;
         public string ScrubISO11998 { get; set; }
         public long ScrubISO11998Class { get; set; } = 1;

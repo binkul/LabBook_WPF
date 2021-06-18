@@ -1020,11 +1020,16 @@
                         <Rectangle Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" Stroke="#FF393BD7" StrokeThickness="2" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Szorowanie" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24"/>
                         <Label Grid.Row="0" Grid.Column="0" Content="Szczotka" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold"/>
-                        <TextBox Grid.Row="0" Grid.Column="0" Text="Szczotka" Margin="61,26,4,27" Height="20" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="0" Grid.Column="0" Margin="61,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
+                                 Text="{Binding Source={StaticResource common}, Path=ScrubBrush}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Gąbka" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
-                        <TextBox Grid.Row="0" Grid.Column="0" Text="Gąbka" Margin="61,48,4,8" Height="20" VerticalAlignment="Top" />
+                        <TextBox Grid.Row="0" Grid.Column="0" Margin="61,48,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
+                                 Text="{Binding Source={StaticResource common}, Path=ScrubISO11998}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Klasa" Margin="0,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
-                        <ComboBox Grid.Row="0" Grid.Column="0" Margin="61,72,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84" />
+                        <ComboBox Grid.Row="0" Grid.Column="0" Margin="61,72,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84" 
+                                  ItemsSource="{Binding Source={StaticResource common}, Path=ScrubingClass}" 
+                                  DisplayMemberPath="name" SelectedValuePath="id" 
+                                  SelectedValue="{Binding Source={StaticResource common},Path=ScrubISO11998Class}" />
                     </Grid>
                 </TabItem>
 

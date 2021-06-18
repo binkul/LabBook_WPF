@@ -3,6 +3,7 @@ using LabBook.Forms.MainForm.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,13 @@ namespace LabBook.Forms.MainForm.ModelView
         private WindowEditMV _windowEditMV;
         private ExpCommon _commonModel;
         private bool _modified = false;
+        private DataView _scrubingClassView;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public CommonMV()
+        {
+            _scrubingClassView = _service.GetScrubingClass();
+        }
 
         protected void OnPropertyChanged(params string[] names)
         {
@@ -43,6 +50,19 @@ namespace LabBook.Forms.MainForm.ModelView
             set
             {
                 _commonModel = value;
+                OnPropertyChanged(
+                    nameof(ScrubBrush), 
+                    nameof(ScrubISO11998), 
+                    nameof(ScrubISO11998Class)
+                    );
+            }
+        }
+
+        public DataView ScrubingClass
+        {
+            get
+            {
+                return _scrubingClassView;
             }
         }
 
@@ -62,7 +82,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                return _commonModel.ScrubBrush;
+                return _commonModel != null ? _commonModel.ScrubBrush : "";
             }
             set
             {
@@ -75,7 +95,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                return _commonModel.ScrubISO11998;
+                return _commonModel != null ? _commonModel.ScrubISO11998 : "";
             }
             set
             {
@@ -88,7 +108,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                return _commonModel.ScrubISO11998Class;
+                return _commonModel != null ? _commonModel.ScrubISO11998Class : 1;
             }
             set
             {
@@ -97,7 +117,21 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public void RefreshData(long labBookId)
+        {
+            Save();
+            Model = _service.GetCurrent(labBookId);
+        }
 
+        public void Save()
+        {
+            if (_modified)
+            {
+                ExpCommon model = _service.Save(_windowEditMV.LabBookId, Model);
+                Model.Id = model.Id;
+            }
+            _modified = false;
+        }
 
         public bool Modified
         {

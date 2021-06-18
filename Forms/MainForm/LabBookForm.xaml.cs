@@ -59,6 +59,5 @@ namespace LabBook.Forms.MainForm
                 }
             }
         }
-
     }
 }
