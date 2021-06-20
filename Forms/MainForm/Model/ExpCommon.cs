@@ -6,39 +6,37 @@ namespace LabBook.Forms.MainForm.Model
 {
     public class ExpCommon
     {
-        public long Id { get; set; } = CommonConstant.IdNewAdded;
         public long LabBookId { get; set; } = 1;
-        public string ScrubISO11998 { get; set; }
-        public long ScrubISO11998Class { get; set; } = 1;
-        public string ScrubBrush { get; set; }
-        public string DryingISO9117_1 { get; set; }
-        public string DryingISO9117_3 { get; set; }
-        public string YellowingISO7724 { get; set; }
-        public string SchockISO6272 { get; set; }
-        public string PersozISO2409 { get; set; }
-        public string KoenigISO2409 { get; set; }
-        public string ScratchISO6272_1 { get; set; }
-        public string AdhesionISO2409 { get; set; }
-        public string StainISO2812_4 { get; set; }
-        public string WaterISO2812_2 { get; set; }
-        public string SaltSprayISO9227 { get; set; }
-        public string FlashRust { get; set; }
-        public string UV { get; set; }
-        public string Hardness { get; set; }
-        public string FlowLimit { get; set; }
-        public string RunOff { get; set; }
-        public string Yield { get; set; }
+        public string ScrubISO11998 { get; set; } //
+        public long ScrubISO11998Class { get; set; } = 1; //
+        public string ScrubBrush { get; set; } //
+        public string DryingISO9117_1 { get; set; } //
+        public string DryingISO9117_3 { get; set; } //
+        public string YellowingISO7724 { get; set; } //
+        public string SchockISO6272 { get; set; } //
+        public string PersozISO2409 { get; set; } //
+        public string KoenigISO2409 { get; set; } //
+        public string ScratchISO6272_1 { get; set; } //
+        public string AdhesionISO2409 { get; set; } //
+        public string StainISO2812_4 { get; set; } //
+        public string WaterISO2812_2 { get; set; } //
+        public string SaltSprayISO9227 { get; set; } //
+        public string FlashRust { get; set; } //
+        public string UV { get; set; } //
+        public string Hardness { get; set; } //
+        public string FlowLimit { get; set; } //
+        public string RunOff { get; set; } //
+        public string Yield { get; set; } //
         public string Other { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Updated { get; set; } = DateTime.Now;
 
-        public ExpCommon(long id, long labBookId, string scrubISO11998, long scrubISO11998Class, string scrubBrush, 
+        public ExpCommon(long labBookId, string scrubISO11998, long scrubISO11998Class, string scrubBrush, 
             string dryingISO9117_1, string dryingISO9117_3, string yellowingISO7724, string schockISO6272, string persozISO2409, 
             string koenigISO2409, string scratchISO6272_1, string adhesionISO2409, string stainISO2812_4, string waterISO2812_2, 
             string saltSprayISO9227, string flashRust, string uV, string hardness, string flowLimit, string runOff, string yield, 
             string other, DateTime created, DateTime updated)
         {
-            Id = id;
             LabBookId = labBookId;
             ScrubISO11998 = scrubISO11998;
             ScrubISO11998Class = scrubISO11998Class;
@@ -73,7 +71,6 @@ namespace LabBook.Forms.MainForm.Model
         public override bool Equals(object obj)
         {
             return obj is ExpCommon common &&
-                   Id == common.Id &&
                    LabBookId == common.LabBookId &&
                    ScrubISO11998 == common.ScrubISO11998 &&
                    ScrubISO11998Class == common.ScrubISO11998Class &&
@@ -103,7 +100,6 @@ namespace LabBook.Forms.MainForm.Model
         public override int GetHashCode()
         {
             int hashCode = 956710367;
-            hashCode = hashCode * -1521134295 + Id.GetHashCode();
             hashCode = hashCode * -1521134295 + LabBookId.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ScrubISO11998);
             hashCode = hashCode * -1521134295 + ScrubISO11998Class.GetHashCode();

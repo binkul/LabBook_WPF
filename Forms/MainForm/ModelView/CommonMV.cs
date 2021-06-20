@@ -51,9 +51,27 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 _commonModel = value;
                 OnPropertyChanged(
-                    nameof(ScrubBrush), 
-                    nameof(ScrubISO11998), 
-                    nameof(ScrubISO11998Class)
+                    nameof(ScrubBrush),
+                    nameof(ScrubISO11998),
+                    nameof(ScrubISO11998Class),
+                    nameof(ScratchISO6272),
+                    nameof(DryingIdegree),
+                    nameof(DryingIIIdegree),
+                    nameof(Persoz),
+                    nameof(Koenig),
+                    nameof(FlasCorrosion),
+                    nameof(SaltChamber),
+                    nameof(Yellowing),
+                    nameof(UvChamber),
+                    nameof(Schock),
+                    nameof(Adhesion),
+                    nameof(WaterResistance),
+                    nameof(StainResistance),
+                    nameof(Hardness),
+                    nameof(FlowLimit),
+                    nameof(RunOff),
+                    nameof(Yield),
+                    nameof(Other)
                     );
             }
         }
@@ -63,18 +81,6 @@ namespace LabBook.Forms.MainForm.ModelView
             get
             {
                 return _scrubingClassView;
-            }
-        }
-
-        public long Id
-        {
-            get
-            {
-                return _commonModel.Id;
-            }
-            set
-            {
-                _commonModel.Id = value;
             }
         }
 
@@ -117,6 +123,241 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public string ScratchISO6272
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.ScratchISO6272_1 : "";
+            }
+            set
+            {
+                _commonModel.ScratchISO6272_1 = value;
+                _modified = true;
+            }
+        }
+
+        public string DryingIdegree
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.DryingISO9117_1 : "";
+            }
+            set
+            {
+                _commonModel.DryingISO9117_1 = value;
+                _modified = true;
+            }
+        }
+
+        public string DryingIIIdegree
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.DryingISO9117_3 : "";
+            }
+            set
+            {
+                _commonModel.DryingISO9117_3 = value;
+                _modified = true;
+            }
+        }
+
+        public string Persoz
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.PersozISO2409 : "";
+            }
+            set
+            {
+                _commonModel.PersozISO2409 = value;
+                _modified = true;
+            }
+        }
+
+        public string Koenig
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.KoenigISO2409 : "";
+            }
+            set
+            {
+                _commonModel.KoenigISO2409 = value;
+                _modified = true;
+            }
+        }
+
+        public string FlasCorrosion
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.FlashRust : "";
+            }
+            set
+            {
+                _commonModel.FlashRust = value;
+                _modified = true;
+            }
+        }
+
+        public string SaltChamber
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.SaltSprayISO9227 : "";
+            }
+            set
+            {
+                _commonModel.SaltSprayISO9227 = value;
+                _modified = true;
+            }
+        }
+
+        public string Yellowing
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.YellowingISO7724 : "";
+            }
+            set
+            {
+                _commonModel.YellowingISO7724 = value;
+                _modified = true;
+            }
+        }
+
+        public string UvChamber
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.UV : "";
+            }
+            set
+            {
+                _commonModel.UV = value;
+                _modified = true;
+            }
+        }
+
+        public string Schock
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.SchockISO6272 : "";
+            }
+            set
+            {
+                _commonModel.SchockISO6272 = value;
+                _modified = true;
+            }
+        }
+
+        public string Adhesion
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.AdhesionISO2409 : "";
+            }
+            set
+            {
+                _commonModel.AdhesionISO2409 = value;
+                _modified = true;
+            }
+        }
+
+        public string WaterResistance
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.WaterISO2812_2 : "";
+            }
+            set
+            {
+                _commonModel.WaterISO2812_2 = value;
+                _modified = true;
+            }
+        }
+
+        public string StainResistance
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.StainISO2812_4 : "";
+            }
+            set
+            {
+                _commonModel.StainISO2812_4 = value;
+                _modified = true;
+            }
+        }
+
+        public string Hardness
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.Hardness : "";
+            }
+            set
+            {
+                _commonModel.Hardness = value;
+                _modified = true;
+            }
+        }
+
+        public string FlowLimit
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.FlowLimit : "";
+            }
+            set
+            {
+                _commonModel.FlowLimit = value;
+                _modified = true;
+            }
+        }
+
+        public string RunOff
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.RunOff : "";
+            }
+            set
+            {
+                _commonModel.RunOff = value;
+                _modified = true;
+            }
+        }
+
+        public string Yield
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.Yield : "";
+            }
+            set
+            {
+                _commonModel.Yield = value;
+                _modified = true;
+            }
+        }
+
+        public string Other
+        {
+            get
+            {
+                return _commonModel != null ? _commonModel.Other : "";
+            }
+            set
+            {
+                _commonModel.Other = value;
+                _modified = true;
+            }
+        }
+
+
         public void RefreshData(long labBookId)
         {
             Save();
@@ -126,10 +367,7 @@ namespace LabBook.Forms.MainForm.ModelView
         public void Save()
         {
             if (_modified)
-            {
-                ExpCommon model = _service.Save(_windowEditMV.LabBookId, Model);
-                Model.Id = model.Id;
-            }
+                _ = _service.Save(Model);
             _modified = false;
         }
 

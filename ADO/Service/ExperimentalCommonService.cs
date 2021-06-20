@@ -20,22 +20,13 @@ namespace LabBook.ADO.Service
 
         public ExpCommon GetCurrent(long labBookId)
         {
-            if (!_repository.ExistById(labBookId, ExperimentalCommonRepository.ExistByLabBookIdQuery))
-                return new ExpCommon(labBookId);
-            else
-                return _repository.GetById(labBookId, ExperimentalCommonRepository.GetByLabbokIdQuery);
-        }
-
-        public ExpCommon RefreshData(long labBookId)
-        {
             return _repository.GetById(labBookId, ExperimentalCommonRepository.GetByLabbokIdQuery);
         }
 
-        public ExpCommon Save(long labBookId, ExpCommon expCommon)
+        public ExpCommon Save(ExpCommon expCommon)
         {
-            if (expCommon.Id == CommonConstant.IdNewAdded)
+            if (!_repository.ExistById(expCommon.LabBookId, ExperimentalCommonRepository.ExistByLabBookIdQuery))
             {
-                expCommon.LabBookId = labBookId;
                 return _repository.Save(expCommon);
             }
             else
