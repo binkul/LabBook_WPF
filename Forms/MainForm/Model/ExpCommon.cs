@@ -7,26 +7,26 @@ namespace LabBook.Forms.MainForm.Model
     public class ExpCommon
     {
         public long LabBookId { get; set; } = 1;
-        public string ScrubISO11998 { get; set; } //
-        public long ScrubISO11998Class { get; set; } = 1; //
-        public string ScrubBrush { get; set; } //
-        public string DryingISO9117_1 { get; set; } //
-        public string DryingISO9117_3 { get; set; } //
-        public string YellowingISO7724 { get; set; } //
-        public string SchockISO6272 { get; set; } //
-        public string PersozISO2409 { get; set; } //
-        public string KoenigISO2409 { get; set; } //
-        public string ScratchISO6272_1 { get; set; } //
-        public string AdhesionISO2409 { get; set; } //
-        public string StainISO2812_4 { get; set; } //
-        public string WaterISO2812_2 { get; set; } //
-        public string SaltSprayISO9227 { get; set; } //
-        public string FlashRust { get; set; } //
-        public string UV { get; set; } //
-        public string Hardness { get; set; } //
-        public string FlowLimit { get; set; } //
-        public string RunOff { get; set; } //
-        public string Yield { get; set; } //
+        public string ScrubISO11998 { get; set; }
+        public long ScrubISO11998Class { get; set; } = 1;
+        public string ScrubBrush { get; set; }
+        public string DryingISO9117_1 { get; set; }
+        public string DryingISO9117_3 { get; set; }
+        public string YellowingISO7724 { get; set; }
+        public string SchockISO6272 { get; set; }
+        public string PersozISO2409 { get; set; }
+        public string KoenigISO2409 { get; set; }
+        public string ScratchISO6272_1 { get; set; }
+        public string AdhesionISO2409 { get; set; }
+        public string StainISO2812_4 { get; set; }
+        public string WaterISO2812_2 { get; set; }
+        public string SaltSprayISO9227 { get; set; }
+        public string FlashRust { get; set; }
+        public string UV { get; set; }
+        public string Hardness { get; set; }
+        public string FlowLimit { get; set; }
+        public string RunOff { get; set; }
+        public string Yield { get; set; }
         public string Other { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Updated { get; set; } = DateTime.Now;

@@ -30,7 +30,7 @@ namespace LabBook.ADO.Repository
             "flash_rust=@flash_rust, UV_test=@UV_test, hardness=@hardness, flow_limit=@flow_limit, runoff=@runoff, yield=@yield, " +
             "other=@other, date_update=@date_update Where labbook_id = @labbook_id";
 
-        override public ExpCommon GetById(long labBookId, string query)
+        public override ExpCommon GetById(long labBookId, string query)
         {
             ExpCommon expCommon = new ExpCommon(labBookId);
 
@@ -39,12 +39,12 @@ namespace LabBook.ADO.Repository
                 try
                 {
                     var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
-                    sqlCmd.Parameters.AddWithValue("@id", labBookId);
+                    _ = sqlCmd.Parameters.AddWithValue("@id", labBookId);
                     connection.Open();
                     SqlDataReader reader = sqlCmd.ExecuteReader(CommandBehavior.CloseConnection);
                     if (reader.HasRows)
                     {
-                        reader.Read();
+                        _ = reader.Read();
                         expCommon.ScrubISO11998 = !reader[1].Equals(DBNull.Value) ? Convert.ToString(reader[1]) : null;
                         expCommon.ScrubISO11998Class = Convert.ToInt64(reader[2]);
                         expCommon.ScrubBrush = !reader[3].Equals(DBNull.Value) ? Convert.ToString(reader[3]) : null;
@@ -72,12 +72,12 @@ namespace LabBook.ADO.Repository
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
                         "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
@@ -89,7 +89,7 @@ namespace LabBook.ADO.Repository
             return expCommon;
         }
 
-        override public ExpCommon Save(ExpCommon expCommon)
+        public override ExpCommon Save(ExpCommon expCommon)
         {
             using (SqlCommand cmd = new SqlCommand())
             {
