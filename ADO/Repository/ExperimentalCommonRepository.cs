@@ -13,7 +13,7 @@ namespace LabBook.ADO.Repository
             "drying_ISO9117_1, drying_ISO9117_3, yellowing_ISO7724, schock_ISO6272, person_ISO2409, koenig_ISO2409, " +
             "scratch_ISO6272_1, adhesion_ISO2409, stain_ISO2812_4, water_ISO2812_2, salt_spray_ISO9227, flash_rust, UV_test, " +
             "hardness, flow_limit, runoff, yield, other, date_created, date_update From LabBook.dbo.ExpCommon Where labbook_id = @id";
-        private static readonly string _getScrubingClass = "Select * From LabBook.dbo.CmbScrubClass Order By name";
+        private static readonly string _getScrubingClass = "Select * From LabBook.dbo.CmbScrubClass";
         public static readonly string ExistByLabBookIdQuery = "Select COUNT(1) From LabBook.dbo.ExpCommon Where labbook_id=@id";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.ExpCommon(labbook_id, scrub_ISO11998, scrub_ISO11998_class, scrub_brush, " +
             "drying_ISO9117_1, drying_ISO9117_3, yellowing_ISO7724, schock_ISO6272, person_ISO2409, koenig_ISO2409, " +

@@ -33,6 +33,7 @@
         private OpacityMV _opacityMV;
         private SpectroMV _spectroMV;
         private CommonMV _commonMV;
+        private AshBurnMV _ashBurnMV;
         private long _index = 0;
         private long _labBookId = 0;
         private int _tabIndex;
@@ -110,6 +111,13 @@
             }
         }
 
+        public AshBurnMV SetAshBurnMV
+        {
+            set
+            {
+                _ashBurnMV = value;
+            }
+        }
         public double FormXpos
         {
             get
@@ -381,6 +389,9 @@
 
                 if (_commonMV != null)
                     _commonMV.RefreshData(_labBookId);
+
+                if (_ashBurnMV != null)
+                    _ashBurnMV.RefreshData(_labBookId);
             }
         }
 
@@ -412,8 +423,9 @@
         {
             get
             {
-                if (_viscosityMV != null && _glossMV != null && _opacityMV != null && _spectroMV != null && _commonMV != null)
-                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified || _spectroMV.Modified ||_commonMV.Modified;
+                if (_viscosityMV != null && _glossMV != null && _opacityMV != null && _spectroMV != null && _commonMV != null && _ashBurnMV != null)
+                    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified || 
+                        _spectroMV.Modified || _commonMV.Modified || _ashBurnMV.Modified;
                 else
                     return false;
             }
@@ -600,6 +612,7 @@
             _opacityMV.Save();
             _spectroMV.Save();
             _commonMV.Save();
+            _ashBurnMV.Save();
         }
 
         public void DeleteExperiment()

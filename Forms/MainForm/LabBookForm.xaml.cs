@@ -22,6 +22,7 @@ namespace LabBook.Forms.MainForm
             OpacityMV _opacityMV = this.Resources["opacity"] as OpacityMV;
             SpectroMV _spectroMV = this.Resources["spectro"] as SpectroMV;
             CommonMV _commonMV = this.Resources["common"] as CommonMV;
+            AshBurnMV _ashBurnMV = this.Resources["burn"] as AshBurnMV;
 
             this.DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
@@ -29,11 +30,13 @@ namespace LabBook.Forms.MainForm
             _opacityMV.SetWindowEditMV = mainModelView;
             _spectroMV.SetWindowEditMV = mainModelView;
             _commonMV.SetWindowEditMV = mainModelView;
+            _ashBurnMV.SetWindowEditMV = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
             mainModelView.SetGlossMV = _glossMV;
             mainModelView.SetOpacityMV = _opacityMV;
             mainModelView.SetSpectroMV = _spectroMV;
             mainModelView.SetCommonMV = _commonMV;
+            mainModelView.SetAshBurnMV = _ashBurnMV;
 
             FilterMV _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);

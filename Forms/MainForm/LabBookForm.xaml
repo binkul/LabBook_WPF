@@ -39,6 +39,7 @@
         <vm:OpacityMV x:Key="opacity" />
         <vm:SpectroMV x:Key="spectro" />
         <vm:CommonMV x:Key="common" />
+        <vm:AshBurnMV x:Key="burn" />
         <Convertors:ColumnToVisibilityConverter x:Key="VisibilityColumnConverter" />
         <Convertors:CycleToNameConverter x:Key="CycleConverter" />
         <Convertors:UserToNameConverter x:Key="UserConverter" />

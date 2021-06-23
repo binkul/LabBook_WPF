@@ -40,7 +40,7 @@ namespace LabBook.ADO.Service
         {
             ExperimentalCommonRepository repository = (ExperimentalCommonRepository)_repository;
             DataTable table = repository.GetScrubingClass();
-            return new DataView(table) { Sort = "name" };
+            return new DataView(table) { Sort = "id" };
         }
     }
 }
