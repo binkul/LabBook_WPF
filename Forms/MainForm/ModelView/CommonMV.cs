@@ -352,6 +352,13 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public bool IsPermited
+        {
+            get
+            {
+                return _windowEditMV != null ? _windowEditMV.IsPermited : false;
+            }
+        }
 
         public void RefreshData(long labBookId)
         {

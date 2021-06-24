@@ -54,6 +54,7 @@
         <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
         <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
         <Convertors:DotConverter x:Key="DecimalConverter" />
+        <Convertors:FloatConverter x:Key="FloatConverter" />
         <Convertors:DateTimeConverter x:Key="DateTimeConverter" />
         <local:BindingProxy x:Key="proxy" Data="{Binding}" />
         <Style TargetType="{x:Type DataGrid}" >
@@ -237,7 +238,7 @@
 
             <TextBox x:Name="TxtDensity" Margin="466,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"
                      IsEnabled="{Binding IsPermited, Mode=OneWay}"
-                     Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter}, UpdateSourceTrigger=PropertyChanged}" 
+                     Text="{Binding SelectedItem.density, ElementName=DgLabBook, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
                      KeyUp="TxtBox_KeyUp" FontSize="14" HorizontalAlignment="Left" Width="86" Height="28" Padding="0,3,0,0" />
 
             <Label Name="LblDate" Content="{Binding SelectedItem.created, ElementName=DgLabBook, Mode=OneWay, Converter={StaticResource DateTimeConverter}}" 
@@ -1025,21 +1026,21 @@
                         <Label Grid.Row="0" Grid.Column="0" Content="Szorowanie ISO 11998 i Rysy ISO 6272-1" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24"/>
                         <Label Grid.Row="0" Grid.Column="0" Content="Szczotka ISO-11998" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold"/>
                         <TextBox Grid.Row="0" Grid.Column="0" Margin="120,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=ScrubBrush, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding ScrubBrush, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Gąbka ISO-11998" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="0" Grid.Column="0" Margin="120,48,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=ScrubISO11998, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding ScrubISO11998, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Klasa ISO-13300" Margin="0,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <ComboBox Grid.Row="0" Grid.Column="0" Margin="120,72,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84" 
                                   IsEnabled="{Binding IsPermited, Mode=OneWay}"
-                                  ItemsSource="{Binding Source={StaticResource common}, Path=ScrubingClass, UpdateSourceTrigger=PropertyChanged}" 
+                                  ItemsSource="{Binding ScrubingClass, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                   DisplayMemberPath="name" SelectedValuePath="id" 
-                                  SelectedValue="{Binding Source={StaticResource common},Path=ScrubISO11998Class, UpdateSourceTrigger=PropertyChanged}" />
+                                  SelectedValue="{Binding ScrubISO11998Class, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Rysa ISO-6272-1" Margin="0,96,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="0" Grid.Column="0" Margin="120,98,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=ScratchISO6272, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding ScratchISO6272, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Drying and hardness-->
@@ -1047,19 +1048,19 @@
                         <Label Grid.Row="1" Grid.Column="0" Content="Schnięcie ISO 9117-1 i Twardość ISO 2409" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24" Grid.RowSpan="2" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Schnięcie I-st" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="1" Grid.Column="0" Margin="100,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2" 
-                                 Text="{Binding Source={StaticResource common}, Path=DryingIdegree, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding DryingIdegree, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Schnięcie III-ci" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="1" Grid.Column="0" Margin="100,48,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2" 
-                                 Text="{Binding Source={StaticResource common}, Path=DryingIIIdegree, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding DryingIIIdegree, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Persoz" Margin="0,66,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="1" Grid.Column="0" Margin="100,70,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2" 
-                                 Text="{Binding Source={StaticResource common}, Path=Persoz, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding Persoz, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="1" Grid.Column="0" Content="Koenig" Margin="0,88,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="1" Grid.Column="0" Margin="100,92,4,8" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2" 
-                                 Text="{Binding Source={StaticResource common}, Path=Koenig, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding Koenig, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Salt spray and falsh rust-->
@@ -1067,11 +1068,11 @@
                         <Label Grid.Row="0" Grid.Column="2" Content="Komora solna i Flash rust" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24"/>
                         <Label Grid.Row="0" Grid.Column="2" Content="Flash rust" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2"/>
                         <TextBox Grid.Row="0" Grid.Column="2" Margin="70,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=FlasCorrosion, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding FlasCorrosion, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="0" Grid.Column="2" Content="Komora" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2"/>
                         <TextBox Grid.Row="0" Grid.Column="2" Margin="70,48,4,3" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=SaltChamber, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding SaltChamber, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Yellowing and UV-->
@@ -1079,11 +1080,11 @@
                         <Label Grid.Row="2" Grid.Column="2" Content="UV i zażółcenie" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24" Grid.RowSpan="2" />
                         <Label Grid.Row="2" Grid.Column="2" Content="Zażółcenie" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="2" Grid.Column="2" Margin="80,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=Yellowing, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding Yellowing, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="2" Grid.Column="2" Content="Komora UV" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="2" Grid.Column="2" Margin="80,48,4,3" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=UvChamber, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding UvChamber, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Shock and Adhesion -->
@@ -1091,11 +1092,11 @@
                         <Label Grid.Row="0" Grid.Column="1" Content="Uderzenie i przyczpność" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24" Grid.RowSpan="2" />
                         <Label Grid.Row="0" Grid.Column="1" Content="Uderzenie" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="70,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=Schock, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding Schock, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="0" Grid.Column="1" Content="Przyczep." Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="70,48,4,3" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=Adhesion, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding Adhesion, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Stain and Water -->
@@ -1103,11 +1104,11 @@
                         <Label Grid.Row="2" Grid.Column="1" Content="Odpornośc na wodę i plamy" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24" Grid.RowSpan="2" />
                         <Label Grid.Row="2" Grid.Column="1" Content="Woda" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="2" Grid.Column="1" Margin="50,26,4,27" Height="40" VerticalAlignment="Top" AcceptsReturn="True" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=WaterResistance, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding WaterResistance, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="2" Grid.Column="1" Content="Plamy" Margin="0,64,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" Grid.RowSpan="2" />
                         <TextBox Grid.Row="2" Grid.Column="1" Margin="50,68,4,3" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" Grid.RowSpan="2"
-                                 Text="{Binding Source={StaticResource common}, Path=StainResistance, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding StainResistance, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                         <!-- Hardness, yield, flow limit etc.  -->
@@ -1115,19 +1116,19 @@
                         <Label Grid.Row="3" Grid.Column="0" Content="Twardość, wydajność, spływ" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Twardość" Margin="0,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="3" Grid.Column="0" Margin="70,26,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=Hardness, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding Hardness, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Rozpływ" Margin="0,44,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="3" Grid.Column="0" Margin="70,48,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=FlowLimit, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding FlowLimit, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Spływ" Margin="0,66,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="3" Grid.Column="0" Margin="70,70,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=RunOff, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding RunOff, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                         <Label Grid.Row="3" Grid.Column="0" Content="Wydajność" Margin="0,88,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <TextBox Grid.Row="3" Grid.Column="0" Margin="70,92,4,27" Height="20" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
-                                 Text="{Binding Source={StaticResource common}, Path=Yield, UpdateSourceTrigger=PropertyChanged}" 
+                                 Text="{Binding Yield, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
                     </Grid>
@@ -1135,13 +1136,133 @@
 
                 <!-- Page Pozostałe -->
                 <TabItem Header="Badania Pozostałe" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
-                    <Grid >
+                    <Grid>
                         <TextBox Background="White" Margin="5" AcceptsReturn="True" FontSize="14"
-                                     Text="{Binding Source={StaticResource common}, Path=Other, UpdateSourceTrigger=PropertyChanged}"
+                                     Text="{Binding Other, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding IsPermited, Mode=OneWay}" />
                     </Grid>
                 </TabItem>
-                
+
+                <!-- Page Spalanie i VOC -->
+                <TabItem Header="Spalanie i VOC" Margin="-1.8,0,-2.4,-0.8" Background="#FFE5E5E5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Popiół 450" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="Popiół 900" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <Label Grid.Row="2" Grid.Column="0" Content="Części stałe" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="3" Grid.Column="0" Content="Części organiczne" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="4" Grid.Column="0" Content="Dwutlenek tytanu" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="5" Grid.Column="0" Content="Kreda" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="6" Grid.Column="0" Content="Pozostałe" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                        <Label Grid.Row="2" Grid.Column="3" Content="Tygiel" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="2" Grid.Column="4" Content="Wsad" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="2" Grid.Column="5" Content="105 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="2" Grid.Column="6" Content="450 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="2" Grid.Column="7" Content="900 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+
+
+                        <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Ash450, Source={StaticResource burn}, Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Ash900, Source={StaticResource burn}, Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Solids, Source={StaticResource burn}, Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Organic, Source={StaticResource burn}, Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Titanium, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Chalk, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Others, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+
+                        <TextBox Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        
+                        <TextBox Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Paint1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Paint2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Paint3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+
+                        <TextBox Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible105_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible105_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible105_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+
+                        <TextBox Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible405_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible405_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible405_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+
+                        <TextBox Grid.Row="3" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible900_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="4" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible900_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <TextBox Grid.Row="5" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding Crucible900_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+
+                        <Button Grid.Row="6" Grid.Column="7" Content="Oblicz" Width="60" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                FontWeight="Bold" Foreground="#FF1409BD"
+                                Command="{Binding CalculateBurn}">
+                            
+                        </Button>
+                        
+                    </Grid>
+                </TabItem>
+
+
             </TabControl>
         </Grid>
     </DockPanel>

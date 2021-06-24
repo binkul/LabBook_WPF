@@ -123,6 +123,9 @@ namespace LabBook.ADO.Repository
                     if (expAshBurns.Chalk == -1) cmd.Parameters.AddWithValue("@calcium_carbonate", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@calcium_carbonate", expAshBurns.Chalk);
 
+                    if (expAshBurns.Others == -1) cmd.Parameters.AddWithValue("@others", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@others", expAshBurns.Others);
+
                     if (string.IsNullOrEmpty(expAshBurns.VocAmount)) cmd.Parameters.AddWithValue("@voc_content", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@voc_content", expAshBurns.VocAmount);
 
@@ -223,6 +226,9 @@ namespace LabBook.ADO.Repository
 
                     if (expAshBurns.Chalk == -1) cmd.Parameters.AddWithValue("@calcium_carbonate", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@calcium_carbonate", expAshBurns.Chalk);
+
+                    if (expAshBurns.Others == -1) cmd.Parameters.AddWithValue("@others", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@others", expAshBurns.Others);
 
                     if (string.IsNullOrEmpty(expAshBurns.VocAmount)) cmd.Parameters.AddWithValue("@voc_content", DBNull.Value);
                     else cmd.Parameters.AddWithValue("@voc_content", expAshBurns.VocAmount);

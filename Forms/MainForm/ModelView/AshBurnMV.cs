@@ -2,6 +2,7 @@
 using LabBook.Forms.MainForm.Model;
 using System.ComponentModel;
 using System.Data;
+using System.Windows.Input;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
@@ -392,6 +393,11 @@ namespace LabBook.Forms.MainForm.ModelView
             {
                 return _vocClassView;
             }
+        }
+
+        public void Calculate()
+        {
+            Model = _service.Calculate(Model);
         }
 
         public void RefreshData(long labBookId)

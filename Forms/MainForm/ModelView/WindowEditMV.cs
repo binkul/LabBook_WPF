@@ -26,6 +26,7 @@
         private ICommand _newSerieButton;
         private ICommand _refreshButton;
         private ICommand _copyFromButton;
+        private ICommand _calculateBurn;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -604,6 +605,15 @@
             }
         }
 
+        public ICommand CalculateBurn
+        {
+            get
+            {
+                if (_calculateBurn == null) _calculateBurn = new CalculateBurn(this);
+                return _calculateBurn;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
@@ -696,6 +706,11 @@
                 }
                 index++;
             }
+        }
+
+        public void CalculateAshAndBurn()
+        {
+            _ashBurnMV.Calculate();
         }
 
         public void UpdateRowIndex()

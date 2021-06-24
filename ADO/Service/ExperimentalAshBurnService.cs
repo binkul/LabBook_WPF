@@ -33,5 +33,18 @@ namespace LabBook.ADO.Service
             DataTable table = repository.GetVOCClass();
             return new DataView(table) { Sort = "id" };
         }
+
+        public ExpAshBurns Calculate(ExpAshBurns expAshBurns)
+        {
+
+            double crucible = (expAshBurns.Crucible1 + expAshBurns.Crucible2 + expAshBurns.Crucible3) / 3;
+            double paint = (expAshBurns.Paint1 + expAshBurns.Paint2 + expAshBurns.Paint2) / 3;
+            double crucible105 = (expAshBurns.Crucible105_1 + expAshBurns.Crucible105_2 + expAshBurns.Crucible105_3) / 3;
+            double crucible450 = (expAshBurns.Crucible405_1 + expAshBurns.Crucible405_2 + expAshBurns.Crucible405_3) / 3;
+            double crucible900 = (expAshBurns.Crucible900_1 + expAshBurns.Crucible900_2 + expAshBurns.Crucible900_3) / 3;
+
+
+            return expAshBurns;
+        }
     }
 }

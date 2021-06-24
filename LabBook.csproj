@@ -97,6 +97,8 @@
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
+    <Compile Include="Forms\MainForm\Converters\FloatConverter.cs" />
     <Compile Include="Forms\MainForm\ModelView\AshBurnMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\CommonMV.cs" />
     <Compile Include="Forms\MainForm\Model\ExpAshBurns.cs" />
