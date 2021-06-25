@@ -5,7 +5,11 @@ namespace LabBook.Forms.MainForm.Model
 {
     public class ExpAshBurns
     {
-        private static double none = -1f;
+        public static double none = -1f;
+
+        public bool Row_1 { get; set; } = true;
+        public bool Row_2 { get; set; } = true;
+        public bool Row_3 { get; set; } = true;
         public long LabBookId { get; set; } = 1;
         public double Solid { get; set; } = none;
         public double Ash450 { get; set; } = none;
@@ -34,12 +38,18 @@ namespace LabBook.Forms.MainForm.Model
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime Updated { get; set; } = DateTime.Now;
 
-        public ExpAshBurns(long labBookId, double solid, double ash450, double ash900, double organic, double titanium, 
-            double chalk, double others, int vocCatId, string vocAmount, double crucible1, double crucible2, double crucible3,
-            double paint1, double paint2, double paint3, double crucible105_1, double crucible105_2, double crucible105_3,
-            double crucible405_1, double crucible405_2, double crucible405_3, double crucible900_1, double crucible900_2,
-            double crucible900_3, DateTime created, DateTime updated) : this(labBookId)
+        public ExpAshBurns(bool row_1, bool row_2, bool row_3, long labBookId, 
+            double solid, double ash450, double ash900, double organic, 
+            double titanium, double chalk, double others, int vocCatId, string vocAmount,
+            double crucible1, double crucible2, double crucible3, double paint1, double paint2, double paint3, 
+            double crucible105_1, double crucible105_2, double crucible105_3, double crucible405_1, 
+            double crucible405_2, double crucible405_3, double crucible900_1, double crucible900_2, 
+            double crucible900_3, DateTime created, DateTime updated)
         {
+            Row_1 = row_1;
+            Row_2 = row_2;
+            Row_3 = row_3;
+            LabBookId = labBookId;
             Solid = solid;
             Ash450 = ash450;
             Ash900 = ash900;

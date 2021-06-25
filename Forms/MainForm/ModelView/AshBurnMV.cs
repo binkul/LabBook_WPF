@@ -1,5 +1,6 @@
 ﻿using LabBook.ADO.Service;
 using LabBook.Forms.MainForm.Model;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private ExpAshBurns _ashBurnModel;
         private DataView _vocClassView;
         private bool _modified = false;
+        private ExpAshBurnCalculation _calculationResult = new ExpAshBurnCalculation();
         public event PropertyChangedEventHandler PropertyChanged;
 
         public AshBurnMV()
@@ -70,7 +72,10 @@ namespace LabBook.Forms.MainForm.ModelView
                     nameof(Crucible405_3),
                     nameof(Crucible900_1),
                     nameof(Crucible900_2),
-                    nameof(Crucible900_3)
+                    nameof(Crucible900_3),
+                    nameof(CalculationRow_1),
+                    nameof(CalculationRow_2),
+                    nameof(CalculationRow_3)
                     );
             }
         }
@@ -191,6 +196,8 @@ namespace LabBook.Forms.MainForm.ModelView
                 _modified = true;
             }
         }
+
+        #region Calculation area
 
         public double Crucible1
         {
@@ -387,7 +394,45 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public DataView VocClassList
+        public bool CalculationRow_1
+        {
+            get
+            {
+                return _ashBurnModel != null ? _ashBurnModel.Row_1 : true;
+            }
+            set
+            {
+                _ashBurnModel.Row_1 = value;
+            }
+        }
+
+        public bool CalculationRow_2
+        {
+            get
+            {
+                return _ashBurnModel != null ? _ashBurnModel.Row_2 : true;
+            }
+            set
+            {
+                _ashBurnModel.Row_2 = value;
+            }
+        }
+
+        public bool CalculationRow_3
+        {
+            get
+            {
+                return _ashBurnModel != null ? _ashBurnModel.Row_3 : true;
+            }
+            set
+            {
+                _ashBurnModel.Row_3 = value;
+            }
+        }
+
+        #endregion
+
+        public DataView VocClass
         {
             get
             {
@@ -395,9 +440,135 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        #region Calculation for label
+
+        public string CalcSolids
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 && _calculationResult.Solid_1 > 0)
+                    result += Math.Round(_calculationResult.Solid_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Solid_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Solid_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Solid_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Solid_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        public string CalcAsh450
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 && _calculationResult.Ash450_1 > 0)
+                    result += Math.Round(_calculationResult.Ash450_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Ash450_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Ash450_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Ash450_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Ash450_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        public string CalcAsh900
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 && _calculationResult.Ash900_1 > 0)
+                    result += Math.Round(_calculationResult.Ash900_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Ash900_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Ash900_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Ash900_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Ash900_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        public string CalcOrganic
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 && _calculationResult.Organic_1 > 0)
+                    result += Math.Round(_calculationResult.Organic_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Organic_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Organic_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Organic_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Organic_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        public string CalcTitan
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 && _calculationResult.Titanium_1 > 0)
+                    result += Math.Round(_calculationResult.Titanium_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Titanium_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Titanium_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Titanium_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Titanium_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        public string CalcChalk
+        {
+            get
+            {
+                var result = "";
+                if (_ashBurnModel == null) return result;
+
+                if (_ashBurnModel.Row_1 & _calculationResult.Chalk_1 > 0)
+                    result += Math.Round(_calculationResult.Chalk_1, 2).ToString();
+                if (_ashBurnModel.Row_2 && _calculationResult.Chalk_2 > 0)
+                    result += " | " + Math.Round(_calculationResult.Chalk_2, 2).ToString();
+                if (_ashBurnModel.Row_3 && _calculationResult.Chalk_3 > 0)
+                    result += " | " + Math.Round(_calculationResult.Chalk_3, 2).ToString();
+
+                return result;
+            }
+        }
+
+        #endregion
+
         public void Calculate()
         {
-            Model = _service.Calculate(Model);
+            _calculationResult = _service.Calculate(Model);
+            OnPropertyChanged(
+                nameof(CalcSolids), 
+                nameof(CalcAsh450),
+                nameof(CalcAsh900),
+                nameof(CalcOrganic),
+                nameof(CalcTitan),
+                nameof(CalcChalk)
+                );
+        }
+
+        public void CalculateAndSave()
+        {
+            _calculationResult = _service.CalculateAverage(Model);
+
         }
 
         public void RefreshData(long labBookId)

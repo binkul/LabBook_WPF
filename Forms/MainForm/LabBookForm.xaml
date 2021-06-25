@@ -1020,7 +1020,7 @@
                             <RowDefinition Height="0.17*" />
                             <RowDefinition Height="0.33*" />
                         </Grid.RowDefinitions>
-                        
+
                         <!-- Scrub resitance -->
                         <Rectangle Grid.Row="0" Grid.Column="0" Margin="0,0,1,1" Stroke="#FF393BD7" StrokeThickness="1" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Szorowanie ISO 11998 i Rysy ISO 6272-1" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Height="24"/>
@@ -1035,7 +1035,7 @@
                         <Label Grid.Row="0" Grid.Column="0" Content="Klasa ISO-13300" Margin="0,70,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
                         <ComboBox Grid.Row="0" Grid.Column="0" Margin="120,72,0,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84" 
                                   IsEnabled="{Binding IsPermited, Mode=OneWay}"
-                                  ItemsSource="{Binding ScrubingClass, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" 
+                                  ItemsSource="{Binding ScrubingClass, Source={StaticResource common}}" 
                                   DisplayMemberPath="name" SelectedValuePath="id" 
                                   SelectedValue="{Binding ScrubISO11998Class, Source={StaticResource common}, UpdateSourceTrigger=PropertyChanged}" />
                         <Label Grid.Row="0" Grid.Column="0" Content="Rysa ISO-6272-1" Margin="0,96,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="SemiBold" />
@@ -1164,7 +1164,13 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+
+                        <Rectangle Grid.Row="0" Grid.Column="0" Margin="0,0,1,1" Stroke="#FF393BD7" StrokeThickness="1" Grid.ColumnSpan="2" Grid.RowSpan="9" />
+                        <Rectangle Grid.Row="0" Grid.Column="2" Margin="0,0,1,1" Stroke="#FF393BD7" StrokeThickness="1" Grid.ColumnSpan="6" Grid.RowSpan="9" />
+
 
                         <Label Grid.Row="0" Grid.Column="0" Content="Popiół 450" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
                         <Label Grid.Row="1" Grid.Column="0" Content="Popiół 900" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -1173,13 +1179,25 @@
                         <Label Grid.Row="4" Grid.Column="0" Content="Dwutlenek tytanu" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Label Grid.Row="5" Grid.Column="0" Content="Kreda" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
                         <Label Grid.Row="6" Grid.Column="0" Content="Pozostałe" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="7" Grid.Column="0" Content="LZO klasa" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Label Grid.Row="8" Grid.Column="0" Content="LZO" Margin="0,0,5,0" HorizontalAlignment="Right" FontWeight="Bold" VerticalAlignment="Center"/>
 
-                        <Label Grid.Row="2" Grid.Column="3" Content="Tygiel" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
-                        <Label Grid.Row="2" Grid.Column="4" Content="Wsad" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
-                        <Label Grid.Row="2" Grid.Column="5" Content="105 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
-                        <Label Grid.Row="2" Grid.Column="6" Content="450 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
-                        <Label Grid.Row="2" Grid.Column="7" Content="900 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="0" Grid.Column="2" Content="{Binding CalcAsh450, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Label Grid.Row="1" Grid.Column="2" Content="{Binding CalcAsh900, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Label Grid.Row="2" Grid.Column="2" Content="{Binding CalcSolids, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Label Grid.Row="3" Grid.Column="2" Content="{Binding CalcOrganic, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Label Grid.Row="4" Grid.Column="2" Content="{Binding CalcTitan, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Label Grid.Row="5" Grid.Column="2" Content="{Binding CalcChalk, Source={StaticResource burn}}" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
+                        <Label Grid.Row="4" Grid.Column="3" Content="Tygiel" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="4" Grid.Column="4" Content="Wsad" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="4" Grid.Column="5" Content="105 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="4" Grid.Column="6" Content="450 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+                        <Label Grid.Row="4" Grid.Column="7" Content="900 oC" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Bottom"/>
+
+                        <CheckBox Grid.Row="5" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding CalculationRow_1, Source={StaticResource burn}}" />
+                        <CheckBox Grid.Row="6" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding CalculationRow_2, Source={StaticResource burn}}" />
+                        <CheckBox Grid.Row="7" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" IsChecked="{Binding CalculationRow_3, Source={StaticResource burn}}" />
 
                         <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Ash450, Source={StaticResource burn}, Converter={StaticResource FloatConverter}}"
@@ -1202,63 +1220,74 @@
                         <TextBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Others, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                        <ComboBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" 
+                                  IsEnabled="{Binding IsPermited, Mode=OneWay}"
+                                  ItemsSource="{Binding VocClass, Source={StaticResource burn}}" 
+                                  DisplayMemberPath="VOC" SelectedValuePath="id" 
+                                  SelectedValue="{Binding VocClassId, Source={StaticResource burn}, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0" />
+                        <TextBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" KeyUp="TxtBox_KeyUp" Width="80"
+                                 Text="{Binding VocContent, Source={StaticResource burn}}"
+                                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
-                        <TextBox Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        
-                        <TextBox Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+
+                        <TextBox Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Paint1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="6" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Paint2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="7" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Paint3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
-                        <TextBox Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible105_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="6" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible105_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible105_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
-                        <TextBox Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible405_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="6" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible405_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="7" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible405_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
-                        <TextBox Grid.Row="3" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="5" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible900_1, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="4" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="6" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible900_2, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                        <TextBox Grid.Row="5" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
+                        <TextBox Grid.Row="7" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" KeyUp="TxtBox_KeyUp" Width="80"
                                  Text="{Binding Crucible900_3, Source={StaticResource burn} , Converter={StaticResource FloatConverter}}"
                                  IsEnabled="{Binding IsPermited, Mode=OneWay}" />
 
-                        <Button Grid.Row="6" Grid.Column="7" Content="Oblicz" Width="60" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                FontWeight="Bold" Foreground="#FF1409BD"
-                                Command="{Binding CalculateBurn}">
-                            
-                        </Button>
-                        
+                        <Button Grid.Row="8" Grid.Column="6" Content="Oblicz" VerticalAlignment="Center"
+                                FontWeight="Bold" Foreground="#FF1409BD" HorizontalAlignment="Right" Width="60"
+                                Command="{Binding CalculateBurn}" />
+                        <Button Grid.Row="8" Grid.Column="7" Content="Oblicz i wpisz" VerticalAlignment="Center" 
+                                FontWeight="Bold" Foreground="#FF1409BD" Margin="0" HorizontalAlignment="Center" Width="90"
+                                Command="{Binding CalculateAndSaveBurn}" />
+
+
+
                     </Grid>
                 </TabItem>
 

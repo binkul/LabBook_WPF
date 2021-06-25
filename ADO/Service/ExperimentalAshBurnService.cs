@@ -1,7 +1,9 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Repository;
 using LabBook.Forms.MainForm.Model;
+using System;
 using System.Data;
+using System.Linq;
 
 namespace LabBook.ADO.Service
 {
@@ -34,17 +36,85 @@ namespace LabBook.ADO.Service
             return new DataView(table) { Sort = "id" };
         }
 
-        public ExpAshBurns Calculate(ExpAshBurns expAshBurns)
+        public ExpAshBurnCalculation Calculate(ExpAshBurns expAshBurns)
         {
+            ExpAshBurnCalculation result = new ExpAshBurnCalculation();
 
-            double crucible = (expAshBurns.Crucible1 + expAshBurns.Crucible2 + expAshBurns.Crucible3) / 3;
-            double paint = (expAshBurns.Paint1 + expAshBurns.Paint2 + expAshBurns.Paint2) / 3;
-            double crucible105 = (expAshBurns.Crucible105_1 + expAshBurns.Crucible105_2 + expAshBurns.Crucible105_3) / 3;
-            double crucible450 = (expAshBurns.Crucible405_1 + expAshBurns.Crucible405_2 + expAshBurns.Crucible405_3) / 3;
-            double crucible900 = (expAshBurns.Crucible900_1 + expAshBurns.Crucible900_2 + expAshBurns.Crucible900_3) / 3;
+            if (expAshBurns.Row_1 && expAshBurns.Paint1 > 0f)
+            {
+                result.Solid_1 = expAshBurns.Crucible105_1 - expAshBurns.Crucible1;
+                result.Ash450_1 = expAshBurns.Crucible405_1 - expAshBurns.Crucible1;
+                result.Ash900_1 = expAshBurns.Crucible900_1 - expAshBurns.Crucible1;
+                result.Organic_1 = result.Solid_1 - result.Ash450_1;
+                result.Chalk_1 = ((result.Ash450_1 - result.Ash900_1) * 100f) / 44f;
+                result.Chalk_1 = result.Ash450_1 - result.Chalk_1;
+                result.Titanium_1 = result.Ash450_1 - result.Chalk_1;
+                result.Solid_1 = (result.Solid_1 * 100f) / expAshBurns.Paint1;
+                result.Ash450_1 = (result.Ash450_1 * 100) / expAshBurns.Paint1;
+                result.Ash900_1 = (result.Ash900_1 * 100) / expAshBurns.Paint1;
+                result.Organic_1 = (result.Organic_1 * 100) / expAshBurns.Paint1;
+                result.Titanium_1 = (result.Titanium_1 * 100) / expAshBurns.Paint1;
+                result.Chalk_1 = (result.Chalk_1 * 100f) / expAshBurns.Paint1;
+            }
 
+            if (expAshBurns.Row_2 && expAshBurns.Paint2 > 0f)
+            {
+                result.Solid_2 = expAshBurns.Crucible105_2 - expAshBurns.Crucible2;
+                result.Ash450_2 = expAshBurns.Crucible405_2 - expAshBurns.Crucible2;
+                result.Ash900_2 = expAshBurns.Crucible900_2 - expAshBurns.Crucible2;
+                result.Organic_2 = result.Solid_2 - result.Ash450_2;
+                result.Chalk_2 = ((result.Ash450_2 - result.Ash900_2) * 100f) / 44f;
+                result.Chalk_2 = result.Ash450_2 - result.Chalk_2;
+                result.Titanium_2 = result.Ash450_2 - result.Chalk_2;
+                result.Solid_2 = (result.Solid_2 * 100f) / expAshBurns.Paint2;
+                result.Ash450_2 = (result.Ash450_2 * 100) / expAshBurns.Paint2;
+                result.Ash900_2 = (result.Ash900_2 * 100) / expAshBurns.Paint2;
+                result.Organic_2 = (result.Organic_2 * 100) / expAshBurns.Paint2;
+                result.Titanium_2 = (result.Titanium_2 * 100) / expAshBurns.Paint2;
+                result.Chalk_2 = (result.Chalk_2 * 100f) / expAshBurns.Paint2;
+            }
 
-            return expAshBurns;
+            if (expAshBurns.Row_3 && expAshBurns.Paint3 > 0f)
+            {
+                result.Solid_3 = expAshBurns.Crucible105_3 - expAshBurns.Crucible3;
+                result.Ash450_3 = expAshBurns.Crucible405_3 - expAshBurns.Crucible3;
+                result.Ash900_3 = expAshBurns.Crucible900_3 - expAshBurns.Crucible3;
+                result.Organic_3 = result.Solid_3 - result.Ash450_3;
+                result.Chalk_3 = ((result.Ash450_3 - result.Ash900_3) * 100f) / 44f;
+                result.Chalk_3 = result.Ash450_3 - result.Chalk_3;
+                result.Titanium_3 = result.Ash450_3 - result.Chalk_3;
+                result.Solid_3 = (result.Solid_3 * 100f) / expAshBurns.Paint3;
+                result.Ash450_3 = (result.Ash450_3 * 100) / expAshBurns.Paint3;
+                result.Ash900_3 = (result.Ash900_3 * 100) / expAshBurns.Paint3;
+                result.Organic_3 = (result.Organic_3 * 100) / expAshBurns.Paint3;
+                result.Titanium_3 = (result.Titanium_3 * 100) / expAshBurns.Paint3;
+                result.Chalk_3 = (result.Chalk_3 * 100f) / expAshBurns.Paint3;
+            }
+
+            return result;
+        }
+    
+        public ExpAshBurnCalculation CalculateAverage(ExpAshBurns expAshBurns)
+        {
+            ExpAshBurnCalculation result = Calculate(expAshBurns);
+
+            result.SolidAvr = CalcAverage(result.Solid_1, result.Solid_2, result.Solid_3);
+            result.Ash450Avr = CalcAverage(result.Ash450_1, result.Ash450_2, result.Ash450_3);
+            result.Ash900Avr = CalcAverage(result.Ash900_1, result.Ash900_2, result.Ash900_3);
+            result.OrganicAvr = CalcAverage(result.Organic_1, result.Organic_2, result.Organic_3);
+            result.ChalkAvr = CalcAverage(result.Chalk_1, result.Chalk_2, result.Chalk_3);
+            result.TitaniumAvr = CalcAverage(result.Titanium_1, result.Titanium_2, result.Titanium_3);
+
+            return result;
+        }
+
+        private double CalcAverage(params double[] nums)
+        {
+            var result = (from num in nums
+                          where num > 0
+                          select num).ToArray();
+
+            return  result.Length > 0 ? result.Average() : -1;   
         }
     }
 }
