@@ -98,12 +98,12 @@ namespace LabBook.ADO.Service
         {
             ExpAshBurnCalculation result = Calculate(expAshBurns);
 
-            result.SolidAvr = CalcAverage(result.Solid_1, result.Solid_2, result.Solid_3);
-            result.Ash450Avr = CalcAverage(result.Ash450_1, result.Ash450_2, result.Ash450_3);
-            result.Ash900Avr = CalcAverage(result.Ash900_1, result.Ash900_2, result.Ash900_3);
-            result.OrganicAvr = CalcAverage(result.Organic_1, result.Organic_2, result.Organic_3);
-            result.ChalkAvr = CalcAverage(result.Chalk_1, result.Chalk_2, result.Chalk_3);
-            result.TitaniumAvr = CalcAverage(result.Titanium_1, result.Titanium_2, result.Titanium_3);
+            result.SolidAvr = Math.Round(CalcAverage(result.Solid_1, result.Solid_2, result.Solid_3), 2);
+            result.Ash450Avr = Math.Round(CalcAverage(result.Ash450_1, result.Ash450_2, result.Ash450_3), 2);
+            result.Ash900Avr = Math.Round(CalcAverage(result.Ash900_1, result.Ash900_2, result.Ash900_3), 2);
+            result.OrganicAvr = Math.Round(CalcAverage(result.Organic_1, result.Organic_2, result.Organic_3), 2);
+            result.ChalkAvr = Math.Round(CalcAverage(result.Chalk_1, result.Chalk_2, result.Chalk_3), 2);
+            result.TitaniumAvr = Math.Round(CalcAverage(result.Titanium_1, result.Titanium_2, result.Titanium_3), 2);
 
             return result;
         }

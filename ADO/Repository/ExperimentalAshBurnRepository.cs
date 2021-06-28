@@ -23,7 +23,7 @@ namespace LabBook.ADO.Repository
             "@paint_1, @paint_2, @paint_3, @crucible_105_1, @crucible_105_2, @crucible_105_3, @crucible_405_1, @crucible_405_2" +
             "@crucible_405_3, @crucible_900_1, @crucible_900_2, @crucible_900_3, @date_created, @date_update)";
         public static readonly string UpdateQuery = "Update LabBook.dbo.ExpAshBurn Set solid=@solid, ash_450=@ash_450, ash_900=@ash_900, " +
-            "organic=@organic, titanium_dioxide=@titanium_dioxide, calcium_carbonate=@calcium_carbonate, other=@others, voc_id=@voc_id, " +
+            "organic=@organic, titanium_dioxide=@titanium_dioxide, calcium_carbonate=@calcium_carbonate, others=@others, voc_id=@voc_id, " +
             "voc_content=@voc_content, crucible_1=@crucible_1, crucible_2=@crucible_2, crucible_3=@crucible_3, paint_1=@paint_1, paint_2=@paint_2, " +
             "paint_3=@paint_3, crucible_105_1=@crucible_105_1, crucible_105_2=@crucible_105_2, crucible_105_3=@crucible_105_3, " +
             "crucible_405_1=@crucible_405_1, crucible_405_2=@crucible_405_2, crucible_405_3=@crucible_405_3, crucible_900_1=@crucible_900_1, " +

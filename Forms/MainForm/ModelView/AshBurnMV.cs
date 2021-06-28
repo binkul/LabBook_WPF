@@ -446,7 +446,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 && _calculationResult.Solid_1 > 0)
@@ -464,7 +464,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 && _calculationResult.Ash450_1 > 0)
@@ -482,7 +482,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 && _calculationResult.Ash900_1 > 0)
@@ -500,7 +500,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 && _calculationResult.Organic_1 > 0)
@@ -518,7 +518,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 && _calculationResult.Titanium_1 > 0)
@@ -536,7 +536,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             get
             {
-                var result = "";
+                var result = "<= ";
                 if (_ashBurnModel == null) return result;
 
                 if (_ashBurnModel.Row_1 & _calculationResult.Chalk_1 > 0)
@@ -568,7 +568,22 @@ namespace LabBook.Forms.MainForm.ModelView
         public void CalculateAndSave()
         {
             _calculationResult = _service.CalculateAverage(Model);
-
+            Solids = _calculationResult.SolidAvr;
+            Ash450 = _calculationResult.Ash450Avr;
+            Ash900 = _calculationResult.Ash900Avr;
+            Organic = _calculationResult.OrganicAvr;
+            Titanium = _calculationResult.TitaniumAvr;
+            Chalk = _calculationResult.ChalkAvr;
+            Others = 0f;
+            OnPropertyChanged(
+                nameof(Solids),
+                nameof(Ash450),
+                nameof(Ash900),
+                nameof(Organic),
+                nameof(Titanium),
+                nameof(Chalk),
+                nameof(Others)
+                );
         }
 
         public void RefreshData(long labBookId)
