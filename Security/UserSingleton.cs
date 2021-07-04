@@ -20,7 +20,7 @@ namespace LabBook.Security
         private static string _identifier;
         private static bool _isActive;
 
-        private UserSingleton(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive) 
+        private UserSingleton(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive)
         {
             _id = id;
             _name = name;
@@ -34,18 +34,18 @@ namespace LabBook.Security
 
         public static UserSingleton CreateInstance(long id, string name, string surname, string email, string login, string permission, string identifier, bool isActive)
         {
-                if (_instance == null)
+            if (_instance == null)
+            {
+                lock (_syncRoot)
                 {
-                    lock (_syncRoot)
-                    {
-                        if (_instance == null)
-                            _instance = new UserSingleton(id, name, surname, email, login, permission, identifier, isActive);
-                    }
+                    if (_instance == null)
+                        _instance = new UserSingleton(id, name, surname, email, login, permission, identifier, isActive);
                 }
+            }
 
-                return _instance;
+            return _instance;
         }
-    
+
         public static UserSingleton GetInstance
         {
             get
@@ -61,7 +61,7 @@ namespace LabBook.Security
                 return _id;
             }
         }
-        
+
         public static string Name
         {
             get

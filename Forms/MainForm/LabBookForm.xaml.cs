@@ -24,7 +24,7 @@ namespace LabBook.Forms.MainForm
             CommonMV _commonMV = this.Resources["common"] as CommonMV;
             AshBurnMV _ashBurnMV = this.Resources["burn"] as AshBurnMV;
 
-            this.DataContext = mainModelView;
+            DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
             _glossMV.SetWindowEditMV = mainModelView;
             _opacityMV.SetWindowEditMV = mainModelView;

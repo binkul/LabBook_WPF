@@ -2,20 +2,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace LabBook.Forms.MainForm.Model
+namespace LabBook.Forms.Materials.Model
 {
-    static class WindowSetting
+    public class WindowSetting
     {
-        private static readonly string _path = "\\Data\\Forms\\LabBookForm.xml";
-        private static readonly WindowData defaultData = new WindowData(50d, 50d, 900d, 600d, 140d, 140d, 140d, 140d, 140d, 140d, 140d);
+        private static readonly string _path = "\\Data\\Forms\\MaterialForm.xml";
+        private static readonly WindowData defaultData = new WindowData(50d, 50d, 900d, 600d);
 
         public static WindowData Read()
         {
             IList<double> list = WindowsOperation.LoadWindowSettings(_path);
             try
             {
-                return list != null ? new WindowData(list[0], list[1], list[2], list[3], list[4], list[5], list[6], 
-                    list[7], list[8], list[9], list[10]) : defaultData;
+                return list != null ? new WindowData(list[0], list[1], list[2], list[3]) : defaultData;
             }
             catch (Exception)
             {
@@ -31,16 +30,8 @@ namespace LabBook.Forms.MainForm.Model
                 data.FormYpos,
                 data.FormWidth,
                 data.FormHeight,
-                data.ColStatus,
-                data.ColId,
-                data.ColTitle,
-                data.ColUser,
-                data.ColCycle,
-                data.ColDensity,
-                data.ColDate
             };
             WindowsOperation.SaveWindowsSettings(list, _path);
-
         }
     }
 }

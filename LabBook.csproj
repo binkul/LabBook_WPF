@@ -99,6 +99,7 @@
     <Compile Include="ADO\Service\UserService.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
+    <Compile Include="Forms\MainForm\Command\MaterialButtton.cs" />
     <Compile Include="Forms\MainForm\Converters\FloatConverter.cs" />
     <Compile Include="Forms\MainForm\ModelView\AshBurnMV.cs" />
     <Compile Include="Forms\MainForm\ModelView\CommonMV.cs" />
@@ -145,6 +146,13 @@
     <Compile Include="Forms\MainForm\Model\WindowData.cs" />
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Navigation.cs" />
+    <Compile Include="Forms\Materials\Command\AddNewButton.cs" />
+    <Compile Include="Forms\Materials\MaterialForm.xaml.cs">
+      <DependentUpon>MaterialForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Materials\ModelView\MaterialFormMV.cs" />
+    <Compile Include="Forms\Materials\Model\WindowData.cs" />
+    <Compile Include="Forms\Materials\Model\WindowSetting.cs" />
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
@@ -175,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\MainForm\LabBookForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Materials\MaterialForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -265,6 +277,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\load.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\rawmaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\new.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

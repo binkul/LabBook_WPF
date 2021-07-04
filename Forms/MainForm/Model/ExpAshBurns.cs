@@ -18,7 +18,7 @@ namespace LabBook.Forms.MainForm.Model
         public double Titanium { get; set; } = none;
         public double Chalk { get; set; } = none;
         public double Others { get; set; } = none;
-        public int VocCatId { get; set; } = 1;
+        public long VocCatId { get; set; } = 1;
         public string VocAmount { get; set; }
         public double Crucible1 { get; set; } = none;
         public double Crucible2 { get; set; } = none;

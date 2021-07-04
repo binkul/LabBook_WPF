@@ -171,7 +171,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public int VocClassId
+        public long VocClassId
         {
             get
             {

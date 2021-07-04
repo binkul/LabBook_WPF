@@ -17,7 +17,7 @@
         xmlns:cmd="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         ResizeMode="CanResize"
-        Title="LabBook" 
+        Title="Dziennik laboratoryjny" 
         Height="{Binding FormHeight, Mode=TwoWay}" 
         Width="{Binding FormWidth, Mode=TwoWay}" 
         Top="{Binding FormYpos, Mode=TwoWay}" 
@@ -119,6 +119,7 @@
                     <RibbonButton Label="Kopia z ..." LargeImageSource="/Img/copy.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding CopyFrom}"/>
                 </RibbonGroup>
+
             </RibbonTab>
 
             <!--#### Edycja menu ####-->
@@ -162,7 +163,11 @@
 
             <!--#### Okna menu ####-->
             <RibbonTab Header="Okna" >
-
+                <RibbonGroup Header="Otwieranie"  FontSize="10">
+                    <RibbonButton Label="Surowce" LargeImageSource="/Img/rawmaterial.png"  FontSize="12" FontWeight="Regular"
+                                 Command="{Binding MaterialButton}" />
+                    
+                </RibbonGroup>
             </RibbonTab>
         </Ribbon>
 
@@ -245,7 +250,7 @@
                    Margin="0,11,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
                    Padding="0" Foreground="Red" />
 
-            <TabControl Margin="0,83,-0.4,4"
+            <TabControl Margin="0,83,0,4"
                         SelectedIndex="{Binding TabIndex, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                 <!-- Main Page -->
                 <TabItem Header="Strona główna">

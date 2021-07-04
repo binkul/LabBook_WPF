@@ -1,17 +1,18 @@
-﻿namespace LabBook.Forms.MainForm.ModelView
-{
-    using System.Windows.Controls;
-    using LabBook.ADO.Service;
-    using LabBook.Security;
-    using Model;
-    using System.ComponentModel;
-    using System.Data;
-    using System.Windows;
-    using System.Windows.Input;
-    using LabBook.Forms.MainForm.Command;
-    using System;
-    using LabBook.Dto;
+﻿using System.Windows.Controls;
+using LabBook.ADO.Service;
+using LabBook.Security;
+using LabBook.Forms.MainForm.Model;
+using System.ComponentModel;
+using System.Data;
+using System.Windows;
+using System.Windows.Input;
+using LabBook.Forms.MainForm.Command;
+using System;
+using LabBook.Dto;
+using LabBook.Forms.Materials;
 
+namespace LabBook.Forms.MainForm.ModelView
+{
     public class WindowEditMV : INotifyPropertyChanged
     {
         private readonly double _startLeftPosition = 5d;
@@ -28,6 +29,7 @@
         private ICommand _copyFromButton;
         private ICommand _calculateBurn;
         private ICommand _calculateAndSaveBurn;
+        private ICommand _materialButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -120,6 +122,7 @@
                 _ashBurnMV = value;
             }
         }
+        
         public double FormXpos
         {
             get
@@ -295,53 +298,17 @@
             }
         }
 
-        public double TxtFilerNumberDLeftPosition
-        {
-            get
-            {
-                return _startLeftPosition +  ColumnStatus;
-            }
-        }
+        public double TxtFilerNumberDLeftPosition => _startLeftPosition + ColumnStatus;
 
-        public double TxtFilterTitleLeftPosition
-        {
-            get
-            {
-                return TxtFilerNumberDLeftPosition + ColumnId;
-            }
-        }
+        public double TxtFilterTitleLeftPosition => TxtFilerNumberDLeftPosition + ColumnId;
 
-        public double CmbFilterUserLeftPosition
-        {
-            get
-            {
-                return TxtFilterTitleLeftPosition + ColumnTitle;
-            }
-        }
+        public double CmbFilterUserLeftPosition => TxtFilterTitleLeftPosition + ColumnTitle;
 
-        public double CmbFilterCycleLeftPosition
-        {
-            get
-            {
-                return CmbFilterUserLeftPosition + ColumnUser;
-            }
-        }
+        public double CmbFilterCycleLeftPosition => CmbFilterUserLeftPosition + ColumnUser;
 
-        public double TxtFilterDensityLeftPosition
-        {
-            get
-            {
-                return CmbFilterCycleLeftPosition + ColumnCycle;
-            }
-        }
+        public double TxtFilterDensityLeftPosition => CmbFilterCycleLeftPosition + ColumnCycle;
 
-        public double DpFilterDateLeftPosition
-        {
-            get
-            {
-                return TxtFilterDensityLeftPosition + ColumnDensity;
-            }
-        }
+        public double DpFilterDateLeftPosition => TxtFilterDensityLeftPosition + ColumnDensity;
 
         public DataView GetLabBookView
         {
@@ -504,7 +471,10 @@
 
             #region scroll to selected row
             var index = grid.SelectedIndex;
-            if (index < 0) return;
+            if (index < 0)
+            {
+                return;
+            }
 
             var item = grid.Items[index];
             DataGridRow row = grid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
@@ -624,6 +594,15 @@
             }
         }
 
+        public ICommand MaterialButton
+        {
+            get
+            {
+                if (_materialButton == null) _materialButton = new MaterialButtton(this);
+                return _materialButton;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
@@ -633,6 +612,12 @@
             _spectroMV.Save();
             _commonMV.Save();
             _ashBurnMV.Save();
+        }
+
+        public void OpenMaterials()
+        {
+            MaterialForm material = new MaterialForm();
+            material.ShowDialog();
         }
 
         public void DeleteExperiment()
