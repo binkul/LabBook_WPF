@@ -12,13 +12,21 @@ namespace LabBook.Forms.Materials.Model
         public double FormYpos { get; set; }
         public double FormWidth { get; set; }
         public double FormHeight { get; set; }
+        public double NameWidth { get; set; }
+        public double FunctionWidth { get; set; }
+        public double PriceWidth { get; set; }
+        public double CurrencyWidth { get; set; }
 
-        public WindowData(double formXpos, double formYpos, double formWidth, double formHeight)
+        public WindowData(double formXpos, double formYpos, double formWidth, double formHeight, double nameWidth, double functionWidth, double priceWidth, double currencyWidth)
         {
             FormXpos = formXpos;
             FormYpos = formYpos;
             FormWidth = formWidth;
             FormHeight = formHeight;
+            NameWidth = nameWidth;
+            FunctionWidth = functionWidth;
+            PriceWidth = priceWidth;
+            CurrencyWidth = currencyWidth;
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using LabBook.ADO.Service;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
+using LabBook.Security;
+using System;
 using System.ComponentModel;
+using System.Data;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,10 +16,15 @@ namespace LabBook.Forms.Materials.ModelView
         private ICommand _addNewButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
+        private readonly MaterialService _materialService = new MaterialService();
+        private DataRowView _actualRow;
+        private readonly DataView _materialView;
+
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
         public MaterialFormMV()
         {
+            _materialView = _materialService.GetAll();
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
         }
 
@@ -82,15 +91,118 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public double ColumnName
+        {
+            get 
+            {
+                return _windowData.NameWidth;
+            }
+            set
+            {
+                _windowData.NameWidth = value;
+                OnPropertyChanged(nameof(ColumnName));
+            }
+        }
+        
+        public double ColumnFunction
+        {
+            get
+            {
+                return _windowData.FunctionWidth;
+            }
+            set
+            {
+                _windowData.FunctionWidth = value;
+                OnPropertyChanged(nameof(ColumnFunction));
+            }
+        }
+
+        public double ColumnPrice
+        {
+            get
+            {
+                return _windowData.PriceWidth;
+            }
+            set
+            {
+                _windowData.PriceWidth = value;
+                OnPropertyChanged(nameof(ColumnPrice));
+            }
+        }
+        
+        public double ColumnCurrency
+        {
+            get
+            {
+                return _windowData.CurrencyWidth;
+            }
+            set
+            {
+                _windowData.CurrencyWidth = value;
+                OnPropertyChanged(nameof(ColumnCurrency));
+            }
+        }
+
         public bool Modified
         {
             get
             {
-                //if (_viscosityMV != null && _glossMV != null && _opacityMV != null && _spectroMV != null && _commonMV != null && _ashBurnMV != null)
-                //    return _labBookService.Modified || _viscosityMV.Modified || _glossMV.Modified || _opacityMV.Modified ||
-                //        _spectroMV.Modified || _commonMV.Modified || _ashBurnMV.Modified;
-                //else
+                return _materialService.Modified;
+            }
+        }
+
+        public DataRowView ActualRow
+        {
+            get
+            {
+                return _actualRow;
+            }
+            set
+            {
+                _actualRow = value;
+                OnPropertyChanged(nameof(IsPermited));
+            }
+        }
+
+        public bool IsPermited
+        {
+            get
+            {
+                if (_actualRow == null)
                     return false;
+                else
+                {
+                    if (UserSingleton.Id == Convert.ToInt64(_actualRow["login_id"]))
+                        return true;
+                    else if (UserSingleton.Id != Convert.ToInt64(_actualRow["login_id"]) && UserSingleton.Permission.Equals("admin"))
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
+
+        public DataView GetMaterialView
+        {
+            get
+            {
+                return _materialView;
+            }
+        }
+
+        public DataView GetFunctionView
+        {
+            get
+            {
+                return _materialService.GetAllFunction();
+            }
+        }
+        
+        public DataView GetCurrencyView
+        {
+            get
+            {
+                return _materialService.GetAllCurrency();
             }
         }
 

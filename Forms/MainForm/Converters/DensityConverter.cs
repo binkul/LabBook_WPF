@@ -14,7 +14,7 @@ namespace LabBook.Forms.MainForm.Converters
             if (!string.IsNullOrEmpty(num))
                 Double.TryParse(num, out density);
 
-            return density > 0 ? density.ToString() : "Brak";
+            return density > 0 ? density.ToString() : "-- Brak --";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

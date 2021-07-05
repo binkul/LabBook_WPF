@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabBook.Forms.Materials"
+        xmlns:localOut="clr-namespace:LabBook.Forms.MainForm"
+        xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wi="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="http://www.galasoft.ch/mvvmlight"
@@ -21,14 +23,47 @@
             <cmd:EventToCommand Command="{Binding OnClosingCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
+    <Window.Resources>
+        <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
+        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
+        <Convertors:DensityConverter x:Key="DensityConverter" />
+        <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
+        <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
+        <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
+        <Style x:Key="AllignCellLeft" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Padding" Value="5 0 0 0" />
+        </Style>
+        <Style x:Key="AllignColmnHeaderLeft" TargetType="DataGridColumnHeader">
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+        <Style x:Key="AllignColmnHeaderCenter" TargetType="DataGridColumnHeader">
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+        <Style x:Key="AllignCellCenter" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="DataGridComboAllign" TargetType="{x:Type DataGridCell}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
 
         <!-- ToolBar -->
         <ToolBarTray x:Name="toolbar" DockPanel.Dock="Top">
             <ToolBar>
                 <Button ToolTip="Nowy" ToolBar.OverflowMode="AsNeeded" Command="{Binding AddNewButton}">
-                    <Image Source="/Img/new.png" Width="32" Height="24" />
+                    <Image Source="/Img/new-reservation.png" Width="32" Height="32" />
                 </Button>
             </ToolBar>
         </ToolBarTray>
@@ -38,7 +73,63 @@
             <!-- Main page -->
             <TabItem Header="Strona główna">
                 <Grid Background="#FFE5E5E5" >
+                    <DataGrid x:Name="DgMaterials" Margin="5,28,5,1.6" ItemsSource="{Binding GetMaterialView}" HorizontalAlignment="Stretch" 
+                                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
+                                  CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeaderWidth="20" 
+                                  FrozenColumnCount="1" HeadersVisibility="Column" 
+                                  SelectedItem="{Binding ActualRow, Mode=OneWayToSource}" >
 
+                        <DataGrid.Columns>
+                            
+                            <DataGridTextColumn x:Name="ColName" Header="Nazwa" Binding="{Binding name, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnName, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
+                            <DataGridComboBoxColumn Header="Funkcja"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnFunction, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ItemsSource="{Binding Source={StaticResource FunctionView}, Mode=OneWay}"
+                                                    SelectedValuePath="id"
+                                                    DisplayMemberPath="name"
+                                                    SelectedValueBinding="{Binding function_id}" />
+
+                            <DataGridTextColumn x:Name="ColPrice" Header="Cena" Binding="{Binding price, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
+
+                            <DataGridComboBoxColumn Header="Waluta"
+                                                    CellStyle="{StaticResource DataGridComboAllign}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnCurrency, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ItemsSource="{Binding Source={StaticResource CurrencyView}, Mode=OneWay}"
+                                                    SelectedValuePath="id"
+                                                    DisplayMemberPath="name"
+                                                    SelectedValueBinding="{Binding currency_id}" />
+
+
+                            <!--<DataGridTemplateColumn Header="Waluta"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Width="{Binding Data.ColumnCurrency, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox HorizontalContentAlignment="Center"
+                                                  ItemsSource="{Binding Path=DataContext.GetCurrencyView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                                  SelectedValuePath="id"
+                                                  DisplayMemberPath="name"
+                                                  SelectedValue="{Binding currency_id}">
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
 

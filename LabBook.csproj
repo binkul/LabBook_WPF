@@ -87,6 +87,7 @@
     <Compile Include="ADO\Repository\ExperimentalVisRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentCycleRepository.cs" />
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
+    <Compile Include="ADO\Repository\MaterialRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
     <Compile Include="ADO\Service\ExperimentalAshBurnService.cs" />
     <Compile Include="ADO\Service\ExperimentalCommonService.cs" />
@@ -96,7 +97,9 @@
     <Compile Include="ADO\Service\ExperimentalVisService.cs" />
     <Compile Include="ADO\Service\ExperimentCycleService.cs" />
     <Compile Include="ADO\Service\LabBookService.cs" />
+    <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
     <Compile Include="Forms\MainForm\Command\MaterialButtton.cs" />
