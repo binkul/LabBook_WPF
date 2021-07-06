@@ -17,8 +17,6 @@ namespace LabBook.ADO.Repository
         public static readonly string AllQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, function_id, " +
             "price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where is_intermediate = 'false' " +
             "Order by name";
-        public static readonly string AllFunctionQuery = "Select id, name, date_created From LabBook.dbo.CmbMaterialFunction Order By name";
-        public static readonly string AllCurrencyQuery = "Select id, name, rate, date_crated from LabBook.dbo.CmbCurrency Order by name";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.Material(name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, " +
             "function_id, price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update) Values(@name, @is_intermediate, @is_danger, " +
             "@is_production, @is_active, @intermediate_nrD, @clp_signal_word_id, @function_id, @price, @currency_id, @unit_id, @density, @solids, @ash_450, @VOC, @remarks, " +

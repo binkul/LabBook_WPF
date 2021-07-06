@@ -618,6 +618,7 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             MaterialForm material = new MaterialForm();
             material.ShowDialog();
+            material = null;
         }
 
         public void DeleteExperiment()

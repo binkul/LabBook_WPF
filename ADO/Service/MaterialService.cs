@@ -40,20 +40,6 @@ namespace LabBook.ADO.Service
             return view;
         }
 
-        public DataView GetAllFunction()
-        {
-            _dataTableFunction = _repository.GetAll(MaterialRepository.AllFunctionQuery);
-            DataView view = new DataView(_dataTableFunction) { Sort = "name" };
-            return view;
-        }
-
-        public DataView GetAllCurrency()
-        {
-            _dataTableCurrency = _repository.GetAll(MaterialRepository.AllCurrencyQuery);
-            DataView view = new DataView(_dataTableCurrency) { Sort = "name" };
-            return view;
-        }
-
         private void DataTable_RowChanged(object sender, DataRowChangeEventArgs e)
         {
             _modified = true;

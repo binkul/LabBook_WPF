@@ -143,6 +143,58 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public double ColumnUnit
+        {
+            get
+            {
+                return _windowData.UnitWidth;
+            }
+            set
+            {
+                _windowData.UnitWidth = value;
+                OnPropertyChanged(nameof(ColumnUnit));
+            }
+        }
+
+        public double ColumnDenger
+        {
+            get
+            {
+                return _windowData.DengerWidth;
+            }
+            set
+            {
+                _windowData.DengerWidth = value;
+                OnPropertyChanged(nameof(ColumnDenger));
+            }
+        }
+
+        public double ColumnProd
+        {
+            get
+            {
+                return _windowData.ProdWidth;
+            }
+            set
+            {
+                _windowData.ProdWidth = value;
+                OnPropertyChanged(nameof(ColumnProd));
+            }
+        }
+
+        public double ColumnActive
+        {
+            get
+            {
+                return _windowData.ActivWidth;
+            }
+            set
+            {
+                _windowData.ActivWidth = value;
+                OnPropertyChanged(nameof(ColumnActive));
+            }
+        }
+
         public bool Modified
         {
             get
@@ -189,23 +241,7 @@ namespace LabBook.Forms.Materials.ModelView
                 return _materialView;
             }
         }
-
-        public DataView GetFunctionView
-        {
-            get
-            {
-                return _materialService.GetAllFunction();
-            }
-        }
         
-        public DataView GetCurrencyView
-        {
-            get
-            {
-                return _materialService.GetAllCurrency();
-            }
-        }
-
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {
             var ansver = MessageBoxResult.No;

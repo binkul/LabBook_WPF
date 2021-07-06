@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:LabBook.Forms.Materials"
         xmlns:localOut="clr-namespace:LabBook.Forms.MainForm"
         xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
+        xmlns:vm ="clr-namespace:LabBook.Forms.Materials.ModelView"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wi="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="http://www.galasoft.ch/mvvmlight"
@@ -24,6 +25,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
+        <vm:ComboViewMV x:Key="combos" />
         <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
         <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
         <Convertors:DensityConverter x:Key="DensityConverter" />
@@ -80,53 +82,78 @@
                                   SelectedItem="{Binding ActualRow, Mode=OneWayToSource}" >
 
                         <DataGrid.Columns>
-                            
-                            <DataGridTextColumn x:Name="ColName" Header="Nazwa" Binding="{Binding name, Mode=TwoWay}"
-                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
-                                                    Width="{Binding Data.ColumnName, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                                    ElementStyle="{StaticResource AllignCellLeft}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                            <DataGridTextColumn Binding="{Binding currency_id}" Visibility="Collapsed" />
+                            <DataGridTextColumn Binding="{Binding unit_id}" Visibility="Collapsed" />
+
+                            <DataGridTextColumn x:Name="ColName" Header="Nazwa" 
+                                                Binding="{Binding name, Mode=TwoWay}"
+                                                IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                Width="{Binding Data.ColumnName, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                ElementStyle="{StaticResource AllignCellLeft}"
+                                                HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                             <DataGridComboBoxColumn Header="Funkcja"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
                                                     IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                                     Width="{Binding Data.ColumnFunction, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                                    ItemsSource="{Binding Source={StaticResource FunctionView}, Mode=OneWay}"
+                                                    ItemsSource="{Binding Source={StaticResource combos}, Path=GetFunctionView}"
                                                     SelectedValuePath="id"
                                                     DisplayMemberPath="name"
-                                                    SelectedValueBinding="{Binding function_id}" />
+                                                    SelectedValueBinding="{Binding function_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
 
-                            <DataGridTextColumn x:Name="ColPrice" Header="Cena" Binding="{Binding price, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
-                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
-                                                    Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                                    ElementStyle="{StaticResource AllignCellCenter}"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
+                            <DataGridTextColumn x:Name="ColPrice" Header="Cena" 
+                                                Binding="{Binding price, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
+                                                IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                ElementStyle="{StaticResource AllignCellCenter}"
+                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
 
-                            <DataGridComboBoxColumn Header="Waluta"
-                                                    CellStyle="{StaticResource DataGridComboAllign}"
+                            <DataGridTemplateColumn Header="Waluta"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
-                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                                     Width="{Binding Data.ColumnCurrency, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                                    ItemsSource="{Binding Source={StaticResource CurrencyView}, Mode=OneWay}"
-                                                    SelectedValuePath="id"
-                                                    DisplayMemberPath="name"
-                                                    SelectedValueBinding="{Binding currency_id}" />
-
-
-                            <!--<DataGridTemplateColumn Header="Waluta"
-                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
-                                                    Width="{Binding Data.ColumnCurrency, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox HorizontalContentAlignment="Center"
-                                                  ItemsSource="{Binding Path=DataContext.GetCurrencyView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                                  SelectedValuePath="id"
-                                                  DisplayMemberPath="name"
-                                                  SelectedValue="{Binding currency_id}">
-                                        </ComboBox>
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource combos}, Path=GetCurrencyView}" HorizontalContentAlignment="Center"
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding currency_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>-->
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Jedn."
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Width="{Binding Data.ColumnUnit, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource combos}, Path=GetUnitView}" HorizontalContentAlignment="Center"
+                                                      SelectedValuePath="id"
+                                                      DisplayMemberPath="name" 
+                                                      SelectedValue="{Binding unit_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridCheckBoxColumn Header="Aktywny"
+                                                    Binding="{Binding is_active}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Width="{Binding Data.ColumnActive, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}" />
+
+                            <DataGridCheckBoxColumn Header="Danger"
+                                                    Binding="{Binding is_danger}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Width="{Binding Data.ColumnDenger, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}" />
+
+                            <DataGridCheckBoxColumn Header="Produkcja"
+                                                    Binding="{Binding is_production}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                    Width="{Binding Data.ColumnProd, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}" />
+
 
                         </DataGrid.Columns>
                     </DataGrid>

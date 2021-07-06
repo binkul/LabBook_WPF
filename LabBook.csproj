@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ADO\Common\ComboListRepository.cs" />
     <Compile Include="ADO\Common\CommonConstant.cs" />
     <Compile Include="ADO\Common\IRepository.cs" />
     <Compile Include="ADO\Common\RepositoryCommon.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="ADO\Repository\LabBookRepository.cs" />
     <Compile Include="ADO\Repository\MaterialRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
+    <Compile Include="ADO\Service\ComboListService.cs" />
     <Compile Include="ADO\Service\ExperimentalAshBurnService.cs" />
     <Compile Include="ADO\Service\ExperimentalCommonService.cs" />
     <Compile Include="ADO\Service\ExperimentalGlossService.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
@@ -153,6 +156,7 @@
     <Compile Include="Forms\Materials\MaterialForm.xaml.cs">
       <DependentUpon>MaterialForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Materials\ModelView\ComboViewMV.cs" />
     <Compile Include="Forms\Materials\ModelView\MaterialFormMV.cs" />
     <Compile Include="Forms\Materials\Model\WindowData.cs" />
     <Compile Include="Forms\Materials\Model\WindowSetting.cs" />
