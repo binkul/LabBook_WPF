@@ -34,6 +34,8 @@
         <ConvertLocal:DangerToColorConverter x:Key="DengerToRedConverter" />
         <ConvertLocal:PriceToColorConverter x:Key="PriceTocColorConverter" />
         <ConvertLocal:PriceToBoldConverter x:Key="PriceToBoldConverter" />
+        <ConvertLocal:CurrencyToColorConverter x:Key="CurrencyToColorConverter" />
+        <ConvertLocal:CurrencyToBoldConverter x:Key="CurrencyToBoldConverter" />
         <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
         <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
@@ -115,21 +117,22 @@
                                                     DisplayMemberPath="name"
                                                     SelectedValueBinding="{Binding function_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
 
-                            <DataGridTextColumn x:Name="ColPrice" Header="Cena" 
+                            <DataGridTextColumn Header="Cena"
                                                 Binding="{Binding price, Mode=TwoWay, Converter={StaticResource DensityConverter}}"
                                                 IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                                 Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
-                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Foreground" Value="{Binding price, Converter={StaticResource PriceTocColorConverter}}"/>
-                                        <Setter Property="FontWeight" Value="{Binding price, Converter={StaticResource PriceToBoldConverter}}" />
-                                        <Setter Property="FontSize" Value="12" />
-                                        <Setter Property="HorizontalAlignment" Value="Center" />
-                                        <Setter Property="Padding" Value="5 0 0 0" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-
+                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                ElementStyle="{StaticResource AllignCellCenter}">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="FontWeight" Value="{Binding price, Converter={StaticResource PriceToBoldConverter}}" />
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="False">
+                                                    <Setter Property="Background" Value="{Binding price, Converter={StaticResource PriceTocColorConverter}}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
                             </DataGridTextColumn>
 
                             <DataGridTemplateColumn Header="Waluta"
@@ -139,9 +142,16 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding Source={StaticResource combos}, Path=GetCurrencyView}" HorizontalContentAlignment="Center"
-                                                      SelectedValuePath="id"
-                                                      DisplayMemberPath="name" 
-                                                      SelectedValue="{Binding currency_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+                                                  SelectedValuePath="id"
+                                                  DisplayMemberPath="name" 
+                                                  SelectedValue="{Binding currency_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" >
+                                            <ComboBox.Style>
+                                                <Style TargetType="ComboBox">
+                                                    <Setter Property="Foreground" Value="{Binding currency_id, Mode=OneWay, Converter={StaticResource CurrencyToColorConverter}}" />
+                                                    <Setter Property="FontWeight" Value="{Binding currency_id, Mode=OneWay, Converter={StaticResource CurrencyToBoldConverter}}" />
+                                                </Style>
+                                            </ComboBox.Style>
+                                        </ComboBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -183,13 +193,24 @@
                                                 IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
                                                 Width="{Binding Data.ColumnVOC, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                                 ElementStyle="{StaticResource AllignCellCenter}"
-                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
+                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="FontWeight" Value="{Binding VOC, Converter={StaticResource PriceToBoldConverter}}" />
+                                        <Style.Triggers>
+                                            <Trigger Property="DataGridCell.IsSelected" Value="False">
+                                                <Setter Property="Background" Value="{Binding VOC, Converter={StaticResource PriceTocColorConverter}}" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
 
                             <DataGridTextColumn Header="Data zmian" Binding="{Binding date_created, Converter={StaticResource DateTimeConverter}, Mode=TwoWay}"
                                                 IsReadOnly="True"    
                                                 Width="{Binding Data.ColumnData, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                                 ElementStyle="{StaticResource AllignCellCenter}"
-                                                HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                                HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
 
                         </DataGrid.Columns>
                     </DataGrid>

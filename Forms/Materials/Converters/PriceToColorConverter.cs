@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -19,9 +13,9 @@ namespace LabBook.Forms.Materials.Converters
             var num = value.ToString();
 
             if (!string.IsNullOrEmpty(num))
-                Double.TryParse(num, out density);
+                _ = double.TryParse(num, out density);
 
-            return density > 0 ? Brushes.Black : Brushes.Red;
+            return density > 0 ? Brushes.White : Brushes.Yellow;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
