@@ -195,6 +195,32 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public double ColumnVOC
+        {
+            get
+            {
+                return _windowData.VOCWidth;
+            }
+            set
+            {
+                _windowData.VOCWidth = value;
+                OnPropertyChanged(nameof(ColumnVOC));
+            }
+        }
+
+        public double ColumnData
+        {
+            get
+            {
+                return _windowData.DataWidth;
+            }
+            set
+            {
+                _windowData.DataWidth = value;
+                OnPropertyChanged(nameof(ColumnData));
+            }
+        }
+
         public bool Modified
         {
             get

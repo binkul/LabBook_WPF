@@ -20,9 +20,11 @@ namespace LabBook.Forms.Materials.Model
         public double DengerWidth { get; set; }
         public double ProdWidth { get; set; }
         public double ActivWidth { get; set; }
+        public double VOCWidth { get; set; }
+        public double DataWidth { get; set; }
 
-        public WindowData(double formXpos, double formYpos, double formWidth, double formHeight, double nameWidth, double functionWidth, double priceWidth, 
-            double currencyWidth, double unitWidth, double dengerWidth, double prodWidth, double activWidth)
+        public WindowData(double formXpos, double formYpos, double formWidth, double formHeight, double nameWidth, double functionWidth, double priceWidth, double currencyWidth, 
+            double unitWidth, double dengerWidth, double prodWidth, double activWidth, double vOCWidth, double dataWidth)
         {
             FormXpos = formXpos;
             FormYpos = formYpos;
@@ -36,6 +38,8 @@ namespace LabBook.Forms.Materials.Model
             DengerWidth = dengerWidth;
             ProdWidth = prodWidth;
             ActivWidth = activWidth;
+            VOCWidth = vOCWidth;
+            DataWidth = dataWidth;
         }
     }
 }
