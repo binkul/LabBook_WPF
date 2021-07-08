@@ -162,6 +162,7 @@
       <DependentUpon>MaterialForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\Materials\ModelView\ComboViewMV.cs" />
+    <Compile Include="Forms\Materials\ModelView\FilterMV.cs" />
     <Compile Include="Forms\Materials\ModelView\MaterialFormMV.cs" />
     <Compile Include="Forms\Materials\Model\WindowData.cs" />
     <Compile Include="Forms\Materials\Model\WindowSetting.cs" />

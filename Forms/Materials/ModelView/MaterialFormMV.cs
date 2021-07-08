@@ -7,25 +7,37 @@ using System;
 using System.ComponentModel;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace LabBook.Forms.Materials.ModelView
 {
     public class MaterialFormMV : INotifyPropertyChanged
     {
+        private readonly double _startLeftPosition = 5d;
+        private readonly double _columnStatus = 32d;
+        private readonly double _chbWidthHalf = 6.4d;
+
         private ICommand _addNewButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly MaterialService _materialService = new MaterialService();
+        private long _index = 0;
+        private long _materialId = 0;
+        private bool _notScroll = true;
         private DataRowView _actualRow;
         private readonly DataView _materialView;
+
+        public RelayCommand<SelectionChangedEventArgs> OnSelectionChangedCommand { get; set; }
 
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
         public MaterialFormMV()
         {
             _materialView = _materialService.GetAll();
+
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
+            OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(this.OnSelectionChangedCommandExecuted);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -100,7 +112,13 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.NameWidth = value;
-                OnPropertyChanged(nameof(ColumnName));
+                OnPropertyChanged(
+                    nameof(ColumnName), 
+                    nameof(CmbFilterFunctionLeftPosition), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
         
@@ -113,7 +131,13 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.FunctionWidth = value;
-                OnPropertyChanged(nameof(ColumnFunction));
+                OnPropertyChanged(
+                    nameof(ColumnFunction), 
+                    nameof(CmbFilterFunctionLeftPosition), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -126,7 +150,12 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.PriceWidth = value;
-                OnPropertyChanged(nameof(ColumnPrice));
+                OnPropertyChanged(
+                    nameof(ColumnPrice), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
         
@@ -139,7 +168,12 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.CurrencyWidth = value;
-                OnPropertyChanged(nameof(ColumnCurrency));
+                OnPropertyChanged(
+                    nameof(ColumnCurrency), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -152,7 +186,12 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.UnitWidth = value;
-                OnPropertyChanged(nameof(ColumnUnit));
+                OnPropertyChanged(
+                    nameof(ColumnUnit), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -165,7 +204,11 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.DengerWidth = value;
-                OnPropertyChanged(nameof(ColumnDenger));
+                OnPropertyChanged(
+                    nameof(ColumnDenger),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -178,7 +221,10 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.ProdWidth = value;
-                OnPropertyChanged(nameof(ColumnProd));
+                OnPropertyChanged(
+                    nameof(ColumnProd),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -191,7 +237,12 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _windowData.ActivWidth = value;
-                OnPropertyChanged(nameof(ColumnActive));
+                OnPropertyChanged(
+                    nameof(ColumnActive), 
+                    nameof(ChbFilterActiveLeftPosition),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(ChbFilterProdLeftPosition)
+                    );
             }
         }
 
@@ -221,11 +272,47 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public double TxtFilerNameLeftPosition => _startLeftPosition + _columnStatus;
+
+        public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName;
+
+        private double StartComboPosition => CmbFilterFunctionLeftPosition + ColumnFunction + ColumnPrice + ColumnCurrency + ColumnUnit;
+
+        public double ChbFilterActiveLeftPosition => StartComboPosition + (ColumnActive / 2) - _chbWidthHalf;
+
+        public double ChbFilterDangerLeftPosition => StartComboPosition + ColumnActive + (ColumnDenger / 2) - _chbWidthHalf;
+
+        public double ChbFilterProdLeftPosition => StartComboPosition + ColumnActive + ColumnDenger + (ColumnProd / 2) - _chbWidthHalf;
+
         public bool Modified
         {
             get
             {
                 return _materialService.Modified;
+            }
+        }
+
+        public long DgRowIndex
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                _index = value;
+            }
+        }
+
+        public long MaterialId
+        {
+            get
+            {
+                return _materialId;
+            }
+            set
+            {
+                _materialId = value;
             }
         }
 
@@ -292,6 +379,29 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public void OnSelectionChangedCommandExecuted(SelectionChangedEventArgs e)
+        {
+            if (_notScroll) return;
+
+            #region scroll to selected row
+            var grid = (DataGrid)e.Source;
+            var index = grid.SelectedIndex;
+            if (index < 0)
+            {
+                return;
+            }
+
+            var item = grid.Items[index];
+            DataGridRow row = grid.ItemContainerGenerator.ContainerFromIndex(index) as DataGridRow;
+            if (row == null)
+            {
+                grid.ScrollIntoView(item);
+            }
+            //grid.Focus();
+            _notScroll = true;
+            #endregion
+        }
+
         public ICommand AddNewButton
         {
             get
@@ -299,6 +409,21 @@ namespace LabBook.Forms.Materials.ModelView
                 if (_addNewButton == null) _addNewButton = new AddNewButton(this);
                 return _addNewButton;
             }
+        }
+
+        public void SetFiltration(bool filterOn, string filter)
+        {
+            if (filterOn)
+            {
+                _materialView.RowFilter = filter;
+            }
+            else
+            {
+                _materialView.RowFilter = "";
+            }
+            _notScroll = false;
+            DgRowIndex = 0;
+            OnPropertyChanged(nameof(DgRowIndex));
         }
 
         public void AddNewRecord()

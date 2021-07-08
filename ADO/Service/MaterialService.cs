@@ -2,12 +2,7 @@
 using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.ADO.Service
 {
@@ -16,8 +11,6 @@ namespace LabBook.ADO.Service
         private readonly IRepository<MaterialDto> _repository;
         private bool _modified = false;
         private DataTable _dataTable;
-        private DataTable _dataTableFunction;
-        private DataTable _dataTableCurrency;
 
         public MaterialService()
         {

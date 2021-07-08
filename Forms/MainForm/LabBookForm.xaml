@@ -319,7 +319,7 @@
                                     <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>
                                             <StackPanel Background="#FFE5E5E5" >
-                                                <Image Width="18" Height="16" Margin="1,1,1,1" >
+                                                <Image x:Name="ImageType" Width="18" Height="16" Margin="1,1,1,1" >
                                                     <Image.Source>
                                                         <MultiBinding Converter="{StaticResource IconSourceConverter}" Mode="OneWay" >
                                                             <Binding Path="deleted" />
@@ -328,6 +328,12 @@
                                                     </Image.Source>
                                                 </Image>
                                             </StackPanel>
+                                            <!--#### Add arrow instead normal icons ####-->
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" >
+                                                    <Setter TargetName="ImageType" Property="Source" Value="/Img/arrow-right.png" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

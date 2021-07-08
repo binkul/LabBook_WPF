@@ -13,8 +13,10 @@ namespace LabBook.Forms.Materials
             InitializeComponent();
 
             MaterialFormMV materialFormMV = new MaterialFormMV();
-
             DataContext = materialFormMV;
+
+            FilterMV _filterMV = this.Resources["filter"] as FilterMV;
+            _filterMV.SetWindowEdit(materialFormMV);
         }
     }
 }
