@@ -153,6 +153,8 @@
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Navigation.cs" />
     <Compile Include="Forms\Materials\Command\AddNewButton.cs" />
+    <Compile Include="Forms\Materials\Command\NaviButton.cs" />
+    <Compile Include="Forms\Materials\Command\SaveButton.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\DangerToColorConverter.cs" />

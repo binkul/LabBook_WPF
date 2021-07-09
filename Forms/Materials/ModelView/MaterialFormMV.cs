@@ -19,6 +19,11 @@ namespace LabBook.Forms.Materials.ModelView
         private readonly double _chbWidthHalf = 6.4d;
 
         private ICommand _addNewButton;
+        private ICommand _saveButton;
+        private ICommand _moveRight;
+        private ICommand _moveLeft;
+        private ICommand _moveLast;
+        private ICommand _moveFirst;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly MaterialService _materialService = new MaterialService();
@@ -301,6 +306,8 @@ namespace LabBook.Forms.Materials.ModelView
             set
             {
                 _index = value;
+                _notScroll = false;
+                OnPropertyChanged(nameof(DgRowIndex));
             }
         }
 
@@ -411,6 +418,51 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public ICommand SaveButton
+        {
+            get
+            {
+                if (_saveButton == null) _saveButton = new SaveButton(this);
+                return _saveButton;
+            }
+        }
+
+        public ICommand MoveRight
+        {
+            get
+            {
+                if (_moveRight == null) _moveRight = new NaviButtonRight(this);
+                return _moveRight;
+            }
+        }
+
+        public ICommand MoveLast
+        {
+            get
+            {
+                if (_moveLast == null) _moveLast = new NaviButtonLast(this);
+                return _moveLast;
+            }
+        }
+
+        public ICommand MoveFirst
+        {
+            get
+            {
+                if (_moveFirst == null) _moveFirst = new NaviButtonFirst(this);
+                return _moveFirst;
+            }
+        }
+
+        public ICommand MoveLeft
+        {
+            get
+            {
+                if (_moveLeft == null) _moveLeft = new NaviButtonLeft(this);
+                return _moveLeft;
+            }
+        }
+
         public void SetFiltration(bool filterOn, string filter)
         {
             if (filterOn)
@@ -421,9 +473,7 @@ namespace LabBook.Forms.Materials.ModelView
             {
                 _materialView.RowFilter = "";
             }
-            _notScroll = false;
             DgRowIndex = 0;
-            OnPropertyChanged(nameof(DgRowIndex));
         }
 
         public void AddNewRecord()
@@ -433,7 +483,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public void SaveAll()
         {
-
+            _ = _materialService.Update();
         }
 
     }

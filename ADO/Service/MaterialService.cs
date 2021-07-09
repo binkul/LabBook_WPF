@@ -2,6 +2,7 @@
 using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
+using System;
 using System.Data;
 
 namespace LabBook.ADO.Service

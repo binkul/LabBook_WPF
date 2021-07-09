@@ -33,6 +33,8 @@
         <Convertors:DensityConverter x:Key="DensityConverter" />
         <Convertors:DateTimeConverter x:Key="DateTimeConverter" />
         <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
+        <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
+        <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
         <ConvertLocal:DangerToColorConverter x:Key="DengerToRedConverter" />
         <ConvertLocal:PriceToColorConverter x:Key="PriceTocColorConverter" />
         <ConvertLocal:PriceToBoldConverter x:Key="PriceToBoldConverter" />
@@ -76,14 +78,17 @@
                 <Button ToolTip="Nowy" ToolBar.OverflowMode="AsNeeded" Command="{Binding AddNewButton}">
                     <Image Source="/Img/new-reservation.png" Width="32" Height="32" />
                 </Button>
+                <Button ToolTip="Save" ToolBar.OverflowMode="AsNeeded" Command="{Binding SaveButton}">
+                    <Image Source="/Img/save.png" Width="32" Height="32" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
         
-        <TabControl Margin="0,83,0,4">
+        <TabControl Margin="0,83,-0.4,28.2">
 
             <!-- Main page -->
             <TabItem Header="Strona główna">
-                <Grid Background="#FFE5E5E5" >
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,-2.4" >
 
                     <!--#### Filtering ####-->
                     <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,0,0,-0.4" >
@@ -118,7 +123,7 @@
                     </Canvas>
 
                         <!--#### Main DataGrid ####-->
-                    <DataGrid x:Name="DgMaterials" Margin="5,28,5,1.6" ItemsSource="{Binding GetMaterialView}" HorizontalAlignment="Stretch" 
+                    <DataGrid x:Name="DgMaterials" Margin="5,28,5,10" ItemsSource="{Binding GetMaterialView}" HorizontalAlignment="Stretch" 
                               AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                               CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
                               FrozenColumnCount="1" HeadersVisibility="Column" 
@@ -307,6 +312,51 @@
             </TabItem>
         
         </TabControl>
+
+        <!--#### Navigation ####-->
+        <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="894" Margin="0,0,-0.4,0">
+            
+            <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                     Canvas.Left="10" Canvas.Top="2" Tag="first"
+                     Command="{Binding MoveFirst}">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Top="2" Canvas.Left="30" Tag="left"
+                    Command="{Binding MoveLeft}">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+
+            <TextBox x:Name="TxtNavieRec" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0" FontSize="11" Height="20"
+                     FontWeight="SemiBold" VerticalAlignment="Bottom"  IsReadOnly="True" Canvas.Left="55" Canvas.Top="2"
+                     Text="{Binding SelectedIndex, ElementName=DgMaterials, Converter={StaticResource NaviCurrConverter}}" />
+
+            <Label x:Name="LblNavieRec" Height="20" Width="49" HorizontalAlignment="Left" FontSize="11" FontWeight="SemiBold" 
+                   Padding="0,3,0,0" VerticalAlignment="Bottom"  Canvas.Left="113" Canvas.Top="2"
+                   Content="{Binding Items.Count, ElementName=DgMaterials, Converter={StaticResource NaviTotalConverter}}" />
+
+            <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Left="164" Canvas.Top="2" Tag="right" 
+                    Command="{Binding MoveRight}">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Left="185" Canvas.Top="2" Tag="last"
+                    Command="{Binding MoveLast}">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
+                </StackPanel>
+            </Button>
+
+        </Canvas>
 
     </Grid>
 </Window>
