@@ -13,7 +13,10 @@ namespace LabBook.Forms.MainForm.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value.ToString().Replace(",", ".");
+            if (string.IsNullOrEmpty(value.ToString())) 
+                return null;
+            else
+                return value.ToString().Replace(",", ".");
         }
     }
 }

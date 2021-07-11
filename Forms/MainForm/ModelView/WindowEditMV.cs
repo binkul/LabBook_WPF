@@ -10,10 +10,11 @@ using LabBook.Forms.MainForm.Command;
 using System;
 using LabBook.Dto;
 using LabBook.Forms.Materials;
+using LabBook.Forms.Navigation;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
-    public class WindowEditMV : INotifyPropertyChanged
+    public class WindowEditMV : INotifyPropertyChanged, INavigation
     {
         private readonly double _startLeftPosition = 5d;
 
@@ -38,6 +39,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private SpectroMV _spectroMV;
         private CommonMV _commonMV;
         private AshBurnMV _ashBurnMV;
+        private NavigationMV _navigationMV;
         private long _index = 0;
         private long _labBookId = 0;
         private int _tabIndex;
@@ -77,52 +79,39 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public ViscosityMV SetViscosityMV
         {
-            set
-            {
-                _viscosityMV = value;
-            }
+            set => _viscosityMV = value;
         }
 
         public GlossMV SetGlossMV
         {
-            set
-            {
-                _glossMV = value;
-            }
+            set => _glossMV = value;
         }
 
         public OpacityMV SetOpacityMV
         {
-            set
-            {
-                _opacityMV = value;
-            }
+            set => _opacityMV = value;
         }
 
         public SpectroMV SetSpectroMV
         {
-            set
-            {
-                _spectroMV = value;
-            }
+            set => _spectroMV = value;
         }
 
         public CommonMV SetCommonMV
         {
-            set
-            {
-                _commonMV = value;
-            }
+            set => _commonMV = value;
         }
 
         public AshBurnMV SetAshBurnMV
         {
-            set
-            {
-                _ashBurnMV = value;
-            }
+            set => _ashBurnMV = value;
         }
-        
+
+        public NavigationMV SetNavigationMV
+        {
+            set => _navigationMV = value;
+        }
+
         public double FormXpos
         {
             get
@@ -366,14 +355,20 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public long DgRowIndex
         {
-            get
-            {
-                return _index;
-            }
+            get => _index;
             set
             {
                 _index = value;
+                OnPropertyChanged(nameof(DgRowIndex));
+                Refresh();
             }
+        }
+
+        public long GetRowCount => GetLabBookView.Count;
+
+        public void Refresh()
+        {
+            _navigationMV.Refresh();
         }
 
         public int TabIndex
@@ -486,42 +481,6 @@ namespace LabBook.Forms.MainForm.ModelView
             #endregion
         }
 
-        public ICommand MoveRight
-        {
-            get
-            {
-                if (_moveRight == null) _moveRight = new NaviButtonRight(this);
-                return _moveRight;
-            }
-        }
-
-        public ICommand MoveLast
-        {
-            get
-            {
-                if (_moveLast == null) _moveLast = new NaviButtonLast(this);
-                return _moveLast;
-            }
-        }
-        
-        public ICommand MoveFirst
-        {
-            get
-            {
-                if (_moveFirst == null) _moveFirst = new NaviButtonFirst(this);
-                return _moveFirst;
-            }
-        }
-
-        public ICommand MoveLeft
-        {
-            get
-            {
-                if (_moveLeft == null) _moveLeft = new NaviButtonLeft(this);
-                return _moveLeft;
-            }
-        }
-
         public ICommand Save
         {
             get
@@ -558,7 +517,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public ICommand Refresh
+        public ICommand RefreshButton
         {
             get
             {
@@ -730,7 +689,6 @@ namespace LabBook.Forms.MainForm.ModelView
                 _labBookView.RowFilter = "";
             }
             DgRowIndex = 0;
-            OnPropertyChanged(nameof(DgRowIndex));
         }
 
         private void PrepareUsersView()

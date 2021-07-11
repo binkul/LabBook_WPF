@@ -12,6 +12,7 @@
         xmlns:local="clr-namespace:LabBook.Forms.MainForm"
         xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
         xmlns:vm ="clr-namespace:LabBook.Forms.MainForm.ModelView"
+        xmlns:naviMV="clr-namespace:LabBook.Forms.Navigation"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wi="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="http://www.galasoft.ch/mvvmlight"
@@ -40,6 +41,7 @@
         <vm:SpectroMV x:Key="spectro" />
         <vm:CommonMV x:Key="common" />
         <vm:AshBurnMV x:Key="burn" />
+        <naviMV:NavigationMV x:Key="navi" />
         <Convertors:ColumnToVisibilityConverter x:Key="VisibilityColumnConverter" />
         <Convertors:CycleToNameConverter x:Key="CycleConverter" />
         <Convertors:UserToNameConverter x:Key="UserConverter" />
@@ -109,7 +111,7 @@
                     <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
                                   Command="{Binding Delete}" />
                     <RibbonButton Label="Odświerz" LargeImageSource="/Img/load.png" FontSize="12" FontWeight="Regular"
-                                  Command="{Binding Refresh}" />
+                                  Command="{Binding RefreshButton}" />
                 </RibbonGroup>
                 <RibbonGroup Header="Dodawanie"  FontSize="10">
                     <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular" 
@@ -172,11 +174,11 @@
         </Ribbon>
 
         <!--#### Navigation ####-->
-        <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="894" Margin="0,0,-0.4,0">
+        <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="894" Margin="0,0,0,3">
 
             <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
                      Canvas.Left="10" Canvas.Top="2" Tag="first"
-                     Command="{Binding MoveFirst}">
+                     Command="{Binding MoveFirst, Source={StaticResource navi}}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
@@ -184,7 +186,7 @@
 
             <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
                     Canvas.Top="2" Canvas.Left="30" Tag="left"
-                    Command="{Binding MoveLeft}">
+                    Command="{Binding MoveLeft, Source={StaticResource navi}}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
@@ -192,15 +194,15 @@
 
             <TextBox x:Name="TxtNavieRec" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0" FontSize="11" Height="20"
                      FontWeight="SemiBold" VerticalAlignment="Bottom"  IsReadOnly="True" Canvas.Left="55" Canvas.Top="2"
-                     Text="{Binding SelectedIndex, ElementName=DgLabBook, Converter={StaticResource NaviCurrConverter}}" />
+                     Text="{Binding DgRowIndex, Source={StaticResource navi}, Converter={StaticResource NaviCurrConverter}}" />
 
             <Label x:Name="LblNavieRec" Height="20" Width="49" HorizontalAlignment="Left" FontSize="11" FontWeight="SemiBold" 
                    Padding="0,3,0,0" VerticalAlignment="Bottom"  Canvas.Left="113" Canvas.Top="2"
-                   Content="{Binding Items.Count, ElementName=DgLabBook, Converter={StaticResource NaviTotalConverter}}" />
+                   Content="{Binding GetRowCount, Source={StaticResource navi}, Converter={StaticResource NaviTotalConverter}}" />
 
             <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
                     Canvas.Left="164" Canvas.Top="2" Tag="right" 
-                    Command="{Binding MoveRight}">
+                    Command="{Binding MoveRight, Source={StaticResource navi}}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
@@ -208,7 +210,7 @@
 
             <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
                     Canvas.Left="185" Canvas.Top="2" Tag="last"
-                    Command="{Binding MoveLast}">
+                    Command="{Binding MoveLast, Source={StaticResource navi}}">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
                 </StackPanel>
@@ -1301,7 +1303,6 @@
 
                     </Grid>
                 </TabItem>
-
 
             </TabControl>
         </Grid>

@@ -2,6 +2,7 @@
 using LabBook.ADO.Service;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
+using LabBook.Forms.Navigation;
 using LabBook.Security;
 using System;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.Materials.ModelView
 {
-    public class MaterialFormMV : INotifyPropertyChanged
+    public class MaterialFormMV : INotifyPropertyChanged, INavigation
     {
         private readonly double _startLeftPosition = 5d;
         private readonly double _columnStatus = 32d;
@@ -20,11 +21,18 @@ namespace LabBook.Forms.Materials.ModelView
 
         private ICommand _addNewButton;
         private ICommand _saveButton;
-        private ICommand _moveRight;
-        private ICommand _moveLeft;
-        private ICommand _moveLast;
-        private ICommand _moveFirst;
 
+        private bool _ghs01 = true;
+        private bool _ghs02 = true;
+        private bool _ghs03 = true;
+        private bool _ghs04 = true;
+        private bool _ghs05 = true;
+        private bool _ghs06 = true;
+        private bool _ghs07 = true;
+        private bool _ghs08 = true;
+        private bool _ghs09 = true;
+
+        public NavigationMV NavigationMV { get;  set; }
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly MaterialService _materialService = new MaterialService();
         private long _index = 0;
@@ -276,6 +284,96 @@ namespace LabBook.Forms.Materials.ModelView
                 OnPropertyChanged(nameof(ColumnData));
             }
         }
+        
+        public bool GHS01
+        {
+            get => _ghs01;
+            set
+            {
+                _ghs01 = value;
+                OnPropertyChanged(nameof(GHS01));
+            }
+        }
+
+        public bool GHS02
+        {
+            get => _ghs02;
+            set
+            {
+                _ghs02 = value;
+                OnPropertyChanged(nameof(GHS02));
+            }
+        }
+
+        public bool GHS03
+        {
+            get => _ghs03;
+            set
+            {
+                _ghs03 = value;
+                OnPropertyChanged(nameof(GHS03));
+            }
+        }
+
+        public bool GHS04
+        {
+            get => _ghs04;
+            set
+            {
+                _ghs04 = value;
+                OnPropertyChanged(nameof(GHS04));
+            }
+        }
+
+        public bool GHS05
+        {
+            get => _ghs05;
+            set
+            {
+                _ghs05 = value;
+                OnPropertyChanged(nameof(GHS05));
+            }
+        }
+
+        public bool GHS06
+        {
+            get => _ghs06;
+            set
+            {
+                _ghs06 = value;
+                OnPropertyChanged(nameof(GHS06));
+            }
+        }
+
+        public bool GHS07
+        {
+            get => _ghs07;
+            set
+            {
+                _ghs07 = value;
+                OnPropertyChanged(nameof(GHS07));
+            }
+        }
+
+        public bool GHS08
+        {
+            get => _ghs08;
+            set
+            {
+                _ghs08 = value;
+                OnPropertyChanged(nameof(GHS08));
+            }
+        }
+
+        public bool GHS09
+        {
+            get => _ghs09;
+            set
+            {
+                _ghs09 = value;
+                OnPropertyChanged(nameof(GHS09));
+            }
+        }
 
         public double TxtFilerNameLeftPosition => _startLeftPosition + _columnStatus;
 
@@ -299,16 +397,21 @@ namespace LabBook.Forms.Materials.ModelView
 
         public long DgRowIndex
         {
-            get
-            {
-                return _index;
-            }
+            get => _index;
             set
             {
                 _index = value;
                 _notScroll = false;
                 OnPropertyChanged(nameof(DgRowIndex));
+                Refresh();
             }
+        }
+
+        public long GetRowCount => GetMaterialView.Count;
+
+        public void Refresh()
+        {
+            NavigationMV.Refresh();
         }
 
         public long MaterialId
@@ -427,52 +530,9 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
-        public ICommand MoveRight
-        {
-            get
-            {
-                if (_moveRight == null) _moveRight = new NaviButtonRight(this);
-                return _moveRight;
-            }
-        }
-
-        public ICommand MoveLast
-        {
-            get
-            {
-                if (_moveLast == null) _moveLast = new NaviButtonLast(this);
-                return _moveLast;
-            }
-        }
-
-        public ICommand MoveFirst
-        {
-            get
-            {
-                if (_moveFirst == null) _moveFirst = new NaviButtonFirst(this);
-                return _moveFirst;
-            }
-        }
-
-        public ICommand MoveLeft
-        {
-            get
-            {
-                if (_moveLeft == null) _moveLeft = new NaviButtonLeft(this);
-                return _moveLeft;
-            }
-        }
-
         public void SetFiltration(bool filterOn, string filter)
         {
-            if (filterOn)
-            {
-                _materialView.RowFilter = filter;
-            }
-            else
-            {
-                _materialView.RowFilter = "";
-            }
+            _materialView.RowFilter = filterOn ? filter : "";
             DgRowIndex = 0;
         }
 
@@ -485,6 +545,5 @@ namespace LabBook.Forms.Materials.ModelView
         {
             _ = _materialService.Update();
         }
-
     }
 }

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Data;
 using LabBook.Forms.MainForm.ModelView;
+using LabBook.Forms.Navigation;
 
 namespace LabBook.Forms.MainForm
 {
@@ -17,12 +18,13 @@ namespace LabBook.Forms.MainForm
             InitializeComponent();
 
             WindowEditMV mainModelView = new WindowEditMV();
-            ViscosityMV _viscosityMV = this.Resources["viscosity"] as ViscosityMV;
-            GlossMV _glossMV = this.Resources["gloss"] as GlossMV;
-            OpacityMV _opacityMV = this.Resources["opacity"] as OpacityMV;
-            SpectroMV _spectroMV = this.Resources["spectro"] as SpectroMV;
-            CommonMV _commonMV = this.Resources["common"] as CommonMV;
-            AshBurnMV _ashBurnMV = this.Resources["burn"] as AshBurnMV;
+            ViscosityMV _viscosityMV = Resources["viscosity"] as ViscosityMV;
+            GlossMV _glossMV = Resources["gloss"] as GlossMV;
+            OpacityMV _opacityMV = Resources["opacity"] as OpacityMV;
+            SpectroMV _spectroMV = Resources["spectro"] as SpectroMV;
+            CommonMV _commonMV = Resources["common"] as CommonMV;
+            AshBurnMV _ashBurnMV = Resources["burn"] as AshBurnMV;
+            NavigationMV _navigationMV = Resources["navi"] as NavigationMV;
 
             DataContext = mainModelView;
             _viscosityMV.SetWindowEditMV = mainModelView;
@@ -31,18 +33,20 @@ namespace LabBook.Forms.MainForm
             _spectroMV.SetWindowEditMV = mainModelView;
             _commonMV.SetWindowEditMV = mainModelView;
             _ashBurnMV.SetWindowEditMV = mainModelView;
+            _navigationMV.ModelView = mainModelView;
             mainModelView.SetViscosityMV = _viscosityMV;
             mainModelView.SetGlossMV = _glossMV;
             mainModelView.SetOpacityMV = _opacityMV;
             mainModelView.SetSpectroMV = _spectroMV;
             mainModelView.SetCommonMV = _commonMV;
             mainModelView.SetAshBurnMV = _ashBurnMV;
+            mainModelView.SetNavigationMV = _navigationMV;
 
             FilterMV _filterMV = this.Resources["filter"] as FilterMV;
             _filterMV.SetWindowEdit(mainModelView);
 
 
-            DgLabBook.Focus();
+            _ = DgLabBook.Focus();
         }
 
         private void TxtBox_KeyUp(object sender, KeyEventArgs e)

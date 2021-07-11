@@ -158,6 +158,7 @@
     <Compile Include="Forms\Materials\Converters\CurrencyToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\DangerToColorConverter.cs" />
+    <Compile Include="Forms\Materials\Converters\PictureToVisibilityConverter.cs" />
     <Compile Include="Forms\Materials\Converters\PriceToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\PriceToColorConverter.cs" />
     <Compile Include="Forms\Materials\MaterialForm.xaml.cs">
@@ -168,6 +169,12 @@
     <Compile Include="Forms\Materials\ModelView\MaterialFormMV.cs" />
     <Compile Include="Forms\Materials\Model\WindowData.cs" />
     <Compile Include="Forms\Materials\Model\WindowSetting.cs" />
+    <Compile Include="Forms\Navigation\INavigation.cs" />
+    <Compile Include="Forms\Navigation\NaviButtonFirst.cs" />
+    <Compile Include="Forms\Navigation\NaviButtonLast.cs" />
+    <Compile Include="Forms\Navigation\NaviButtonLeft.cs" />
+    <Compile Include="Forms\Navigation\NaviButtonRight.cs" />
+    <Compile Include="Forms\Navigation\NavigationMV.cs" />
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
@@ -298,6 +305,27 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\Pictogram\GHS04_ok.png" />
+    <Resource Include="Img\Pictogram\GHS04.png" />
+    <Resource Include="Img\Pictogram\GHS06_ok.png" />
+    <Resource Include="Img\Pictogram\GHS06.png" />
+    <Resource Include="Img\Pictogram\GHS01_ok.png" />
+    <Resource Include="Img\Pictogram\GHS01.png" />
+    <Resource Include="Img\Pictogram\GHS08_ok.png" />
+    <Resource Include="Img\Pictogram\GHS08.png" />
+    <Resource Include="Img\Pictogram\ok.png" />
+    <Resource Include="Img\Pictogram\GHS03_ok.png" />
+    <Resource Include="Img\Pictogram\GHS03.png" />
+    <Resource Include="Img\Pictogram\GHS02_ok.png" />
+    <Resource Include="Img\Pictogram\GHS02.png" />
+    <Resource Include="Img\Pictogram\GHS09_ok.png" />
+    <Resource Include="Img\Pictogram\GHS09.png" />
+    <Resource Include="Img\Pictogram\GHS07_ok.png" />
+    <Resource Include="Img\Pictogram\GHS07.png" />
+    <Resource Include="Img\Pictogram\GHS05_ok.png" />
+    <Resource Include="Img\Pictogram\GHS05.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
