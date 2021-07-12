@@ -15,19 +15,14 @@ namespace LabBook.ADO.Service
         private readonly IRepository<MaterialDto> _repository;
         private bool _modified = false;
         private DataTable _dataTable;
+        private DataTable _dataTableClp;
 
         public MaterialService()
         {
             _repository = new MaterialRepository();
         }
 
-        public bool Modified
-        {
-            get
-            {
-                return _modified;
-            }
-        }
+        public bool Modified => _modified;
 
         public DataView GetAll()
         {
@@ -37,27 +32,57 @@ namespace LabBook.ADO.Service
             return view;
         }
 
-        public string GetAllClp()
+        public string GetAllClp(long materialId)
         {
-            DataTable table = _repository.GetAll(ClpRepository.MaterialClpQuery);
+            DataTable table = _repository.GetAll(ClpRepository.MaterialClpQuery.Replace("XXXX", materialId.ToString()));
             StringBuilder clp = new StringBuilder();
 
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 DataRow row = table.Rows[i];
-                clp.Append(row["clp"].ToString());
-                clp.Append("\n");
+                clp.Append(row["clp_full"].ToString().Replace("-- Brak --: ", ""));
+                clp.Append("\r\n");
             }
             return clp.ToString();
         }
 
-        public IList<int> GetAllGhs()
+        public DataView GetAllClpView(long materialId)
         {
-            DataTable table = _repository.GetAll(ClpRepository.MaterialGhsQuery);
+            _dataTableClp = _repository.GetAll(ClpRepository.MaterialClpQuery.Replace("XXXX", materialId.ToString()));
+            DataView view = new DataView(_dataTableClp) { Sort = "ordering" };
+            return view;
+        }
 
-            var result = table.AsEnumerable()
-                .Select(row => Convert.ToInt32(row["GHS"]))
-                .ToList();
+        public void RefreshClpView(long materialId)
+        {
+            if (_dataTableClp == null) return;
+
+            string query = ClpRepository.MaterialClpQuery.Replace("XXXX", materialId.ToString());
+            MaterialRepository repository = (MaterialRepository)_repository;
+            _dataTableClp.Rows.Clear();
+            repository.RefreshTable(query, _dataTableClp);
+        }
+
+        public IDictionary<int, bool> GetAllGhs(long materialId)
+        {
+            var result = new Dictionary<int, bool>() {
+                {1, false },
+                {2, false },
+                {3, false },
+                {4, false },
+                {5, false },
+                {6, false },
+                {7, false },
+                {8, false },
+                {9, false }
+            };
+
+            DataTable table = _repository.GetAll(ClpRepository.MaterialGhsQuery.Replace("XXXX", materialId.ToString()));
+            foreach (DataRow row in table.Rows)
+            {
+                int i = Convert.ToInt32(row["GHS"]);
+                result[i] = true;
+            }
 
             return result;
         }

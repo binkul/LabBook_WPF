@@ -5,6 +5,7 @@ using LabBook.Forms.Materials.Model;
 using LabBook.Forms.Navigation;
 using LabBook.Security;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Windows;
@@ -31,6 +32,7 @@ namespace LabBook.Forms.Materials.ModelView
         private bool _ghs07 = true;
         private bool _ghs08 = true;
         private bool _ghs09 = true;
+        private string _clpText = "Brak";
 
         public NavigationMV NavigationMV { get;  set; }
         private readonly WindowData _windowData = WindowSetting.Read();
@@ -288,7 +290,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS01
         {
             get => _ghs01;
-            set
+            private set
             {
                 _ghs01 = value;
                 OnPropertyChanged(nameof(GHS01));
@@ -298,7 +300,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS02
         {
             get => _ghs02;
-            set
+            private set
             {
                 _ghs02 = value;
                 OnPropertyChanged(nameof(GHS02));
@@ -308,7 +310,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS03
         {
             get => _ghs03;
-            set
+            private set
             {
                 _ghs03 = value;
                 OnPropertyChanged(nameof(GHS03));
@@ -318,7 +320,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS04
         {
             get => _ghs04;
-            set
+            private set
             {
                 _ghs04 = value;
                 OnPropertyChanged(nameof(GHS04));
@@ -328,7 +330,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS05
         {
             get => _ghs05;
-            set
+            private set
             {
                 _ghs05 = value;
                 OnPropertyChanged(nameof(GHS05));
@@ -338,7 +340,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS06
         {
             get => _ghs06;
-            set
+            private set
             {
                 _ghs06 = value;
                 OnPropertyChanged(nameof(GHS06));
@@ -348,7 +350,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS07
         {
             get => _ghs07;
-            set
+            private set
             {
                 _ghs07 = value;
                 OnPropertyChanged(nameof(GHS07));
@@ -358,7 +360,7 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS08
         {
             get => _ghs08;
-            set
+            private set
             {
                 _ghs08 = value;
                 OnPropertyChanged(nameof(GHS08));
@@ -368,10 +370,31 @@ namespace LabBook.Forms.Materials.ModelView
         public bool GHS09
         {
             get => _ghs09;
-            set
+            private set
             {
                 _ghs09 = value;
                 OnPropertyChanged(nameof(GHS09));
+            }
+        }
+
+        public string ClpText
+        {
+            get => _clpText;
+            private set
+            {
+                _clpText = value;
+                OnPropertyChanged(nameof(ClpText));
+            }
+        }
+
+        public DataView ClpData
+        {
+            get
+            {
+                if (_materialService != null)
+                    return _materialService.GetAllClpView(_materialId);
+                else
+                    return null;
             }
         }
 
@@ -416,13 +439,11 @@ namespace LabBook.Forms.Materials.ModelView
 
         public long MaterialId
         {
-            get
-            {
-                return _materialId;
-            }
+            get => _materialId;
             set
             {
                 _materialId = value;
+                RefreshClp();
             }
         }
 
@@ -528,6 +549,22 @@ namespace LabBook.Forms.Materials.ModelView
                 if (_saveButton == null) _saveButton = new SaveButton(this);
                 return _saveButton;
             }
+        }
+
+        private void RefreshClp()
+        {
+            IDictionary<int, bool> ghs = _materialService.GetAllGhs(_materialId);
+            GHS01 = ghs[1];
+            GHS02 = ghs[2];
+            GHS03 = ghs[3];
+            GHS04 = ghs[4];
+            GHS05 = ghs[5];
+            GHS06 = ghs[6];
+            GHS07 = ghs[7];
+            GHS08 = ghs[8];
+            GHS09 = ghs[9];
+            ClpText = _materialService.GetAllClp(_materialId);
+            _materialService.RefreshClpView(_materialId);
         }
 
         public void SetFiltration(bool filterOn, string filter)

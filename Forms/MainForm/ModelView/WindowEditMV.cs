@@ -325,10 +325,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public long LabBookId
         {
-            get
-            {
-                return _labBookId;
-            }
+            get => _labBookId;
             set
             {
                 _labBookId = value;
