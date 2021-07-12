@@ -1,11 +1,6 @@
 ﻿using LabBook.ADO.Service;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.Forms.Materials.ModelView
 {
@@ -47,6 +42,13 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public DataView GetSignalWordView
+        {
+            get
+            {
+                return _service.GetComboView(ComboType.Signal);
+            }
+        }
 
     }
 }

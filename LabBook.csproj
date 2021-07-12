@@ -80,6 +80,7 @@
     <Compile Include="ADO\Common\IRepository.cs" />
     <Compile Include="ADO\Common\RepositoryCommon.cs" />
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
+    <Compile Include="ADO\Repository\ClpRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalAshBurnRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalCommonRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
@@ -101,7 +102,9 @@
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Dto\ClpDto.cs" />
     <Compile Include="Dto\ComboListDto.cs" />
+    <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />

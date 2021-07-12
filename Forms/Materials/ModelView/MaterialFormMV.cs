@@ -377,7 +377,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public double TxtFilerNameLeftPosition => _startLeftPosition + _columnStatus;
 
-        public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName;
+        public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName + 1;
 
         private double StartComboPosition => CmbFilterFunctionLeftPosition + ColumnFunction + ColumnPrice + ColumnCurrency + ColumnUnit;
 

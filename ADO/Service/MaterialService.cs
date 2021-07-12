@@ -3,7 +3,10 @@ using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
 
 namespace LabBook.ADO.Service
 {
@@ -32,6 +35,31 @@ namespace LabBook.ADO.Service
             _dataTable.RowChanged += DataTable_RowChanged;
             DataView view = new DataView(_dataTable) { Sort = "id" };
             return view;
+        }
+
+        public string GetAllClp()
+        {
+            DataTable table = _repository.GetAll(ClpRepository.MaterialClpQuery);
+            StringBuilder clp = new StringBuilder();
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                DataRow row = table.Rows[i];
+                clp.Append(row["clp"].ToString());
+                clp.Append("\n");
+            }
+            return clp.ToString();
+        }
+
+        public IList<int> GetAllGhs()
+        {
+            DataTable table = _repository.GetAll(ClpRepository.MaterialGhsQuery);
+
+            var result = table.AsEnumerable()
+                .Select(row => Convert.ToInt32(row["GHS"]))
+                .ToList();
+
+            return result;
         }
 
         private void DataTable_RowChanged(object sender, DataRowChangeEventArgs e)

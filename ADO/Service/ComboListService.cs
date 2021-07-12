@@ -8,7 +8,8 @@ namespace LabBook.ADO.Service
     {
         MaterialFunction,
         Currency,
-        Unit
+        Unit,
+        Signal
     }
 
     public class ComboListService
@@ -33,6 +34,9 @@ namespace LabBook.ADO.Service
                     break;
                 case ComboType.Unit:
                     query = ComboListRepository.UnitQuery;
+                    break;
+                case ComboType.Signal:
+                    query = ComboListRepository.SignalQuery;
                     break;
             }
             DataTable table = _repository.GetAll(query);

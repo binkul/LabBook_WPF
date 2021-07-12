@@ -114,14 +114,14 @@
                                  Text="{Binding Name, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}"
                                  Width="{Binding ElementName=ColName, Path=ActualWidth}" 
                                  Canvas.Left="{Binding TxtFilerNameLeftPosition, Mode=OneWay, FallbackValue=50}" 
-                                 Canvas.Top="6" />
+                                 Canvas.Top="4" />
                         <ComboBox x:Name="CmbUserFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
                                   ItemsSource="{Binding Source={StaticResource combos}, Path=GetFunctionView}" 
                                   DisplayMemberPath="name" SelectedValuePath="id" SelectedIndex="0"
                                   SelectedValue="{Binding Function, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                   Width="{Binding ElementName=ColFunction, Path=ActualWidth}" 
                                   Canvas.Left="{Binding CmbFilterFunctionLeftPosition, Mode=OneWay, FallbackValue=100}" 
-                                  Canvas.Top="3" />
+                                  Canvas.Top="4" />
                         <CheckBox x:Name="ChbActiv" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top"
                                   IsChecked="{Binding Active, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                                   Canvas.Left="{Binding ChbFilterActiveLeftPosition, Mode=OneWay, FallbackValue=300}" 
@@ -158,6 +158,7 @@
                             <DataGridTextColumn Binding="{Binding density}" Visibility="Collapsed" />
                             <DataGridTextColumn Binding="{Binding solids}" Visibility="Collapsed" />
                             <DataGridTextColumn Binding="{Binding ash_450}" Visibility="Collapsed" />
+                            <DataGridTextColumn Binding="{Binding clp_signal_word_id}" Visibility="Collapsed" />
 
                             <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
                                                     IsReadOnly="True" CanUserSort="False" CanUserResize="False"
@@ -363,10 +364,11 @@
                            VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14" FontWeight="Bold" />
                     <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" 
                               Width="250" Margin="20,0,0,0"
-                              IsEnabled="{Binding IsPermited, Mode=OneWay}" />
-                    <!--DisplayMemberPath="name" SelectedValuePath="id" 
-                      ItemsSource="{Binding GetExpCycleView}" 
-                      SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" />-->
+                              IsEnabled="{Binding IsPermited, Mode=OneWay}"
+                              DisplayMemberPath="name" 
+                              SelectedValuePath="id" 
+                              ItemsSource="{Binding Source={StaticResource combos}, Path=GetSignalWordView}" 
+                              SelectedValue="{Binding SelectedItem.clp_signal_word_id, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
                         <Image Source="/img/Pictogram/GHS01.png" Width="78" Height="78" VerticalAlignment="Center"
                                Visibility="{Binding GHS01, Converter={StaticResource BoolToColapsedConverter}}" />
