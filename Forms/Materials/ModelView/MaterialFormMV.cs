@@ -377,16 +377,6 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
-        public string ClpText
-        {
-            get => _clpText;
-            private set
-            {
-                _clpText = value;
-                OnPropertyChanged(nameof(ClpText));
-            }
-        }
-
         public DataView ClpData
         {
             get
@@ -563,7 +553,6 @@ namespace LabBook.Forms.Materials.ModelView
             GHS07 = ghs[7];
             GHS08 = ghs[8];
             GHS09 = ghs[9];
-            ClpText = _materialService.GetAllClp(_materialId);
             _materialService.RefreshClpView(_materialId);
         }
 

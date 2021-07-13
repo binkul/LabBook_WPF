@@ -44,6 +44,7 @@
         <ConvertLocal:CurrencyToColorConverter x:Key="CurrencyToColorConverter" />
         <ConvertLocal:CurrencyToBoldConverter x:Key="CurrencyToBoldConverter" />
         <ConvertLocal:PictureToVisibilityConverter x:Key="BoolToColapsedConverter" />
+        <ConvertLocal:ClpToColorConverter x:Key="ClpToColorConverter" />
         <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
         <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
@@ -354,7 +355,6 @@
                         <RowDefinition Height="50" />
                         <RowDefinition Height="80" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -390,15 +390,9 @@
                         <Image Source="/img/Pictogram/GHS09.png" Width="78" Height="78" VerticalAlignment="Center"
                                Visibility="{Binding GHS09, Converter={StaticResource BoolToColapsedConverter}}" />
                     </StackPanel>
-                    <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#FFF40E0E" StrokeThickness="2" />
-                    <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Auto" 
-                                  VerticalScrollBarVisibility="Auto" Margin="2,2,2,2">
-                        <TextBlock Background="Wheat" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Margin="2,2,2,2"
-                                   Text="{Binding ClpText}"/>
-                    </ScrollViewer>
 
-                    <Rectangle Grid.Row="3" Grid.ColumnSpan="2" Stroke="#FFF40E0E" StrokeThickness="2" />
-                    <DataGrid Grid.Row="3" Grid.ColumnSpan="2" Margin="2,2,2,2" Background="Wheat" HorizontalAlignment="Stretch" 
+                    <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#FFF40E0E" StrokeThickness="2" />
+                    <DataGrid Grid.Row="2" Grid.ColumnSpan="2" Margin="2,2,2,2" Background="Wheat" HorizontalAlignment="Stretch" 
                               AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                               HeadersVisibility="Column" IsReadOnly="True"
@@ -412,14 +406,22 @@
                                                 FontWeight="Bold"
                                                 HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
                                                 ElementStyle="{StaticResource AllignCellLeft}" />
-                            <DataGridTextColumn Header="Zwrot"
-                                                Foreground="Blue"
+                            
+                            <DataGridTextColumn x:Name="dgRowClp"
+                                                Header="Zwrot"
                                                 CanUserSort="False"
                                                 FontWeight="Bold"
                                                 Binding="{Binding clp, Mode=OneWay}"
                                                 Width="0.2*"
                                                 HeaderStyle="{StaticResource AllignColmnHeaderLeft}" 
-                                                ElementStyle="{StaticResource AllignCellLeft}" />
+                                                ElementStyle="{StaticResource AllignCellLeft}" >
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Foreground" Value="{Binding clp, Converter={StaticResource ClpToColorConverter}}" />
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
+                            
                             <DataGridTextColumn Header="Opis"
                                                 CanUserSort="False"
                                                 Binding="{Binding description, Mode=OneWay}"
