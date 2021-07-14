@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace LabBook.ADO.Service
 {
@@ -113,5 +114,35 @@ namespace LabBook.ADO.Service
             return result;
         }
 
+        public bool Delete(DataRowView row)
+        {
+            bool result = true;
+            string name = row["name"].ToString();
+            long id = Convert.ToInt32(row["id"]);
+            bool tmp = _modified;
+
+            if (MessageBox.Show("Czy usunąć surowiec '" + name + "' z bazy danych?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                return false;
+            }
+
+            result = _repository.Delete(id, MaterialRepository.DeleteQuery);
+            if (!result)
+            {
+                return result;
+            }
+
+            DataRow dr = _dataTable.AsEnumerable().SingleOrDefault(r => r.Field<long>("id") == id);
+            if (dr != null)
+            {
+                dr.Delete();
+                dr.AcceptChanges();
+            }
+            _ = _repository.Delete(id, ClpRepository.DeleteMaterialClpQuery);
+            _ = _repository.Delete(id, ClpRepository.DeleteMaterialGHSQuery);
+
+            _modified = tmp;
+            return result;
+        }
     }
 }

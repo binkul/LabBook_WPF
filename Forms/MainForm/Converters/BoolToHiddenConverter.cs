@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace LabBook.Forms.Materials.Converters
+namespace LabBook.Forms.MainForm.Converters
 {
-    public class PictureToVisibilityConverter : IValueConverter
+    public class BoolToHiddenConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -12,13 +12,12 @@ namespace LabBook.Forms.Materials.Converters
             if (tmp)
                 return System.Windows.Visibility.Visible;
             else
-                return System.Windows.Visibility.Collapsed;
+                return System.Windows.Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
     }
 }

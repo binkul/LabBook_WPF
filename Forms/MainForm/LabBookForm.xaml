@@ -53,7 +53,7 @@
         <Convertors:IconSourcePermissionConverter x:Key="IconSourceConverter" />
         <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
         <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
-        <Convertors:BoolToVisibiltyConverter x:Key="VisibilityConverter" />
+        <Convertors:BoolToHiddenConverter x:Key="VisibilityConverter" />
         <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:FloatConverter x:Key="FloatConverter" />

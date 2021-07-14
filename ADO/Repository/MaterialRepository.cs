@@ -20,7 +20,7 @@ namespace LabBook.ADO.Repository
         public static readonly string UpdateQuery = "Update LabBook.dbo.Material Set name=@name, is_danger=@is_danger, is_production=@is_production," +
             "is_active=@is_active, clp_signal_word_id=@clp_signal_word_id, function_id=@function_id, price=@price, currency_id=@currency_id, unit_id=@unit_id, density=@density, " +
             "solids=@solids, ash_450=@ash_450, VOC=@VOC, remarks=@remarks, date_update=@date_update Where id=@id";
-        public static readonly string DeleteQuery = "";
+        public static readonly string DeleteQuery = "Delete From LabBook.dbo.Material Where id=";
 
         public void RefreshMainTable(DataTable dataTable)
         {

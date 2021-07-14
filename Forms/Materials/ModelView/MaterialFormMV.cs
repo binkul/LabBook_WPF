@@ -22,6 +22,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         private ICommand _addNewButton;
         private ICommand _saveButton;
+        private ICommand _deleteButton;
 
         private bool _ghs01 = true;
         private bool _ghs02 = true;
@@ -32,7 +33,6 @@ namespace LabBook.Forms.Materials.ModelView
         private bool _ghs07 = true;
         private bool _ghs08 = true;
         private bool _ghs09 = true;
-        private string _clpText = "Brak";
 
         public NavigationMV NavigationMV { get;  set; }
         private readonly WindowData _windowData = WindowSetting.Read();
@@ -439,16 +439,19 @@ namespace LabBook.Forms.Materials.ModelView
 
         public DataRowView ActualRow
         {
-            get
-            {
-                return _actualRow;
-            }
+            get => _actualRow;
             set
             {
                 _actualRow = value;
-                OnPropertyChanged(nameof(IsPermited));
+                OnPropertyChanged(
+                    nameof(IsPermited),
+                    nameof(CanDelete),
+                    nameof(IsDanger)
+                    );
             }
         }
+
+        public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]);
 
         public bool IsPermited
         {
@@ -467,6 +470,8 @@ namespace LabBook.Forms.Materials.ModelView
                 }
             }
         }
+
+        public bool CanDelete => IsPermited && GetRowCount > 0;
 
         public DataView GetMaterialView
         {
@@ -541,6 +546,15 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public ICommand DeleteButton
+        {
+            get
+            {
+                if (_deleteButton == null) _deleteButton = new DeleteButton(this);
+                return _deleteButton;
+            }
+        }
+
         private void RefreshClp()
         {
             IDictionary<int, bool> ghs = _materialService.GetAllGhs(_materialId);
@@ -570,6 +584,14 @@ namespace LabBook.Forms.Materials.ModelView
         public void SaveAll()
         {
             _ = _materialService.Update();
+        }
+
+        public void DeleteMaterial()
+        {
+            if (ActualRow != null)
+            {
+                _materialService.Delete(ActualRow);
+            }
         }
     }
 }

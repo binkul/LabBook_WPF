@@ -156,13 +156,14 @@
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Navigation.cs" />
     <Compile Include="Forms\Materials\Command\AddNewButton.cs" />
+    <Compile Include="Forms\Materials\Command\DeleteButton.cs" />
     <Compile Include="Forms\Materials\Command\NaviButton.cs" />
     <Compile Include="Forms\Materials\Command\SaveButton.cs" />
     <Compile Include="Forms\Materials\Converters\ClpToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\DangerToColorConverter.cs" />
-    <Compile Include="Forms\Materials\Converters\PictureToVisibilityConverter.cs" />
+    <Compile Include="Forms\Materials\Converters\BoolToCollapsedConverter.cs" />
     <Compile Include="Forms\Materials\Converters\PriceToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\PriceToColorConverter.cs" />
     <Compile Include="Forms\Materials\MaterialForm.xaml.cs">
@@ -183,7 +184,7 @@
     <Compile Include="Forms\Register\RegisterForm.xaml.cs">
       <DependentUpon>RegisterForm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainForm\Converters\BoolToVisibiltyConverter.cs" />
+    <Compile Include="Forms\MainForm\Converters\BoolToHiddenConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\CycleToNameConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DataGridLenghtToDoubleConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\DataRowViewToLongConverter.cs" />
