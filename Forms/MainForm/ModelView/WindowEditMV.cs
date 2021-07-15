@@ -18,10 +18,6 @@ namespace LabBook.Forms.MainForm.ModelView
     {
         private readonly double _startLeftPosition = 5d;
 
-        private ICommand _moveRight;
-        private ICommand _moveLeft;
-        private ICommand _moveLast;
-        private ICommand _moveFirst;
         private ICommand _saveButton;
         private ICommand _deleteButton;
         private ICommand _addNewButton;

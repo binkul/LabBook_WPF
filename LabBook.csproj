@@ -131,7 +131,6 @@
     <Compile Include="Forms\MainForm\Command\DelOpacityButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelSpectroButton.cs" />
     <Compile Include="Forms\MainForm\Command\DelViscosityButton.cs" />
-    <Compile Include="Forms\MainForm\Command\NaviButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewButton.cs" />
     <Compile Include="Forms\MainForm\Command\NewSerieButton.cs" />
     <Compile Include="Forms\MainForm\Command\RefreshButton.cs" />

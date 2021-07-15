@@ -126,6 +126,39 @@ namespace LabBook.ADO.Common
             return result;
         }
 
+        virtual public bool ExistByName(string name, string query)
+        {
+            bool result = false;
+
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    sqlCmd.Parameters.AddWithValue("@name", name);
+                    connection.Open();
+
+                    if (Convert.ToInt32(sqlCmd.ExecuteScalar()) >= 1)
+                        result = true;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
+
         virtual public T GetById(long id, string query)
         {
             throw new NotImplementedException();

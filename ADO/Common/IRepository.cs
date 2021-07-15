@@ -12,6 +12,7 @@ namespace LabBook.ADO.Common
         void Update(T data);
         ExceptionCode Update(DataRow data, string query);
         bool ExistById(long id, string query);
+        bool ExistByName(string name, string query);
         T GetById(long id, string query);
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.Dto
 {
@@ -16,6 +13,7 @@ namespace LabBook.Dto
         public bool IsActive { get; set; } = false;
         public long IntermediateNrD { get; set; } = -1;
         public int ClpSignalWordId { get; set; } = 1;
+        public int ClpMsdsId { get; set; } = 1;
         public long FunctionId { get; set; } = 1;
         public decimal Price { get; set; } = 0;
         public int CurrencyId { get; set; } = 1;
@@ -29,9 +27,9 @@ namespace LabBook.Dto
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime DateUpdated { get; set; } = DateTime.Now;
 
-        public MaterialDto(long id, string name, bool isIntermediate, bool isDanger, bool isProduction, bool isActive, long intermediateNrD, 
-            int clpSignalWordId, long functionId, decimal price, int currencyId, int unitId, double density, double solids, double ash450, double voc, 
-            string remarks, long loginId, DateTime dateCreated, DateTime dateUpdated)
+        public MaterialDto(long id, string name, bool isIntermediate, bool isDanger, bool isProduction, bool isActive, long intermediateNrD, int clpSignalWordId, int clpMsdsId, 
+            long functionId, decimal price, int currencyId, int unitId, double density, double solids, double ash450, double vOC, string remarks, long loginId, 
+            DateTime dateCreated, DateTime dateUpdated)
         {
             Id = id;
             Name = name;
@@ -41,6 +39,7 @@ namespace LabBook.Dto
             IsActive = isActive;
             IntermediateNrD = intermediateNrD;
             ClpSignalWordId = clpSignalWordId;
+            ClpMsdsId = clpMsdsId;
             FunctionId = functionId;
             Price = price;
             CurrencyId = currencyId;
@@ -48,7 +47,7 @@ namespace LabBook.Dto
             Density = density;
             Solids = solids;
             Ash450 = ash450;
-            VOC = voc;
+            VOC = vOC;
             Remarks = remarks;
             LoginId = loginId;
             DateCreated = dateCreated;
@@ -71,6 +70,7 @@ namespace LabBook.Dto
                    IsActive == dto.IsActive &&
                    IntermediateNrD == dto.IntermediateNrD &&
                    ClpSignalWordId == dto.ClpSignalWordId &&
+                   ClpMsdsId == dto.ClpMsdsId &&
                    FunctionId == dto.FunctionId &&
                    Price == dto.Price &&
                    CurrencyId == dto.CurrencyId &&
@@ -87,7 +87,7 @@ namespace LabBook.Dto
 
         public override int GetHashCode()
         {
-            int hashCode = 1966701578;
+            int hashCode = 1803674884;
             hashCode = hashCode * -1521134295 + Id.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + IsIntermediate.GetHashCode();
@@ -96,6 +96,7 @@ namespace LabBook.Dto
             hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
             hashCode = hashCode * -1521134295 + IntermediateNrD.GetHashCode();
             hashCode = hashCode * -1521134295 + ClpSignalWordId.GetHashCode();
+            hashCode = hashCode * -1521134295 + ClpMsdsId.GetHashCode();
             hashCode = hashCode * -1521134295 + FunctionId.GetHashCode();
             hashCode = hashCode * -1521134295 + Price.GetHashCode();
             hashCode = hashCode * -1521134295 + CurrencyId.GetHashCode();

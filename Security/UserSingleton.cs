@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LabBook.Security
+﻿namespace LabBook.Security
 {
     public sealed class UserSingleton
     {

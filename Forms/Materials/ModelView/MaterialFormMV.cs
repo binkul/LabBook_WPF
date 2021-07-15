@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
+using LabBook.Dto;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
 using LabBook.Forms.Navigation;
@@ -578,7 +579,27 @@ namespace LabBook.Forms.Materials.ModelView
 
         public void AddNewRecord()
         {
+            var material = _materialService.AddNew();
 
+            if (material != null)
+            {
+                var index = 0;
+                foreach (DataRowView row in _materialView)
+                {
+                    if (Convert.ToInt64(row["id"]) == material.Id)
+                    {
+                        DgRowIndex = index;
+                        UpdateRowIndex();
+                        break;
+                    }
+                    index++;
+                }
+            }
+        }
+
+        public void UpdateRowIndex()
+        {
+            OnPropertyChanged(nameof(DgRowIndex));
         }
 
         public void SaveAll()

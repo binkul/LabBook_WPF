@@ -10,17 +10,19 @@ namespace LabBook.ADO.Repository
 {
     public class MaterialRepository : RepositoryCommon<MaterialDto>
     {
-        public static readonly string AllQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, function_id, " +
+        public static readonly string AllQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, " +
             "price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where is_intermediate = 'false' " +
             "Order by name";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.Material(name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, " +
-            "function_id, price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update) Values(@name, @is_intermediate, @is_danger, " +
-            "@is_production, @is_active, @intermediate_nrD, @clp_signal_word_id, @function_id, @price, @currency_id, @unit_id, @density, @solids, @ash_450, @VOC, @remarks, " +
+            "clp_msds_id, function_id, price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update) Values(@name, @is_intermediate, @is_danger, " +
+            "@is_production, @is_active, @intermediate_nrD, @clp_signal_word_id, @clp_msds_id, @function_id, @price, @currency_id, @unit_id, @density, @solids, @ash_450, @VOC, @remarks, " +
             "@login_id, @date_created, @date_update)";
         public static readonly string UpdateQuery = "Update LabBook.dbo.Material Set name=@name, is_danger=@is_danger, is_production=@is_production," +
-            "is_active=@is_active, clp_signal_word_id=@clp_signal_word_id, function_id=@function_id, price=@price, currency_id=@currency_id, unit_id=@unit_id, density=@density, " +
+            "is_active=@is_active, clp_signal_word_id=@clp_signal_word_id, clp_msds_id=@clp_msds_id, function_id=@function_id, price=@price, currency_id=@currency_id, unit_id=@unit_id, density=@density, " +
             "solids=@solids, ash_450=@ash_450, VOC=@VOC, remarks=@remarks, date_update=@date_update Where id=@id";
         public static readonly string DeleteQuery = "Delete From LabBook.dbo.Material Where id=";
+        public static readonly string ExistByNameQuery = "Select Count(1) From LabBook.dbo.Material m Where m.name=@name";
+        private static readonly string _getIdByNameQuery = "Select Max(id) as id From LabBook.dbo.Material Where name=@name";
 
         public void RefreshMainTable(DataTable dataTable)
         {
@@ -60,6 +62,7 @@ namespace LabBook.ADO.Repository
                     cmd.Parameters.AddWithValue("@is_production", row["is_production"]);
                     cmd.Parameters.AddWithValue("@is_active", row["is_active"]);
                     cmd.Parameters.AddWithValue("@clp_signal_word_id", row["clp_signal_word_id"]);
+                    cmd.Parameters.AddWithValue("@clp_msds_id", row["clp_msds_id"]);
                     cmd.Parameters.AddWithValue("@function_id", row["function_id"]);
 
                     if (string.IsNullOrEmpty(row["price"].ToString())) cmd.Parameters.AddWithValue("@price", DBNull.Value);
@@ -109,12 +112,78 @@ namespace LabBook.ADO.Repository
             return error;
         }
 
-        public override ExceptionCode Save(DataRow data, string query)
+        override public MaterialDto Save(MaterialDto data)
         {
-            ExceptionCode error = ExceptionCode.NoError;
+            MaterialDto material = null;
+            var error = false;
 
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+                try
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = SaveQuery;
+                    cmd.Parameters.AddWithValue("@name", data.Name);
+                    cmd.Parameters.AddWithValue("@is_danger", data.IsDanger);
+                    cmd.Parameters.AddWithValue("@is_production", data.IsProduction);
+                    cmd.Parameters.AddWithValue("@is_intermediate", data.IsIntermediate);
+                    cmd.Parameters.AddWithValue("@is_active", data.IsActive);
+                    cmd.Parameters.AddWithValue("@clp_signal_word_id", data.ClpSignalWordId);
+                    cmd.Parameters.AddWithValue("@clp_msds_id", data.ClpMsdsId);
+                    cmd.Parameters.AddWithValue("@function_id", data.FunctionId);
+                    cmd.Parameters.AddWithValue("@login_id", data.LoginId);
+                    cmd.Parameters.AddWithValue("@intermediate_nrD", data.IntermediateNrD);
 
-            return error;
+                    if (data.Price == 0) cmd.Parameters.AddWithValue("@price", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@price", data.Price);
+
+                    cmd.Parameters.AddWithValue("@currency_id", data.CurrencyId);
+                    cmd.Parameters.AddWithValue("@unit_id", data.UnitId);
+
+                    if (data.Density == 0) cmd.Parameters.AddWithValue("@density", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@density", data.Density);
+
+                    if (data.Solids == 0) cmd.Parameters.AddWithValue("@solids", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@solids", data.Solids);
+
+                    if (data.Ash450 == 0) cmd.Parameters.AddWithValue("@ash_450", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@ash_450", data.Ash450);
+
+                    if (data.VOC == 0) cmd.Parameters.AddWithValue("@VOC", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@VOC", data.VOC);
+
+                    if (string.IsNullOrEmpty(data.Remarks)) cmd.Parameters.AddWithValue("@remarks", DBNull.Value);
+                    else cmd.Parameters.AddWithValue("@remarks", data.Remarks);
+
+                    cmd.Parameters.AddWithValue("@date_update", data.DateCreated);
+                    cmd.Parameters.AddWithValue("@date_created", data.DateUpdated);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    material = data;
+                }
+                catch (SqlException ex)
+                {
+                    error = true;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    error = true;
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            if (!error)
+                material.Id = GetId(data.Name);
+
+            return material;
         }
 
         public void RefreshTable(string query, DataTable dataTable)
@@ -138,6 +207,38 @@ namespace LabBook.ADO.Repository
                 }
             }
 
+        }
+
+        private long GetId(string name)
+        {
+            var id = -1L;
+
+            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    var sqlCmd = new SqlCommand(_getIdByNameQuery, connection) { CommandType = CommandType.Text };
+                    sqlCmd.Parameters.AddWithValue("@name", name);
+                    connection.Open();
+                    id = Convert.ToInt64(sqlCmd.ExecuteScalar());
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return id;
         }
     }
 }
