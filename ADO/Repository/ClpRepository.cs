@@ -16,5 +16,6 @@ namespace LabBook.ADO.Repository
             "Where m.material_id=XXXX Order By c.GHS";
         public static readonly string DeleteMaterialGHSQuery = "Delete From LabBook.dbo.MaterialGHS Where material_id=";
         public static readonly string DeleteMaterialClpQuery = "Delete From LabBook.dbo.MaterialCLP Where material_id=";
+        public static readonly string GetClpHPData = "Select id, clp, class, description, ordering From LabBook.dbo.CmbClpHP Order By ordering";
     }
 }

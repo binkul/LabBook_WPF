@@ -92,7 +92,10 @@
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab Header="Clp" IsEnabled="{Binding IsDanger, Mode=OneWay}">
-                
+                <RibbonGroup Header="Zmiany Clp"  FontSize="10">
+                    <RibbonButton Label="Clp" LargeImageSource="/Img/Pictogram/biohazard.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding ClpButton}"/>
+                </RibbonGroup>
             </RibbonTab>
         </Ribbon>
 

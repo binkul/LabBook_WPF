@@ -106,6 +106,16 @@
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
+    <Compile Include="Forms\ClpData\ClpForm.xaml.cs">
+      <DependentUpon>ClpForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ClpData\Command\AddButton.cs" />
+    <Compile Include="Forms\ClpData\Command\RemoveAllButton.cs" />
+    <Compile Include="Forms\ClpData\Command\RemoveSelectedButton.cs" />
+    <Compile Include="Forms\ClpData\ModelView\ClpListMV.cs" />
+    <Compile Include="Forms\ClpData\ModelView\ClpMV.cs" />
+    <Compile Include="Forms\ClpData\Model\Clp.cs" />
+    <Compile Include="Forms\ClpData\Model\ClpList.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
     <Compile Include="Forms\MainForm\Command\MaterialButtton.cs" />
@@ -155,6 +165,7 @@
     <Compile Include="Forms\MainForm\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Navigation.cs" />
     <Compile Include="Forms\Materials\Command\AddNewButton.cs" />
+    <Compile Include="Forms\Materials\Command\ClpButton.cs" />
     <Compile Include="Forms\Materials\Command\DeleteButton.cs" />
     <Compile Include="Forms\Materials\Command\NaviButton.cs" />
     <Compile Include="Forms\Materials\Command\SaveButton.cs" />
@@ -201,6 +212,10 @@
     <Compile Include="Security\User.cs" />
     <Compile Include="Security\UserSingleton.cs" />
     <Compile Include="System\Text\ASCII.cs" />
+    <Page Include="Forms\ClpData\ClpForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\InputBox\InputBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -332,5 +347,9 @@
     <Resource Include="Img\Pictogram\GHS05_ok.png" />
     <Resource Include="Img\Pictogram\GHS05.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\Pictogram\biohazard.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

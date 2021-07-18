@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
 using LabBook.Dto;
+using LabBook.Forms.ClpData;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
 using LabBook.Forms.Navigation;
@@ -24,6 +25,7 @@ namespace LabBook.Forms.Materials.ModelView
         private ICommand _addNewButton;
         private ICommand _saveButton;
         private ICommand _deleteButton;
+        private ICommand _clpButton;
 
         private bool _ghs01 = true;
         private bool _ghs02 = true;
@@ -52,8 +54,8 @@ namespace LabBook.Forms.Materials.ModelView
         {
             _materialView = _materialService.GetAll();
 
-            OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
-            OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(this.OnSelectionChangedCommandExecuted);
+            OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
+            OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(OnSelectionChangedCommandExecuted);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -556,6 +558,15 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
+        public ICommand ClpButton
+        {
+            get
+            {
+                if (_clpButton == null) _clpButton = new ClpButton(this);
+                return _clpButton;
+            }
+        }
+
         private void RefreshClp()
         {
             IDictionary<int, bool> ghs = _materialService.GetAllGhs(_materialId);
@@ -613,6 +624,24 @@ namespace LabBook.Forms.Materials.ModelView
             {
                 _materialService.Delete(ActualRow);
             }
+        }
+
+        public void OpenClpForm()
+        {
+            IDictionary<int, bool> ghs = new Dictionary<int, bool>() {
+                {1, GHS01 },
+                {2, GHS02 },
+                {3, GHS03 },
+                {4, GHS04 },
+                {5, GHS05 },
+                {6, GHS06 },
+                {7, GHS07 },
+                {8, GHS08 },
+                {9, GHS09 }
+            };
+
+            ClpForm clpForm = new ClpForm(ghs);
+            _ = clpForm.ShowDialog();
         }
     }
 }
