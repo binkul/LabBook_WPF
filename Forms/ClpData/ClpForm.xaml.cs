@@ -1,16 +1,10 @@
-﻿using System;
+﻿using LabBook.Forms.ClpData.Model;
+using LabBook.Forms.ClpData.ModelView;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LabBook.Forms.ClpData
 {
@@ -19,10 +13,13 @@ namespace LabBook.Forms.ClpData
     /// </summary>
     public partial class ClpForm : Window
     {
-        public ClpForm(IDictionary<int, bool> ghs)
+        public ClpForm(IDictionary<int, bool> ghs, IList<int> clp, string name)
         {
             InitializeComponent();
             InitializeGHS(ghs);
+            InitializeCLP(clp);
+            LblGhs.Content = "Piktogramy GHS dla '" + name + "'";
+            LblClp.Content = "Zwroty H i P dla '" + name + "'";
         }
 
         private void InitializeGHS(IDictionary<int, bool> ghs)
@@ -71,6 +68,19 @@ namespace LabBook.Forms.ClpData
             {
                 GHS09.Visibility = Visibility.Visible;
                 GHS09_ok.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void InitializeCLP(IList<int> clp)
+        {
+            ClpListMV dataContex = DataContext as ClpListMV;
+            List<ClpMV> dataList = new List<ClpMV>(dataContex.ClpDataList);
+
+            foreach (int clp_id in clp)
+            {
+                ClpMV data = dataList.AsEnumerable().FirstOrDefault(i => i.Id == clp_id);
+                if (data != null)
+                    dataContex.ClpSelectedList.Add(data);
             }
         }
 
@@ -167,5 +177,40 @@ namespace LabBook.Forms.ClpData
                     break;
             }
         }
+
+        private IDictionary<int, bool> GetResultGHS()
+        {
+            return new Dictionary<int, bool>() {
+                {1, GHS01_ok.Visibility == Visibility.Visible },
+                {2, GHS02_ok.Visibility == Visibility.Visible },
+                {3, GHS03_ok.Visibility == Visibility.Visible },
+                {4, GHS04_ok.Visibility == Visibility.Visible },
+                {5, GHS05_ok.Visibility == Visibility.Visible },
+                {6, GHS06_ok.Visibility == Visibility.Visible },
+                {7, GHS07_ok.Visibility == Visibility.Visible },
+                {8, GHS08_ok.Visibility == Visibility.Visible },
+                {9, GHS09_ok.Visibility == Visibility.Visible }
+            };
+        }
+
+        private IList<int> GetResultCLP()
+        {
+            IList<int> clp = new List<int>();
+            ClpListMV dataContex = DataContext as ClpListMV;
+            List<ClpMV> dataList = new List<ClpMV>(dataContex.ClpSelectedList);
+
+            foreach(ClpMV row in dataList)
+            {
+                clp.Add(row.Id);
+            }
+            return clp;
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        public SelectedClpData GetResult => new SelectedClpData(GetResultGHS(), GetResultCLP());
     }
 }

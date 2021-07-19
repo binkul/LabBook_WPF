@@ -2,6 +2,7 @@
 using LabBook.ADO.Exceptions;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
+using LabBook.Forms.ClpData.Model;
 using LabBook.Forms.InputBox;
 using LabBook.Security;
 using System;
@@ -204,6 +205,14 @@ namespace LabBook.ADO.Service
             _ = _repository.Delete(id, ClpRepository.DeleteMaterialGHSQuery);
 
             _modified = tmp;
+            return result;
+        }
+
+        public bool UpdateGhsAndClp(SelectedClpData data)
+        {
+            bool result = true;
+
+
             return result;
         }
     }

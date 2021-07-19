@@ -32,6 +32,7 @@
             <RowDefinition Height="86" />
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -41,7 +42,7 @@
 
         <!-- GHS -->
         <Rectangle Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Stroke="Blue" StrokeThickness="1" Margin="1" />
-        <Label Content="Piktogramy GHS" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="16" />
+        <Label x:Name="LblGhs" Content="Piktogramy GHS" Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="16" />
 
         <Canvas Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" >
             <Image x:Name="GHS01" Source="/img/Pictogram/GHS01.png" Width="78" Height="78" VerticalAlignment="Center" 
@@ -83,7 +84,8 @@
         </Canvas>
 
         <!-- Buttons Add, Remove, Remove all-->
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" >
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" >
             <Button x:Name="BtnAdd" Height="30" Width="30" Margin="0,0,0,10" 
                     Command="{Binding AddButton}" >
                 <StackPanel Orientation="Horizontal" >
@@ -127,9 +129,9 @@
         
         <!-- CLP -->
         <Rectangle Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="3" Stroke="Blue" StrokeThickness="1" Margin="1" />
-        <Label Content="Zwroty H i P" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="16" />
+        <Label x:Name="LblClp" Content="Zwroty H i P" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="16" />
 
-        <DataGrid x:Name="ClpGridSource" Grid.Row="3" Grid.Column="0" Margin="2,2,2,2" Background="Wheat"
+        <DataGrid x:Name="ClpGridSource" Grid.Row="3" Grid.RowSpan="2" Grid.Column="0" Margin="2,2,2,2" Background="Wheat"
                   HorizontalAlignment="Stretch" AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Extended"
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
                   HeadersVisibility="Column" IsReadOnly="True"
@@ -221,5 +223,11 @@
 
             </DataGrid.Columns>
         </DataGrid>
+    
+        <!-- Ok and Cancel buttons -->
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button x:Name="btnSave" IsDefault="True" Height="35" MinWidth="65" HorizontalAlignment="Right" Margin="10,0" FontWeight="Bold" FontSize="14" Foreground="#FF0E10F6" Click="BtnSave_Click" >_Zapisz</Button>
+            <Button x:Name="btncancel" IsCancel="True" Height="35" MinWidth="65" HorizontalAlignment="Right" Margin="10,0" FontWeight="Bold" FontSize="14" Foreground="#FFF60404" >_Anuluj</Button>
+        </StackPanel>
     </Grid>
 </Window>

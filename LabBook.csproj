@@ -116,6 +116,7 @@
     <Compile Include="Forms\ClpData\ModelView\ClpMV.cs" />
     <Compile Include="Forms\ClpData\Model\Clp.cs" />
     <Compile Include="Forms\ClpData\Model\ClpList.cs" />
+    <Compile Include="Forms\ClpData\Model\SelectedClpData.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
     <Compile Include="Forms\MainForm\Command\MaterialButtton.cs" />

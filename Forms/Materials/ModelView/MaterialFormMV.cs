@@ -2,6 +2,7 @@
 using LabBook.ADO.Service;
 using LabBook.Dto;
 using LabBook.Forms.ClpData;
+using LabBook.Forms.ClpData.Model;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
 using LabBook.Forms.Navigation;
@@ -628,7 +629,20 @@ namespace LabBook.Forms.Materials.ModelView
 
         public void OpenClpForm()
         {
-            IDictionary<int, bool> ghs = new Dictionary<int, bool>() {
+            IDictionary<int, bool> ghs = CollectGHS();
+            IList<int> clp = CollectClpId();
+            string name = ActualRow["name"].ToString();
+
+            ClpForm clpForm = new ClpForm(ghs, clp, name);
+            if (clpForm.ShowDialog() == true)
+            {
+                _ = _materialService.UpdateGhsAndClp(clpForm.GetResult);
+            }
+        }
+
+        private IDictionary<int, bool> CollectGHS()
+        {
+            return new Dictionary<int, bool>() {
                 {1, GHS01 },
                 {2, GHS02 },
                 {3, GHS03 },
@@ -639,9 +653,16 @@ namespace LabBook.Forms.Materials.ModelView
                 {8, GHS08 },
                 {9, GHS09 }
             };
+        }
 
-            ClpForm clpForm = new ClpForm(ghs);
-            _ = clpForm.ShowDialog();
+        private IList<int> CollectClpId()
+        {
+            IList<int> clp = new List<int>();
+            foreach (DataRowView view in ClpData)
+            {
+                clp.Add(Convert.ToInt32(view["clp_id"]));
+            }
+            return clp;
         }
     }
 }
