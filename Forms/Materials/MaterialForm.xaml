@@ -112,7 +112,7 @@
                    Padding="0" Foreground="Red" />
 
             <!-- Tabs -->
-            <TabControl Margin="0,50,2,28.4">
+            <TabControl Margin="0,50,2,28.4" SelectedIndex="0">
 
                 <!-- Main page -->
                 <TabItem Header="Strona główna">
@@ -361,7 +361,7 @@
                 </TabItem>
 
                 <!-- CLP page -->
-                <TabItem Header="Dane CLP" 
+                <TabItem x:Name="tabClp" Header="Dane CLP" 
                      Visibility="{Binding IsDanger, Mode=OneWay, Converter={StaticResource BoolToColapsedConverter}}">
                     <Grid Background="#FFE5E5E5" Margin="0,0,10,0" >
                         <Grid.RowDefinitions>
@@ -375,15 +375,18 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Content="Hasło" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" 
-                           VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14" FontWeight="Bold" />
-                        <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                              Width="250" Margin="20,0,0,0"
-                              IsEnabled="{Binding IsPermited, Mode=OneWay}"
-                              DisplayMemberPath="name" 
-                              SelectedValuePath="id" 
-                              ItemsSource="{Binding Source={StaticResource combos}, Path=GetSignalWordView}" 
-                              SelectedValue="{Binding SelectedItem.clp_signal_word_id, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                           VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14" FontWeight="Bold" 
+                               Visibility="{Binding Path=Visibility, ElementName=tabClp}" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                  Visibility="{Binding Path=Visibility, ElementName=tabClp}"
+                                  Width="250" Margin="20,0,0,0"
+                                  IsEnabled="{Binding IsPermited, Mode=OneWay}"
+                                  DisplayMemberPath="name" 
+                                  SelectedValuePath="id" 
+                                  ItemsSource="{Binding Source={StaticResource combos}, Path=GetSignalWordView}" 
+                                  SelectedValue="{Binding SelectedItem.clp_signal_word_id, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                                    Visibility="{Binding Path=Visibility, ElementName=tabClp}">
                             <Image Source="/img/Pictogram/GHS01.png" Width="78" Height="78" VerticalAlignment="Center"
                                Visibility="{Binding GHS01, Converter={StaticResource BoolToColapsedConverter}}" />
                             <Image Source="/img/Pictogram/GHS02.png" Width="78" Height="78" VerticalAlignment="Center"
@@ -404,12 +407,14 @@
                                Visibility="{Binding GHS09, Converter={StaticResource BoolToColapsedConverter}}" />
                         </StackPanel>
 
-                        <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#FFF40E0E" StrokeThickness="2" />
+                        <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#FFF40E0E" StrokeThickness="2" 
+                                   Visibility="{Binding Path=Visibility, ElementName=tabClp}" />
                         <DataGrid Grid.Row="2" Grid.ColumnSpan="2" Margin="2,2,2,2" Background="Wheat" HorizontalAlignment="Stretch" 
-                              AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
-                              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
-                              HeadersVisibility="Column" IsReadOnly="True"
-                              ItemsSource="{Binding ClpData, Mode=OneWay}" >
+                                  AutoGenerateColumns="False" ColumnWidth="*" SelectionMode="Single"
+                                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeColumns="True" CanUserResizeRows="False"
+                                  HeadersVisibility="Column" IsReadOnly="True"
+                                  Visibility="{Binding Path=Visibility, ElementName=tabClp}"
+                                  ItemsSource="{Binding ClpData, Mode=OneWay}" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Klasyfikacja"
                                                 Foreground="Red"

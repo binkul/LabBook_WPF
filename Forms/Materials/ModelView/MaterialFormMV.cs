@@ -570,7 +570,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         private void RefreshClp()
         {
-            IDictionary<int, bool> ghs = _materialService.GetAllGhs(_materialId);
+            IDictionary<int, bool> ghs = _materialService.GetAllGhs(MaterialId);
             GHS01 = ghs[1];
             GHS02 = ghs[2];
             GHS03 = ghs[3];
@@ -580,7 +580,8 @@ namespace LabBook.Forms.Materials.ModelView
             GHS07 = ghs[7];
             GHS08 = ghs[8];
             GHS09 = ghs[9];
-            _materialService.RefreshClpView(_materialId);
+            _materialService.RefreshClpView(MaterialId);
+            OnPropertyChanged(nameof(ClpData));
         }
 
         public void SetFiltration(bool filterOn, string filter)
@@ -636,8 +637,9 @@ namespace LabBook.Forms.Materials.ModelView
             ClpForm clpForm = new ClpForm(ghs, clp, name);
             if (clpForm.ShowDialog() == true)
             {
-                _ = _materialService.UpdateGhsAndClp(clpForm.GetResult);
+                _ = _materialService.UpdateGhsAndClp(MaterialId, clpForm.GetResult);
             }
+            RefreshClp();
         }
 
         private IDictionary<int, bool> CollectGHS()

@@ -23,30 +23,11 @@ namespace LabBook.ADO.Repository
         public static readonly string DeleteQuery = "Delete From LabBook.dbo.Material Where id=";
         public static readonly string ExistByNameQuery = "Select Count(1) From LabBook.dbo.Material m Where m.name=@name";
         private static readonly string _getIdByNameQuery = "Select Max(id) as id From LabBook.dbo.Material Where name=@name";
+        private static readonly string _saveMaterialGhs = "Insert Into LabBook.dbo.MaterialGHS(material_id, ghs_id, date_created) Values(@material_id, @ghs_id, @date_created)";
+        private static readonly string _saveMaterialClp = "Insert Into LabBook.dbo.MaterialCLP(material_id, clp_id, date_created) Values(@material_id, @clp_id, @date_created)";
 
-        public void RefreshMainTable(DataTable dataTable)
-        {
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
-            {
-                try
-                {
-                    SqlDataAdapter adapter = new SqlDataAdapter(AllQuery, connection);
-                    adapter.Fill(dataTable);
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
-                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'. Błąd z poziomu GetAll VisRepository.",
-                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
 
-        override public ExceptionCode Update(DataRow row, string query)
+        public override ExceptionCode Update(DataRow row, string query)
         {
             ExceptionCode error = ExceptionCode.NoError;
 
@@ -112,14 +93,14 @@ namespace LabBook.ADO.Repository
             return error;
         }
 
-        override public MaterialDto Save(MaterialDto data)
+        public override MaterialDto Save(MaterialDto data)
         {
             MaterialDto material = null;
-            var error = false;
+            bool error = false;
 
             using (SqlCommand cmd = new SqlCommand())
             {
-                var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+                SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
                 try
                 {
                     cmd.Connection = connection;
@@ -165,13 +146,13 @@ namespace LabBook.ADO.Repository
                 catch (SqlException ex)
                 {
                     error = true;
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
                         "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (Exception ex)
                 {
                     error = true;
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
@@ -184,6 +165,78 @@ namespace LabBook.ADO.Repository
                 material.Id = GetId(data.Name);
 
             return material;
+        }
+
+        public bool SaveGhs(long materialId, int ghsId)
+        {
+            bool result = true;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+                try
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = _saveMaterialGhs;
+                    cmd.Parameters.AddWithValue("@material_id", materialId);
+                    cmd.Parameters.AddWithValue("@ghs_id", ghsId);
+                    cmd.Parameters.AddWithValue("@date_created", DateTime.Now);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    result = false;
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
+
+        public bool SaveClp(long materialId, int clpId)
+        {
+            bool result = true;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString());
+                try
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = _saveMaterialClp;
+                    cmd.Parameters.AddWithValue("@material_id", materialId);
+                    cmd.Parameters.AddWithValue("@clp_id", clpId);
+                    cmd.Parameters.AddWithValue("@date_created", DateTime.Now);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    result = false;
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            return result;
         }
 
         public void RefreshTable(string query, DataTable dataTable)

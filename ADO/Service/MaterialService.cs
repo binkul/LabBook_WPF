@@ -208,12 +208,25 @@ namespace LabBook.ADO.Service
             return result;
         }
 
-        public bool UpdateGhsAndClp(SelectedClpData data)
+        public bool UpdateGhsAndClp(long materialId, SelectedClpData data)
         {
-            bool result = true;
+            MaterialRepository repository = (MaterialRepository)_repository;
 
+            bool delGhs = _repository.Delete(materialId, ClpRepository.DeleteMaterialGHSQuery);
+            bool delClp = _repository.Delete(materialId, ClpRepository.DeleteMaterialClpQuery);
 
-            return result;
+            data.GHS
+                .Where(x => x.Value)
+                .Select(x => x.Key)
+                .ToList()
+                .ForEach(x => repository.SaveGhs(materialId, x));
+
+            data.CLP
+                .Select(x => x)
+                .ToList()
+                .ForEach(x => repository.SaveClp(materialId, x));
+
+            return delClp & delGhs;
         }
     }
 }

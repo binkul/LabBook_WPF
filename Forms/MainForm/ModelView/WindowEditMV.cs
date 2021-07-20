@@ -390,10 +390,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public DataRowView ActualRow
         {
-            get
-            {
-                return _actualRow;
-            }
+            get => _actualRow;
             set
             {
                 _actualRow = value;
