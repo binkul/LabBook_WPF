@@ -170,6 +170,7 @@
     <Compile Include="Forms\Materials\Command\DeleteButton.cs" />
     <Compile Include="Forms\Materials\Command\NaviButton.cs" />
     <Compile Include="Forms\Materials\Command\SaveButton.cs" />
+    <Compile Include="Forms\Materials\Converters\BoolToNotCollapsedConverter.cs" />
     <Compile Include="Forms\Materials\Converters\ClpToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToColorConverter.cs" />
