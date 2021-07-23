@@ -168,7 +168,9 @@
                 <RibbonGroup Header="Otwieranie"  FontSize="10">
                     <RibbonButton Label="Surowce" LargeImageSource="/Img/rawmaterial.png"  FontSize="12" FontWeight="Regular"
                                  Command="{Binding MaterialButton}" />
-                    
+                    <RibbonButton Label="Półprodukty" LargeImageSource="/Img/semimaterial.png"  FontSize="12" FontWeight="Regular"
+                                 Command="{Binding SemiProductButton}" />
+
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

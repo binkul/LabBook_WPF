@@ -209,6 +209,13 @@
     <Compile Include="Forms\MainForm\Converters\NaviTotalCountConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\NotBoolConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\UserToNameConverter.cs" />
+    <Compile Include="Forms\MainForm\Command\SemiProductButton.cs" />
+    <Compile Include="Forms\SemiProduct\ModelView\SemiProductFormMV.cs" />
+    <Compile Include="Forms\SemiProduct\Model\WindowData.cs" />
+    <Compile Include="Forms\SemiProduct\Model\WindowSetting.cs" />
+    <Compile Include="Forms\SemiProduct\SemiProductForm.xaml.cs">
+      <DependentUpon>SemiProductForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Tools\WindowsOperation.cs" />
     <Compile Include="Security\Encrypt.cs" />
     <Compile Include="Security\User.cs" />
@@ -245,6 +252,10 @@
     <Compile Include="Forms\Login\LoginForm.xaml.cs">
       <DependentUpon>LoginForm.xaml</DependentUpon>
     </Compile>
+    <Page Include="Forms\SemiProduct\SemiProductForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -352,6 +363,11 @@
   <ItemGroup>
     <Resource Include="Img\Pictogram\biohazard.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Forms\SemiProduct\Command\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\semimaterial.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

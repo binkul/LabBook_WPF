@@ -1,0 +1,82 @@
+﻿<Window x:Class="LabBook.Forms.SemiProduct.SemiProductForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabBook.Forms.SemiProduct" 
+        xmlns:localOut="clr-namespace:LabBook.Forms.MainForm"
+        xmlns:naviMV="clr-namespace:LabBook.Forms.Navigation"
+        xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
+        xmlns:ConvertLocal="clr-namespace:LabBook.Forms.Materials.Converters"
+        xmlns:cmd="http://www.galasoft.ch/mvvmlight" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        ResizeMode="CanResize"
+        Title="Półprodukty" 
+        Height="{Binding FormHeight, Mode=TwoWay}" 
+        Width="{Binding FormWidth, Mode=TwoWay}"
+        Top="{Binding FormYpos, Mode=TwoWay}" 
+        Left="{Binding FormXpos, Mode=TwoWay}"
+        WindowStartupLocation="CenterScreen">
+    <i:Interaction.Triggers>
+        <!-- Closing Form event -->
+        <i:EventTrigger EventName="Closing">
+            <cmd:EventToCommand Command="{Binding OnClosingCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <!--<vm:ComboViewMV x:Key="combos" />
+        <vm:FilterMV x:Key="filter" />-->
+        <naviMV:NavigationMV x:Key="navi" />
+        <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
+        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
+        <Convertors:DensityConverter x:Key="DensityConverter" />
+        <Convertors:DateTimeConverter x:Key="DateTimeConverter" />
+        <Convertors:DataRowViewToLongConverter x:Key="RowToIdConverter" />
+        <Convertors:NaviCurrentConverter x:Key="NaviCurrConverter" />
+        <Convertors:DotConverter x:Key="DecimalConverter" />
+        <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
+        <Convertors:BoolToHiddenConverter x:Key="BoolToHiddenConverter" />
+        <ConvertLocal:DangerToColorConverter x:Key="DengerToRedConverter" />
+        <ConvertLocal:PriceToColorConverter x:Key="PriceTocColorConverter" />
+        <ConvertLocal:PriceToBoldConverter x:Key="PriceToBoldConverter" />
+        <ConvertLocal:CurrencyToColorConverter x:Key="CurrencyToColorConverter" />
+        <ConvertLocal:CurrencyToBoldConverter x:Key="CurrencyToBoldConverter" />
+        <ConvertLocal:BoolToCollapsedConverter x:Key="BoolToColapsedConverter" />
+        <ConvertLocal:BoolToNotCollapsedConverter x:Key="BoolToNotColapsedConverter" />
+        <ConvertLocal:ClpToColorConverter x:Key="ClpToColorConverter" />
+        <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
+        <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
+        <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
+        <Style x:Key="AllignCellLeft" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Padding" Value="5 0 0 0" />
+        </Style>
+        <Style x:Key="AllignColmnHeaderLeft" TargetType="DataGridColumnHeader">
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+        <Style x:Key="AllignColmnHeaderCenter" TargetType="DataGridColumnHeader">
+            <Setter Property="SeparatorBrush" Value="WhiteSmoke" />
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+        <Style x:Key="AllignCellCenter" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="DataGridComboAllign" TargetType="{x:Type DataGridCell}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        
+    </Grid>
+</Window>

@@ -11,6 +11,7 @@ using System;
 using LabBook.Dto;
 using LabBook.Forms.Materials;
 using LabBook.Forms.Navigation;
+using LabBook.Forms.SemiProduct;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
@@ -27,6 +28,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private ICommand _calculateBurn;
         private ICommand _calculateAndSaveBurn;
         private ICommand _materialButton;
+        private ICommand _semiProductButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -552,6 +554,15 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public ICommand SemiProductButton
+        {
+            get
+            {
+                if (_semiProductButton == null) _semiProductButton = new SemiProductButton(this);
+                return _semiProductButton;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
@@ -568,6 +579,13 @@ namespace LabBook.Forms.MainForm.ModelView
             MaterialForm material = new MaterialForm();
             material.ShowDialog();
             material = null;
+        }
+
+        public void OpenSemiProduct()
+        {
+            SemiProductForm semiProduct = new SemiProductForm();
+            semiProduct.ShowDialog();
+            semiProduct = null;
         }
 
         public void DeleteExperiment()
