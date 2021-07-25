@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LabBook.Forms.Materials.ModelView
 {
@@ -23,10 +20,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public bool FilterOn
         {
-            private get
-            {
-                return _on;
-            }
+            private get => _on;
             set
             {
                 _on = value;
@@ -37,10 +31,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public string Name
         {
-            private get
-            {
-                return _name;
-            }
+            private get => _name;
             set
             {
                 _name = value;
@@ -51,10 +42,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public string Function
         {
-            private get
-            {
-                return _functionId;
-            }
+            private get => _functionId;
             set
             {
                 _functionId = value;
@@ -65,10 +53,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public bool Active
         {
-            private get
-            {
-                return _active;
-            }
+            private get => _active;
             set
             {
                 _active = value;
@@ -76,13 +61,10 @@ namespace LabBook.Forms.Materials.ModelView
                     _materialFormMV.SetFiltration(FilterOn, GetFilterString());
             }
         }
-       
+
         public bool Danger
         {
-            private get
-            {
-                return _danger;
-            }
+            private get => _danger;
             set
             {
                 _danger = value;
@@ -93,10 +75,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public bool Production
         {
-            private get
-            {
-                return _production;
-            }
+            private get => _production;
             set
             {
                 _production = value;
@@ -107,7 +86,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public string GetFilterString()
         {
-            var filter = new StringBuilder("");
+            StringBuilder filter = new StringBuilder("");
 
             if (FilterOn)
             {

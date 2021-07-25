@@ -1,14 +1,14 @@
-﻿using LabBook.Forms.Materials.ModelView;
+﻿using LabBook.Forms.SemiProduct.ModelView;
 using System;
 using System.Windows.Input;
 
-namespace LabBook.Forms.Materials.Command
+namespace LabBook.Forms.SemiProduct.Command
 {
     public class SaveButton : ICommand
     {
-        private readonly MaterialFormMV _modelView;
+        private readonly SemiProductFormMV _modelView;
 
-        public SaveButton(MaterialFormMV modelView)
+        public SaveButton(SemiProductFormMV modelView)
         {
             if (modelView == null) throw new ArgumentNullException("Model widoku jest null");
             _modelView = modelView;

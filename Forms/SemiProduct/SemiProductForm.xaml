@@ -7,7 +7,10 @@
         xmlns:localOut="clr-namespace:LabBook.Forms.MainForm"
         xmlns:naviMV="clr-namespace:LabBook.Forms.Navigation"
         xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
-        xmlns:ConvertLocal="clr-namespace:LabBook.Forms.Materials.Converters"
+        xmlns:ConvertMat="clr-namespace:LabBook.Forms.Materials.Converters"
+        xmlns:ConvertSemi="clr-namespace:LabBook.Forms.SemiProduct.Converters"
+        xmlns:vm ="clr-namespace:LabBook.Forms.Materials.ModelView"
+        xmlns:vms ="clr-namespace:LabBook.Forms.SemiProduct.ModelView"
         xmlns:cmd="http://www.galasoft.ch/mvvmlight" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
@@ -25,8 +28,8 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <!--<vm:ComboViewMV x:Key="combos" />
-        <vm:FilterMV x:Key="filter" />-->
+        <vm:ComboViewMV x:Key="combos" />
+        <vms:FilterMV x:Key="filter" />
         <naviMV:NavigationMV x:Key="navi" />
         <Convertors:NotBoolConverter x:Key="NotBoolConverter" />
         <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
@@ -37,14 +40,17 @@
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:NaviTotalCountConverter x:Key="NaviTotalConverter" />
         <Convertors:BoolToHiddenConverter x:Key="BoolToHiddenConverter" />
-        <ConvertLocal:DangerToColorConverter x:Key="DengerToRedConverter" />
-        <ConvertLocal:PriceToColorConverter x:Key="PriceTocColorConverter" />
-        <ConvertLocal:PriceToBoldConverter x:Key="PriceToBoldConverter" />
-        <ConvertLocal:CurrencyToColorConverter x:Key="CurrencyToColorConverter" />
-        <ConvertLocal:CurrencyToBoldConverter x:Key="CurrencyToBoldConverter" />
-        <ConvertLocal:BoolToCollapsedConverter x:Key="BoolToColapsedConverter" />
-        <ConvertLocal:BoolToNotCollapsedConverter x:Key="BoolToNotColapsedConverter" />
-        <ConvertLocal:ClpToColorConverter x:Key="ClpToColorConverter" />
+        <ConvertMat:DangerToColorConverter x:Key="DangerToRedConverter" />
+        <ConvertMat:DangerToBoldConverter x:Key="DangerToBoldConverter" />
+        <ConvertMat:PriceToColorConverter x:Key="PriceTocColorConverter" />
+        <ConvertMat:PriceToBoldConverter x:Key="PriceToBoldConverter" />
+        <ConvertMat:CurrencyToColorConverter x:Key="CurrencyToColorConverter" />
+        <ConvertMat:CurrencyToBoldConverter x:Key="CurrencyToBoldConverter" />
+        <ConvertMat:BoolToCollapsedConverter x:Key="BoolToColapsedConverter" />
+        <ConvertMat:BoolToNotCollapsedConverter x:Key="BoolToNotColapsedConverter" />
+        <ConvertMat:ClpToColorConverter x:Key="ClpToColorConverter" />
+        <ConvertSemi:NumberToNumberDConverter x:Key="NumberToNumberDConverter" />
+        <ConvertSemi:PriceWithPlnConverter x:Key="PriceWithPlnConverter" />
         <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
         <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
@@ -76,7 +82,261 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <!-- Menu -->
+        <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14" >
+                <RibbonTab Header="Plik" >
+                    <RibbonGroup Header="Operacje"  FontSize="10">
+                        <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding SaveButton}"/>
+                        <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding DeleteButton}" />
+                    </RibbonGroup>
+                    <RibbonGroup Header="Dodawanie"  FontSize="10">
+                        <RibbonButton Label="Nowy" LargeImageSource="/Img/new-exp.ico"  FontSize="12" FontWeight="Regular" 
+                                  Command="{Binding AddNewButton}"/>
+                    </RibbonGroup>
+                </RibbonTab>
+                <RibbonTab Header="Clp" IsEnabled="{Binding IsDanger, Mode=OneWay}">
+                    <RibbonGroup Header="Zmiany Clp"  FontSize="10">
+                        <RibbonButton Label="Clp" LargeImageSource="/Img/Pictogram/biohazard.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding ClpButton}"/>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+
+        <Grid Margin="5,0,0,0">
+            <Label Content="Nazwa" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontWeight="Bold" FontSize="14"  />
+            <TextBox x:Name="TxtName" Margin="97,10,130.6,0" Padding="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
+                 FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" Height="28"
+                 Text="{Binding SelectedItem.name, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+            <Label Name="LblDate" Content="{Binding SelectedItem.date_update, ElementName=DgMaterials, Mode=OneWay, Converter={StaticResource DateTimeConverter}}" 
+                   Margin="0,13,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
+                   Padding="0" Foreground="Red" />
+            
+            <!-- Tabs -->
+            <TabControl Margin="0,50,2,28.4" SelectedIndex="0">
+
+                <!-- Main page -->
+                <TabItem Header="Strona główna">
+                    <Grid Background="#FFE5E5E5" Margin="0,0,0,-2.4" >
+
+                        <!--#### Filtering ####-->
+                        <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" Margin="0,0,0,-0.4" >
+                            <CheckBox x:Name="ChbFilter" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top" Width="16" 
+                                  IsChecked="{Binding FilterOn, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                  Canvas.Left="5" Canvas.Top="7" />
+                            <CheckBox x:Name="ChbDanger" HorizontalAlignment="Left" Height="17" Margin="0,0,0,0" VerticalAlignment="Top"
+                                  IsChecked="{Binding Danger, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                  Canvas.Left="{Binding ChbFilterDangerLeftPosition, Mode=OneWay, FallbackValue=25}" 
+                                  Canvas.Top="8" />
+                            <TextBox x:Name="TxtNumberFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
+                                 Text="{Binding NumberD, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}"
+                                 Width="{Binding ElementName=ColNumberD, Path=ActualWidth}" 
+                                 Canvas.Left="{Binding TxtFilerNumberLeftPosition, Mode=OneWay, FallbackValue=100}" 
+                                 Canvas.Top="4" />
+                            <TextBox x:Name="TxtNameFilter" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" KeyUp="TxtBox_KeyUp"
+                                 Text="{Binding Name, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=LostFocus}"
+                                 Width="{Binding ElementName=ColName, Path=ActualWidth}" 
+                                 Canvas.Left="{Binding TxtFilerNameLeftPosition, Mode=OneWay, FallbackValue=50}" 
+                                 Canvas.Top="4" />
+                            <ComboBox x:Name="CmbFunctionFilter" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left"
+                                  ItemsSource="{Binding Source={StaticResource combos}, Path=GetSemiProductTypeView}" 
+                                  DisplayMemberPath="name" SelectedValuePath="id" SelectedIndex="0"
+                                  SelectedValue="{Binding Function, Source={StaticResource filter}, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="{Binding ElementName=ColFunction, Path=ActualWidth}" 
+                                  Canvas.Left="{Binding CmbFilterFunctionLeftPosition, Mode=OneWay, FallbackValue=180}" 
+                                  Canvas.Top="4" />
+
+                        </Canvas>
+
+                        <DataGrid x:Name="DgMaterials" Margin="5,28,5,10"  HorizontalAlignment="Stretch" AutoGenerateColumns="False" 
+                                  ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
+                                  CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
+                                  FrozenColumnCount="1" HeadersVisibility="Column"
+                                  ItemsSource="{Binding GetMaterialView}"    
+                                  SelectedIndex="{Binding DgRowIndex, Mode=TwoWay, FallbackValue=0}"
+                                  SelectedItem="{Binding ActualRow, Mode=OneWayToSource}" 
+                                  SelectedValue="{Binding MaterialId, Converter={StaticResource RowToIdConverter}, Mode=OneWayToSource}" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <cmd:EventToCommand Command="{Binding OnSelectionChangedCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding remarks}" Visibility="Collapsed" />
+                                <DataGridTextColumn Binding="{Binding density}" Visibility="Collapsed" />
+                                <DataGridTextColumn Binding="{Binding solids}" Visibility="Collapsed" />
+                                <DataGridTextColumn Binding="{Binding ash_450}" Visibility="Collapsed" />
+                                <DataGridTextColumn Binding="{Binding clp_signal_word_id}" Visibility="Collapsed" />
+                                                                                  
+                                <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                        IsReadOnly="True" CanUserSort="False" CanUserResize="False"
+                                                        Width="32">
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <StackPanel Background="#FFE5E5E5" >
+                                                <Image x:Name="ArrowRight" Width="18" Height="16" Margin="1,1,1,1" Source="/Img/arrow-right.png" 
+                                                   Visibility="Hidden">
+                                                </Image>
+                                            </StackPanel>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" >
+                                                    <Setter TargetName="ArrowRight" Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridCheckBoxColumn x:Name="ColDanger" Header="Danger"
+                                                        CanUserSort="False"
+                                                        Binding="{Binding is_danger, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                                        Width="{Binding Data.ColumnDenger, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                        IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}" />
+                                
+                                <DataGridTextColumn x:Name="ColNumberD" IsReadOnly="True"
+                                                    Header="Numer D"
+                                                    Binding="{Binding intermediate_nrD, Mode=OneWay, Converter={StaticResource NumberToNumberDConverter}}"
+                                                    Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
+                                <DataGridTextColumn x:Name="ColName" 
+                                                    Header="Nazwa"
+                                                    Binding="{Binding name, Mode=TwoWay}"
+                                                    IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnName, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="{Binding is_danger, Converter={StaticResource DangerToRedConverter}}" />
+                                            <Setter Property="FontWeight" Value="{Binding is_danger, Converter={StaticResource DangerToBoldConverter}}" />
+                                            <Setter Property="FontSize" Value="12" />
+                                            <Setter Property="HorizontalAlignment" Value="Left" />
+                                            <Setter Property="Padding" Value="5 0 0 0" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridComboBoxColumn x:Name="ColFunction"
+                                                        CanUserSort="False"
+                                                        Header="Funkcja"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}"
+                                                        IsReadOnly="{Binding Data.IsPermited, Source={StaticResource proxy}, Converter={StaticResource NotBoolConverter}, Mode=OneWay}"
+                                                        Width="{Binding Data.ColumnFunction, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                        ItemsSource="{Binding Source={StaticResource combos}, Path=GetSemiProductTypeView}"
+                                                        SelectedValuePath="id"
+                                                        DisplayMemberPath="name"
+                                                        SelectedValueBinding="{Binding function_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
+
+                                <DataGridTextColumn Header="Cena" IsReadOnly="True"
+                                                    CanUserSort="False"
+                                                    Binding="{Binding price, Mode=OneWay, Converter={StaticResource PriceWithPlnConverter}}"
+                                                    Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
+                                                    ElementStyle="{StaticResource AllignCellCenter}">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="FontWeight" Value="{Binding price, Converter={StaticResource PriceToBoldConverter}}" />
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="False">
+                                                    <Setter Property="Background" Value="{Binding price, Converter={StaticResource PriceTocColorConverter}}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn x:Name="ColVOC" IsReadOnly="True"
+                                                    Header="VOC %" 
+                                                    CanUserSort="False"
+                                                    Binding="{Binding VOC, Mode=OneWay, Converter={StaticResource DensityConverter}}"
+                                                    Width="{Binding Data.ColumnVOC, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="{x:Type DataGridCell}">
+                                            <Setter Property="FontWeight" Value="{Binding VOC, Converter={StaticResource PriceToBoldConverter}}" />
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridCell.IsSelected" Value="False">
+                                                    <Setter Property="Background" Value="{Binding VOC, Converter={StaticResource PriceTocColorConverter}}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                
+                                <DataGridTextColumn x:Name="ColRemarks"
+                                                    Header="Uwagi"
+                                                    Binding="{Binding remarks, Mode=TwoWay}"
+                                                    Width="{Binding Data.ColumnRemarks, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellLeft}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+
+                                <DataGridTextColumn Header="Data zmian" 
+                                                    CanUserSort="False"
+                                                    IsReadOnly="True"  
+                                                    Binding="{Binding date_update, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"
+                                                    Width="{Binding Data.ColumnData, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                                    ElementStyle="{StaticResource AllignCellCenter}"
+                                                    HeaderStyle="{StaticResource AllignColmnHeaderCenter}" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <!--#### Navigation ####-->
+            <Canvas DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="23" Width="752" Margin="0,0,0,3" >
+
+                <Button  x:Name="BtnNaviLeftFirst" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                     Canvas.Left="10" Canvas.Top="2" Tag="first"
+                     Command="{Binding MoveFirst, Source={StaticResource navi}}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/img/arrow-left_first.png" Stretch="Fill" Height="13"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="BtnNaviLeft" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Top="2" Canvas.Left="30" Tag="left"
+                    Command="{Binding MoveLeft, Source={StaticResource navi}}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/img/arrow-left.png" Stretch="Fill" Height="13"/>
+                    </StackPanel>
+                </Button>
+
+                <TextBox x:Name="TxtNavieRec" Width="55" HorizontalAlignment="Left" Padding="0,2,0,0" FontSize="11" Height="20"
+                     FontWeight="SemiBold" VerticalAlignment="Bottom"  IsReadOnly="True" Canvas.Left="55" Canvas.Top="2"
+                     Text="{Binding DgRowIndex, Source={StaticResource navi}, Converter={StaticResource NaviCurrConverter}}" />
+
+                <Label x:Name="LblNavieRec" Height="20" Width="49" HorizontalAlignment="Left" FontSize="11" FontWeight="SemiBold" 
+                   Padding="0,3,0,0" VerticalAlignment="Bottom"  Canvas.Left="113" Canvas.Top="2"
+                   Content="{Binding GetRowCount, Source={StaticResource navi}, Converter={StaticResource NaviTotalConverter}}" />
+
+                <Button x:Name="BtnNaviRight" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Left="164" Canvas.Top="2" Tag="right" 
+                    Command="{Binding MoveRight, Source={StaticResource navi}}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/img/arrow-right.png" Stretch="Fill" Height="13"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                    Canvas.Left="185" Canvas.Top="2" Tag="last"
+                    Command="{Binding MoveLast, Source={StaticResource navi}}">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/img/arrow-right_last.png" Stretch="Fill" Height="13"/>
+                    </StackPanel>
+                </Button>
+
+            </Canvas>
+
+
+        </Grid>
+    </DockPanel>
 </Window>

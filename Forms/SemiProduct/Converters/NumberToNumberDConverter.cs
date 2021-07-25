@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace LabBook.Forms.Materials.Converters
+namespace LabBook.Forms.SemiProduct.Converters
 {
-    public class DangerToColorConverter : IValueConverter
+    public class NumberToNumberDConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return Brushes.Black;
-
-            bool danger = (bool)value;
-            if (danger)
-                return Brushes.Red;
-            else
-                return Brushes.Black;
+            string number = value.ToString();
+            return "D-" + number;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

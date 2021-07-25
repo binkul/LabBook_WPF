@@ -1,8 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
-using LabBook.Dto;
 using LabBook.Forms.ClpData;
-using LabBook.Forms.ClpData.Model;
 using LabBook.Forms.Materials.Command;
 using LabBook.Forms.Materials.Model;
 using LabBook.Forms.Navigation;
@@ -53,7 +51,7 @@ namespace LabBook.Forms.Materials.ModelView
 
         public MaterialFormMV()
         {
-            _materialView = _materialService.GetAll();
+            _materialView = _materialService.GetAll(MaterialType.Material);
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
             OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(OnSelectionChangedCommandExecuted);

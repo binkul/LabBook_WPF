@@ -1,14 +1,18 @@
-﻿using LabBook.Forms.Materials.ModelView;
+﻿using LabBook.Forms.SemiProduct.ModelView;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LabBook.Forms.Materials.Command
+namespace LabBook.Forms.SemiProduct.Command
 {
-    public class SaveButton : ICommand
+    public class ClpButton : ICommand
     {
-        private readonly MaterialFormMV _modelView;
+        private readonly SemiProductFormMV _modelView;
 
-        public SaveButton(MaterialFormMV modelView)
+        public ClpButton(SemiProductFormMV modelView)
         {
             if (modelView == null) throw new ArgumentNullException("Model widoku jest null");
             _modelView = modelView;
@@ -28,12 +32,12 @@ namespace LabBook.Forms.Materials.Command
 
         public bool CanExecute(object parameter)
         {
-            return _modelView.Modified;
+            return _modelView.IsDanger;
         }
 
         public void Execute(object parameter)
         {
-            _modelView.SaveAll();
+            _modelView.OpenClpForm();
         }
     }
 }

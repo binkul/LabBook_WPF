@@ -174,6 +174,7 @@
     <Compile Include="Forms\Materials\Converters\ClpToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\CurrencyToColorConverter.cs" />
+    <Compile Include="Forms\Materials\Converters\DangerToBoldConverter.cs" />
     <Compile Include="Forms\Materials\Converters\DangerToColorConverter.cs" />
     <Compile Include="Forms\Materials\Converters\BoolToCollapsedConverter.cs" />
     <Compile Include="Forms\Materials\Converters\PriceToBoldConverter.cs" />
@@ -210,7 +211,14 @@
     <Compile Include="Forms\MainForm\Converters\NotBoolConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\UserToNameConverter.cs" />
     <Compile Include="Forms\MainForm\Command\SemiProductButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\AddNewButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\ClpButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\DeleteButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\SaveButton.cs" />
+    <Compile Include="Forms\SemiProduct\Converters\NumberToNumberDConverter.cs" />
+    <Compile Include="Forms\SemiProduct\Converters\PriceWithPlnConverter.cs" />
     <Compile Include="Forms\SemiProduct\ModelView\SemiProductFormMV.cs" />
+    <Compile Include="Forms\SemiProduct\ModelView\FilterMV.cs" />
     <Compile Include="Forms\SemiProduct\Model\WindowData.cs" />
     <Compile Include="Forms\SemiProduct\Model\WindowSetting.cs" />
     <Compile Include="Forms\SemiProduct\SemiProductForm.xaml.cs">
@@ -363,9 +371,7 @@
   <ItemGroup>
     <Resource Include="Img\Pictogram\biohazard.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\SemiProduct\Command\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Img\semimaterial.png" />
   </ItemGroup>

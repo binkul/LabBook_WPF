@@ -10,8 +10,11 @@ namespace LabBook.ADO.Repository
 {
     public class MaterialRepository : RepositoryCommon<MaterialDto>
     {
-        public static readonly string AllQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, " +
+        public static readonly string AllMaterialQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, " +
             "price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where is_intermediate = 'false' " +
+            "Order by name";
+        public static readonly string AllSemiProductQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, " +
+            "price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where is_intermediate = 'true' " +
             "Order by name";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.Material(name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, " +
             "clp_msds_id, function_id, price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update) Values(@name, @is_intermediate, @is_danger, " +

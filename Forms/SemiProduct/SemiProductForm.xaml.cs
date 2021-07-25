@@ -19,7 +19,9 @@ namespace LabBook.Forms.SemiProduct
             SemiProductFormMV semiProductFormMV = new SemiProductFormMV();
             DataContext = semiProductFormMV;
 
+            FilterMV filterMV = Resources["filter"] as FilterMV;
             NavigationMV naviMV = Resources["navi"] as NavigationMV;
+            filterMV.SetWindowEdit(semiProductFormMV);
             naviMV.ModelView = semiProductFormMV;
             semiProductFormMV.NavigationMV = naviMV;
         }

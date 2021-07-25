@@ -9,7 +9,8 @@ namespace LabBook.ADO.Service
         MaterialFunction,
         Currency,
         Unit,
-        Signal
+        Signal,
+        SemiProduct
     }
 
     public class ComboListService
@@ -37,6 +38,11 @@ namespace LabBook.ADO.Service
                     break;
                 case ComboType.Signal:
                     query = ComboListRepository.SignalQuery;
+                    break;
+                case ComboType.SemiProduct:
+                    query = ComboListRepository.SemiProductType;
+                    break;
+                default:
                     break;
             }
             DataTable table = _repository.GetAll(query);

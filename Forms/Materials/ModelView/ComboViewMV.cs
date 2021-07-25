@@ -18,37 +18,14 @@ namespace LabBook.Forms.Materials.ModelView
             }
         }
 
-        public DataView GetCurrencyView
-        {
-            get
-            {
-                return _service.GetComboView(ComboType.Currency);
-            }
-        }
+        public DataView GetCurrencyView => _service.GetComboView(ComboType.Currency);
 
-        public DataView GetFunctionView
-        {
-            get
-            {
-                return _service.GetComboView(ComboType.MaterialFunction);
-            }
-        }
+        public DataView GetFunctionView => _service.GetComboView(ComboType.MaterialFunction);
 
-        public DataView GetUnitView
-        {
-            get
-            {
-                return _service.GetComboView(ComboType.Unit);
-            }
-        }
+        public DataView GetUnitView => _service.GetComboView(ComboType.Unit);
 
-        public DataView GetSignalWordView
-        {
-            get
-            {
-                return _service.GetComboView(ComboType.Signal);
-            }
-        }
+        public DataView GetSignalWordView => _service.GetComboView(ComboType.Signal);
 
+        public DataView GetSemiProductTypeView => _service.GetComboView(ComboType.SemiProduct);
     }
 }

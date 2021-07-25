@@ -14,6 +14,12 @@ using System.Windows;
 
 namespace LabBook.ADO.Service
 {
+    public enum MaterialType
+    {
+        Material,
+        SemiProduct
+    }
+
     public class MaterialService
     {
         private readonly IRepository<MaterialDto> _repository;
@@ -28,9 +34,23 @@ namespace LabBook.ADO.Service
 
         public bool Modified => _modified;
 
-        public DataView GetAll()
+        public DataView GetAll(MaterialType type)
         {
-            _dataTable = _repository.GetAll(MaterialRepository.AllQuery);
+            string query;
+            switch (type)
+            {
+                case MaterialType.Material:
+                    query = MaterialRepository.AllMaterialQuery;
+                    break;
+                case MaterialType.SemiProduct:
+                    query = MaterialRepository.AllSemiProductQuery;
+                    break;
+                default:
+                    query = "";
+                    break;
+            }
+
+            _dataTable = _repository.GetAll(query);
             _dataTable.RowChanged += DataTable_RowChanged;
             DataView view = new DataView(_dataTable) { Sort = "name" };
             return view;

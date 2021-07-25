@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
 using LabBook.Forms.Navigation;
+using LabBook.Forms.SemiProduct.Command;
 using LabBook.Forms.SemiProduct.Model;
 using LabBook.Security;
 using System;
@@ -15,6 +16,10 @@ namespace LabBook.Forms.SemiProduct.ModelView
 {
     public class SemiProductFormMV : INotifyPropertyChanged, INavigation
     {
+        private readonly double _chbWidthHalf = 6.4d;
+        private readonly double _startLeftPosition = 5d;
+        private readonly double _columnStatus = 32d;
+
         private ICommand _addNewButton;
         private ICommand _saveButton;
         private ICommand _deleteButton;
@@ -46,7 +51,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public SemiProductFormMV()
         {
-            _semiProductView = _materialService.GetAll();
+            _semiProductView = _materialService.GetAll(MaterialType.SemiProduct);
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
             OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(OnSelectionChangedCommandExecuted);
@@ -115,137 +120,77 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public double ColumnNumberD
+        {
+            get => _windowData.NumberDWidth;
+            set
+            {
+                _windowData.NumberDWidth = value;
+                OnPropertyChanged(
+                    nameof(ColumnNumberD),
+                    nameof(TxtFilerNumberLeftPosition),
+                    nameof(TxtFilerNameLeftPosition),
+                    nameof(CmbFilterFunctionLeftPosition)
+                    );
+            }
+        }
+
         public double ColumnName
         {
-            get
-            {
-                return _windowData.NameWidth;
-            }
+            get => _windowData.NameWidth;
             set
             {
                 _windowData.NameWidth = value;
                 OnPropertyChanged(
-                    nameof(ColumnName)
-                    //nameof(CmbFilterFunctionLeftPosition),
-                    //nameof(ChbFilterActiveLeftPosition),
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
+                    nameof(ColumnName),
+                    nameof(CmbFilterFunctionLeftPosition)
                     );
             }
         }
 
         public double ColumnFunction
         {
-            get
-            {
-                return _windowData.FunctionWidth;
-            }
+            get => _windowData.FunctionWidth;
             set
             {
                 _windowData.FunctionWidth = value;
                 OnPropertyChanged(
                     nameof(ColumnFunction)
-                    //nameof(CmbFilterFunctionLeftPosition),
-                    //nameof(ChbFilterActiveLeftPosition),
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
                     );
             }
         }
 
         public double ColumnPrice
         {
-            get
-            {
-                return _windowData.PriceWidth;
-            }
+            get => _windowData.PriceWidth;
             set
             {
                 _windowData.PriceWidth = value;
                 OnPropertyChanged(
                     nameof(ColumnPrice)
-                    //nameof(ChbFilterActiveLeftPosition),
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
-                    );
-            }
-        }
-
-        public double ColumnUnit
-        {
-            get
-            {
-                return _windowData.UnitWidth;
-            }
-            set
-            {
-                _windowData.UnitWidth = value;
-                OnPropertyChanged(
-                    nameof(ColumnUnit)
-                    //nameof(ChbFilterActiveLeftPosition),
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
                     );
             }
         }
 
         public double ColumnDenger
         {
-            get
-            {
-                return _windowData.DengerWidth;
-            }
+            get => _windowData.DengerWidth;
             set
             {
                 _windowData.DengerWidth = value;
                 OnPropertyChanged(
-                    nameof(ColumnDenger)
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
-                    );
-            }
-        }
-
-        public double ColumnProd
-        {
-            get
-            {
-                return _windowData.ProdWidth;
-            }
-            set
-            {
-                _windowData.ProdWidth = value;
-                OnPropertyChanged(
-                    nameof(ColumnProd)
-                    //nameof(ChbFilterProdLeftPosition)
-                    );
-            }
-        }
-
-        public double ColumnActive
-        {
-            get
-            {
-                return _windowData.ActivWidth;
-            }
-            set
-            {
-                _windowData.ActivWidth = value;
-                OnPropertyChanged(
-                    nameof(ColumnActive)
-                    //nameof(ChbFilterActiveLeftPosition),
-                    //nameof(ChbFilterDangerLeftPosition),
-                    //nameof(ChbFilterProdLeftPosition)
+                    nameof(ColumnDenger),
+                    nameof(ChbFilterDangerLeftPosition),
+                    nameof(TxtFilerNumberLeftPosition),
+                    nameof(TxtFilerNameLeftPosition),
+                    nameof(CmbFilterFunctionLeftPosition)
                     );
             }
         }
 
         public double ColumnVOC
         {
-            get
-            {
-                return _windowData.VOCWidth;
-            }
+            get => _windowData.VOCWidth;
             set
             {
                 _windowData.VOCWidth = value;
@@ -253,12 +198,19 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public double ColumnRemarks
+        {
+            get => _windowData.RemarksWidth;
+            set
+            {
+                _windowData.RemarksWidth = value;
+                OnPropertyChanged(nameof(ColumnRemarks));
+            }
+        }
+
         public double ColumnData
         {
-            get
-            {
-                return _windowData.DataWidth;
-            }
+            get => _windowData.DataWidth;
             set
             {
                 _windowData.DataWidth = value;
@@ -356,6 +308,16 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public double ChbFilterDangerLeftPosition => _startLeftPosition + _columnStatus + (ColumnDenger / 2) - _chbWidthHalf;
+
+        public double TxtFilerNumberLeftPosition => _startLeftPosition + _columnStatus + ColumnDenger;
+
+        public double TxtFilerNameLeftPosition => TxtFilerNumberLeftPosition + ColumnNumberD;
+
+        public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName;
+
+        public DataView GetMaterialView => _semiProductView;
+
         public DataView ClpData
         {
             get
@@ -367,14 +329,31 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
-
-        public bool Modified
+        public DataRowView ActualRow
         {
-            get
+            get => _actualRow;
+            set
             {
-                return _materialService.Modified;
+                _actualRow = value;
+                OnPropertyChanged(
+                    nameof(IsPermited),
+                    nameof(CanDelete),
+                    nameof(IsDanger)
+                    );
             }
         }
+
+        public long MaterialId
+        {
+            get => _materialId;
+            set
+            {
+                _materialId = value;
+                RefreshClp();
+            }
+        }
+
+        public bool Modified => _materialService.Modified;
 
         public long GetRowCount => GetSemiProductView.Count;
 
@@ -395,37 +374,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
             NavigationMV.Refresh();
         }
 
-        public DataView GetSemiProductView
-        {
-            get
-            {
-                return _semiProductView;
-            }
-        }
-        
-        public long MaterialId
-        {
-            get => _materialId;
-            set
-            {
-                _materialId = value;
-                RefreshClp();
-            }
-        }
-
-        public DataRowView ActualRow
-        {
-            get => _actualRow;
-            set
-            {
-                _actualRow = value;
-                OnPropertyChanged(
-                    nameof(IsPermited),
-                    nameof(CanDelete),
-                    nameof(IsDanger)
-                    );
-            }
-        }
+        public DataView GetSemiProductView => _semiProductView;
 
         public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]);
 
@@ -494,6 +443,63 @@ namespace LabBook.Forms.SemiProduct.ModelView
             //grid.Focus();
             _notScroll = true;
             #endregion
+        }
+
+        public ICommand AddNewButton
+        {
+            get
+            {
+                if (_addNewButton == null) _addNewButton = new AddNewButton(this);
+                return _addNewButton;
+            }
+        }
+
+        public ICommand SaveButton
+        {
+            get
+            {
+                if (_saveButton == null) _saveButton = new SaveButton(this);
+                return _saveButton;
+            }
+        }
+
+        public ICommand DeleteButton
+        {
+            get
+            {
+                if (_deleteButton == null) _deleteButton = new DeleteButton(this);
+                return _deleteButton;
+            }
+        }
+
+        public ICommand ClpButton
+        {
+            get
+            {
+                if (_clpButton == null) _clpButton = new ClpButton(this);
+                return _clpButton;
+            }
+        }
+
+        public void SetFiltration(bool filterOn, string filter)
+        {
+            _semiProductView.RowFilter = filterOn ? filter : "";
+            DgRowIndex = 0;
+        }
+
+        public void AddNewRecord()
+        {
+
+        }
+
+        public void DeleteSemiProduct()
+        {
+
+        }
+
+        public void OpenClpForm()
+        {
+
         }
 
         private void RefreshClp()
