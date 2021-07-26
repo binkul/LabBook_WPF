@@ -93,7 +93,6 @@ namespace LabBook.Forms.Materials.ModelView
                 #region name filter
                 if (!string.IsNullOrEmpty(Name))
                 {
-                    filter.Clear();
                     filter.Append("name LIKE '");
                     filter.Append(Name);
                     filter.Append("*'");
@@ -106,17 +105,11 @@ namespace LabBook.Forms.Materials.ModelView
                     long id = Convert.ToInt64(Function);
                     if (id > 1)
                     {
-                        if (filter.ToString().Length == 0)
-                        {
-                            filter.Clear();
-                            filter.Append("function_id = ");
-                            filter.Append(Function);
-                        }
-                        else
-                        {
-                            filter.Append(" AND function_id = ");
-                            filter.Append(Function);
-                        }
+                        if (filter.Length > 0)
+                            filter.Append(" AND ");
+
+                        filter.Append("function_id = ");
+                        filter.Append(Function);
                     }
                 }
                 #endregion
@@ -124,45 +117,30 @@ namespace LabBook.Forms.Materials.ModelView
                 #region active filter
                 if (_active)
                 {
-                    if (filter.ToString().Length == 0)
-                    {
-                        filter.Clear();
-                        filter.Append("is_active = 'true'");
-                    }
-                    else
-                    {
-                        filter.Append(" AND is_active = 'true'");
-                    }
+                    if (filter.Length > 0)
+                        filter.Append(" AND ");
+
+                    filter.Append("is_active = 'true'");
                 }
                 #endregion
 
                 #region danger filter
                 if (_danger)
                 {
-                    if (filter.ToString().Length == 0)
-                    {
-                        filter.Clear();
-                        filter.Append("is_danger = 'true'");
-                    }
-                    else
-                    {
-                        filter.Append(" AND is_danger = 'true'");
-                    }
+                    if (filter.Length > 0)
+                        filter.Append(" AND ");
+
+                    filter.Append("is_danger = 'true'");
                 }
                 #endregion
 
                 #region production filter
                 if (_production)
                 {
-                    if (filter.ToString().Length == 0)
-                    {
-                        filter.Clear();
-                        filter.Append("is_production = 'true'");
-                    }
-                    else
-                    {
-                        filter.Append(" AND is_production = 'true'");
-                    }
+                    if (filter.Length > 0)
+                        filter.Append(" AND ");
+
+                    filter.Append("is_production = 'true'");
                 }
                 #endregion
 

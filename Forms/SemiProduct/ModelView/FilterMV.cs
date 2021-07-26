@@ -80,7 +80,50 @@ namespace LabBook.Forms.SemiProduct.ModelView
             StringBuilder filter = new StringBuilder("");
             if (FilterOn)
             {
+                #region danger filter
+                if (Danger)
+                {
+                    filter.Append("is_danger = 'true'");
+                }
+                #endregion
 
+                #region number D filter
+                if (!string.IsNullOrEmpty(_numberD))
+                {
+                    if (filter.Length > 0)
+                        filter.Append(" AND ");
+
+                    filter.Append("intermediate_nrD >= ");
+                    filter.Append(NumberD);
+                }
+                #endregion
+
+                #region name filter
+                if (!string.IsNullOrEmpty(_name))
+                {
+                    if (filter.Length > 0)
+                        filter.Append(" AND ");
+
+                    filter.Append("name LIKE '");
+                    filter.Append(Name);
+                    filter.Append("*'");
+                }
+                #endregion
+
+                #region function filter
+                if (!string.IsNullOrEmpty(Function))
+                {
+                    long id = Convert.ToInt64(Function);
+                    if (id > 1)
+                    {
+                        if (filter.Length > 0)
+                            filter.Append(" AND ");
+
+                        filter.Append("function_id = ");
+                        filter.Append(Function);
+                    }
+                }
+                #endregion
             }
             return filter.ToString();
         }
