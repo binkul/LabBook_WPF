@@ -475,14 +475,8 @@ namespace LabBook.Forms.Materials.ModelView
 
         public bool CanDelete => IsPermited && GetRowCount > 0;
 
-        public DataView GetMaterialView
-        {
-            get
-            {
-                return _materialView;
-            }
-        }
-        
+        public DataView GetMaterialView => _materialView;
+
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {
             var ansver = MessageBoxResult.No;

@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
+using LabBook.Forms.ClpData;
 using LabBook.Forms.Navigation;
 using LabBook.Forms.SemiProduct.Command;
 using LabBook.Forms.SemiProduct.Model;
@@ -481,27 +482,6 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
-        public void SetFiltration(bool filterOn, string filter)
-        {
-            _semiProductView.RowFilter = filterOn ? filter : "";
-            DgRowIndex = 0;
-        }
-
-        public void AddNewRecord()
-        {
-
-        }
-
-        public void DeleteSemiProduct()
-        {
-
-        }
-
-        public void OpenClpForm()
-        {
-
-        }
-
         private void RefreshClp()
         {
             IDictionary<int, bool> ghs = _materialService.GetAllGhs(MaterialId);
@@ -518,9 +498,64 @@ namespace LabBook.Forms.SemiProduct.ModelView
             OnPropertyChanged(nameof(ClpData));
         }
 
+        public void SetFiltration(bool filterOn, string filter)
+        {
+            _semiProductView.RowFilter = filterOn ? filter : "";
+            DgRowIndex = 0;
+        }
+
         public void SaveAll()
         {
             _ = _materialService.Update();
+        }
+
+        public void AddNewRecord()
+        {
+
+        }
+
+        public void DeleteSemiProduct()
+        {
+
+        }
+
+        public void OpenClpForm()
+        {
+            IDictionary<int, bool> ghs = CollectGHS();
+            IList<int> clp = CollectClpId();
+            string name = ActualRow["name"].ToString();
+
+            ClpForm clpForm = new ClpForm(ghs, clp, name);
+            if (clpForm.ShowDialog() == true)
+            {
+                _ = _materialService.UpdateGhsAndClp(MaterialId, clpForm.GetResult);
+            }
+            RefreshClp();
+        }
+
+        private IDictionary<int, bool> CollectGHS()
+        {
+            return new Dictionary<int, bool>() {
+                {1, GHS01 },
+                {2, GHS02 },
+                {3, GHS03 },
+                {4, GHS04 },
+                {5, GHS05 },
+                {6, GHS06 },
+                {7, GHS07 },
+                {8, GHS08 },
+                {9, GHS09 }
+            };
+        }
+
+        private IList<int> CollectClpId()
+        {
+            IList<int> clp = new List<int>();
+            foreach (DataRowView view in ClpData)
+            {
+                clp.Add(Convert.ToInt32(view["clp_id"]));
+            }
+            return clp;
         }
 
     }
