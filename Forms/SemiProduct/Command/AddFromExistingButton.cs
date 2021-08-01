@@ -1,0 +1,39 @@
+﻿using LabBook.Forms.SemiProduct.ModelView;
+using System;
+using System.Windows.Input;
+
+namespace LabBook.Forms.SemiProduct.Command
+{
+    public class AddFromExistingButton : ICommand
+    {
+        private readonly SemiProductFormMV _modelView;
+
+        public AddFromExistingButton(SemiProductFormMV modelView)
+        {
+            if (modelView == null) throw new ArgumentNullException("Model widoku jest null");
+            _modelView = modelView;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            _modelView.AddNewFromExisting();
+        }
+    }
+}

@@ -112,10 +112,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double FormXpos
         {
-            get
-            {
-                return _windowData.FormXpos;
-            }
+            get => _windowData.FormXpos;
             set
             {
                 _windowData.FormXpos = value;
@@ -125,10 +122,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double FormYpos
         {
-            get
-            {
-                return _windowData.FormYpos;
-            }
+            get => _windowData.FormYpos;
             set
             {
                 _windowData.FormYpos = value;
@@ -138,10 +132,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double FormWidth
         {
-            get
-            {
-                return _windowData.FormWidth;
-            }
+            get => _windowData.FormWidth;
             set
             {
                 _windowData.FormWidth = value;
@@ -151,10 +142,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double FormHeight
         {
-            get
-            {
-                return _windowData.FormHeight;
-            }
+            get => _windowData.FormHeight;
             set
             {
                 _windowData.FormHeight = value;
@@ -164,10 +152,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnStatus
         {
-            get
-            {
-                return _windowData.ColStatus;
-            }
+            get => _windowData.ColStatus;
             set
             {
                 _windowData.ColStatus = value;
@@ -184,16 +169,13 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnId
         {
-            get
-            {
-                return _windowData.ColId;
-            }
+            get => _windowData.ColId;
             set
             {
                 _windowData.ColId = value;
                 OnPropertyChanged(
-                    nameof(TxtFilerNumberDLeftPosition), 
-                    nameof(TxtFilterTitleLeftPosition), 
+                    nameof(TxtFilerNumberDLeftPosition),
+                    nameof(TxtFilterTitleLeftPosition),
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
@@ -203,15 +185,12 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnTitle
         {
-            get
-            {
-                return _windowData.ColTitle;
-            }
+            get => _windowData.ColTitle;
             set
             {
                 _windowData.ColTitle = value;
                 OnPropertyChanged(
-                    nameof(ColumnTitle), 
+                    nameof(ColumnTitle),
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
@@ -221,15 +200,12 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnUser
         {
-            get
-            {
-                return _windowData.ColUser;
-            }
+            get => _windowData.ColUser;
             set
             {
                 _windowData.ColUser = value;
                 OnPropertyChanged(
-                    nameof(ColumnUser), 
+                    nameof(ColumnUser),
                     nameof(CmbFilterUserLeftPosition),
                     nameof(CmbFilterCycleLeftPosition),
                     nameof(TxtFilterDensityLeftPosition),
@@ -239,10 +215,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnCycle
         {
-            get
-            {
-                return _windowData.ColCycle;
-            }
+            get => _windowData.ColCycle;
             set
             {
                 _windowData.ColCycle = value;
@@ -256,10 +229,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnDensity
         {
-            get
-            {
-                return _windowData.ColDensity;
-            }
+            get => _windowData.ColDensity;
             set
             {
                 _windowData.ColDensity = value;
@@ -272,10 +242,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double ColumnDate
         {
-            get
-            {
-                return _windowData.ColDate;
-            }
+            get => _windowData.ColDate;
             set
             {
                 _windowData.ColDate = value;
@@ -297,29 +264,11 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public double DpFilterDateLeftPosition => TxtFilterDensityLeftPosition + ColumnDensity;
 
-        public DataView GetLabBookView
-        {
-            get
-            {
-                return _labBookView;
-            }
-        }
+        public DataView GetLabBookView => _labBookView;
 
-        public DataView GetExpCycleView
-        {
-            get
-            {
-                return _expCycleView;
-            }
-        }
+        public DataView GetExpCycleView => _expCycleView;
 
-        public DataView GetAllUser
-        {
-            get
-            {
-                return _userView;
-            }
-        }
+        public DataView GetAllUser => _userView;
 
         public long LabBookId
         {
@@ -368,14 +317,8 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public int TabIndex
         {
-            get
-            {
-                return _tabIndex;
-            }
-            set
-            {
-                _tabIndex = value;
-            }
+            get => _tabIndex;
+            set => _tabIndex = value;
         }
 
         public bool Modified
@@ -420,13 +363,7 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public bool IsDeleted
-        {
-            get
-            {
-                return Convert.ToBoolean(_actualRow["deleted"]);
-            }
-        }
+        public bool IsDeleted => Convert.ToBoolean(_actualRow["deleted"]);
 
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {
@@ -454,7 +391,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public void OnSelectionChangedCommandExecuted(SelectionChangedEventArgs e)
         {
-            var grid = (DataGrid)e.Source;
+            DataGrid grid = (DataGrid)e.Source;
 
             #region scroll to selected row
             var index = grid.SelectedIndex;
@@ -583,16 +520,16 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public void OpenSemiProduct()
         {
-            SemiProductForm semiProduct = new SemiProductForm();
-            semiProduct.ShowDialog();
-            semiProduct = null;
+            LabBookDto labBookDto = new LabBookDto() { Id = Convert.ToInt64(ActualRow["id"]), Title = ActualRow["title"].ToString() };
+            SemiProductForm semiProduct = new SemiProductForm(labBookDto);
+            _ = semiProduct.ShowDialog();
         }
 
         public void DeleteExperiment()
         {
             if (_actualRow == null) return;
 
-            var id = Convert.ToInt64(_actualRow["id"]);
+            long id = Convert.ToInt64(_actualRow["id"]);
             _labBookService.Delete(id);
         }
 
@@ -658,7 +595,7 @@ namespace LabBook.Forms.MainForm.ModelView
             if (record == null)
                 return;
 
-            var index = 0;
+            int index = 0;
             foreach (DataRowView row in _labBookView)
             {
                 if (Convert.ToInt64(row["id"]) == record.Id)

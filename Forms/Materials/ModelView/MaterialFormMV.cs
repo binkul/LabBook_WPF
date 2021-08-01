@@ -138,7 +138,7 @@ namespace LabBook.Forms.Materials.ModelView
                     );
             }
         }
-        
+
         public double ColumnFunction
         {
             get
@@ -288,7 +288,7 @@ namespace LabBook.Forms.Materials.ModelView
                 OnPropertyChanged(nameof(ColumnData));
             }
         }
-        
+
         public bool GHS01
         {
             get => _ghs01;
@@ -616,7 +616,16 @@ namespace LabBook.Forms.Materials.ModelView
         {
             if (ActualRow != null)
             {
-                _materialService.Delete(ActualRow);
+                _ = _materialService.Delete(ActualRow);
+                int index = 0;
+                foreach (DataRowView view in _materialView)
+                {
+                    if (view["id"].Equals(ActualRow["id"]))
+                        break;
+                    index++;
+                }
+                _materialView.Delete(index);
+                OnPropertyChanged(nameof(GetMaterialView));
             }
         }
 

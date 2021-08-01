@@ -8,7 +8,7 @@ namespace LabBook.ADO.Common
 {
     public abstract class RepositoryCommon<T> : IRepository<T>
     {
-        virtual public bool Delete(long id, string query)
+        public virtual bool Delete(long id, string query)
         {
             bool error = false;
 
@@ -43,7 +43,7 @@ namespace LabBook.ADO.Common
             return error;
         }
 
-        virtual public DataTable GetAll(string query)
+        public virtual DataTable GetAll(string query)
         {
             var table = new DataTable();
 
@@ -73,36 +73,36 @@ namespace LabBook.ADO.Common
             return table;
         }
 
-        virtual public T Save(T data)
+        public virtual T Save(T data)
         {
             throw new NotImplementedException();
         }
 
-        virtual public ExceptionCode Save(DataRow data, string query)
+        public virtual ExceptionCode Save(DataRow data, string query)
         {
             throw new NotImplementedException();
         }
 
-        virtual public void Update(T data)
+        public virtual void Update(T data)
         {
             throw new NotImplementedException();
         }
 
-        virtual public ExceptionCode Update(DataRow data, string query)
+        public virtual ExceptionCode Update(DataRow data, string query)
         {
             throw new NotImplementedException();
         }
 
-        virtual public bool ExistById(long id, string query)
+        public virtual bool ExistById(long id, string query)
         {
             bool result = false;
 
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            using (SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
                 try
                 {
-                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
-                    sqlCmd.Parameters.AddWithValue("@id", id);
+                    SqlCommand sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    _ = sqlCmd.Parameters.AddWithValue("@id", id);
                     connection.Open();
 
                     if (Convert.ToInt32(sqlCmd.ExecuteScalar()) >= 1)
@@ -110,12 +110,12 @@ namespace LabBook.ADO.Common
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
                         "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
@@ -126,7 +126,7 @@ namespace LabBook.ADO.Common
             return result;
         }
 
-        virtual public bool ExistByName(string name, string query)
+        public virtual bool ExistByName(string name, string query)
         {
             bool result = false;
 
@@ -159,7 +159,7 @@ namespace LabBook.ADO.Common
             return result;
         }
 
-        virtual public T GetById(long id, string query)
+        public virtual T GetById(long id, string query)
         {
             throw new NotImplementedException();
         }

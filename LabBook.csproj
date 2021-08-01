@@ -63,6 +63,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Controls.Ribbon" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -116,6 +118,21 @@
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
+    <Compile Include="EntityFramework\CmbClpDataSheets.cs" />
+    <Compile Include="EntityFramework\CmbClpHP.cs" />
+    <Compile Include="EntityFramework\CmbClpPictogram.cs" />
+    <Compile Include="EntityFramework\CmbClpSignalWord.cs" />
+    <Compile Include="EntityFramework\CmbContrastClass.cs" />
+    <Compile Include="EntityFramework\CmbContrastType.cs" />
+    <Compile Include="EntityFramework\CmbContrastYield.cs" />
+    <Compile Include="EntityFramework\CmbCurrency.cs" />
+    <Compile Include="EntityFramework\CmbGlosClass.cs" />
+    <Compile Include="EntityFramework\CmbMaterialFunction.cs" />
+    <Compile Include="EntityFramework\CmbScrubClass.cs" />
+    <Compile Include="EntityFramework\CmbSemiProductType.cs" />
+    <Compile Include="EntityFramework\CmbUnit.cs" />
+    <Compile Include="EntityFramework\CmbVOC.cs" />
+    <Compile Include="EntityFramework\LabBookContex.cs" />
     <Compile Include="Forms\ClpData\ClpForm.xaml.cs">
       <DependentUpon>ClpForm.xaml</DependentUpon>
     </Compile>
@@ -221,6 +238,7 @@
     <Compile Include="Forms\MainForm\Converters\NotBoolConverter.cs" />
     <Compile Include="Forms\MainForm\Converters\UserToNameConverter.cs" />
     <Compile Include="Forms\MainForm\Command\SemiProductButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\AddFromExistingButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\AddNewButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\ClpButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\DeleteButton.cs" />

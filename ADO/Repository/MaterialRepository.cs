@@ -25,6 +25,8 @@ namespace LabBook.ADO.Repository
             "solids=@solids, ash_450=@ash_450, VOC=@VOC, remarks=@remarks, date_update=@date_update Where id=@id";
         public static readonly string DeleteQuery = "Delete From LabBook.dbo.Material Where id=";
         public static readonly string ExistByNameQuery = "Select Count(1) From LabBook.dbo.Material m Where m.name=@name";
+        public static readonly string ExistByIdQuery = "Select Count(1) From LabBook.dbo.Material m Where m.id=@id";
+        public static readonly string ExistByIntDQuery = "Select Count(1) From LabBook.dbo.Material m Where m.intermediate_nrD=@id";
         private static readonly string _getIdByNameQuery = "Select Max(id) as id From LabBook.dbo.Material Where name=@name";
         private static readonly string _saveMaterialGhs = "Insert Into LabBook.dbo.MaterialGHS(material_id, ghs_id, date_created) Values(@material_id, @ghs_id, @date_created)";
         private static readonly string _saveMaterialClp = "Insert Into LabBook.dbo.MaterialCLP(material_id, clp_id, date_created) Values(@material_id, @clp_id, @date_created)";
@@ -267,7 +269,7 @@ namespace LabBook.ADO.Repository
 
         private long GetId(string name)
         {
-            var id = -1L;
+            long id = -1L;
 
             using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {

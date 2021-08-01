@@ -59,6 +59,17 @@ namespace LabBook.Dto
             Name = name;
         }
 
+        public MaterialDto(string name, long intermediateNrD)
+        {
+            Name = name;
+            IntermediateNrD = intermediateNrD;
+            IsIntermediate = true;
+            IsActive = true;
+            IsProduction = true;
+            UnitId = 2;
+            CurrencyId = 2;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is MaterialDto dto &&

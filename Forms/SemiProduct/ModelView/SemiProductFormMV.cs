@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
+using LabBook.Dto;
+using LabBook.EntityFramework;
 using LabBook.Forms.ClpData;
 using LabBook.Forms.Navigation;
 using LabBook.Forms.SemiProduct.Command;
@@ -7,8 +9,10 @@ using LabBook.Forms.SemiProduct.Model;
 using LabBook.Security;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,6 +26,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private readonly double _columnStatus = 32d;
 
         private ICommand _addNewButton;
+        private ICommand _addFromExistingButton;
         private ICommand _saveButton;
         private ICommand _deleteButton;
         private ICommand _clpButton;
@@ -37,6 +42,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs09 = true;
 
         public NavigationMV NavigationMV { get; set; }
+        private readonly LabBookDto _labBookDto;
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly MaterialService _materialService = new MaterialService();
         private long _index = 0;
@@ -50,8 +56,9 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
-        public SemiProductFormMV()
+        public SemiProductFormMV(LabBookDto labBookDto)
         {
+            _labBookDto = labBookDto;
             _semiProductView = _materialService.GetAll(MaterialType.SemiProduct);
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
@@ -317,8 +324,6 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName;
 
-        public DataView GetMaterialView => _semiProductView;
-
         public DataView ClpData
         {
             get
@@ -329,6 +334,8 @@ namespace LabBook.Forms.SemiProduct.ModelView
                     return null;
             }
         }
+
+        public DataView GetSemiProductView => _semiProductView;
 
         public DataRowView ActualRow
         {
@@ -374,8 +381,6 @@ namespace LabBook.Forms.SemiProduct.ModelView
         {
             NavigationMV.Refresh();
         }
-
-        public DataView GetSemiProductView => _semiProductView;
 
         public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]);
 
@@ -455,6 +460,15 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public ICommand AddFromExistingButton
+        {
+            get
+            {
+                if (_addFromExistingButton == null) _addFromExistingButton = new AddFromExistingButton(this);
+                return _addFromExistingButton;
+            }
+        }
+
         public ICommand SaveButton
         {
             get
@@ -511,12 +525,49 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public void AddNewRecord()
         {
+            MaterialDto semiProduct = _materialService.AddNewSemiProduct();
+            GoToNewIndex(semiProduct);
+        }
 
+        public void AddNewFromExisting()
+        {
+            MaterialDto semiProduct = _materialService.AddNewSemiProduct(_labBookDto.Id, _labBookDto.Title);
+            GoToNewIndex(semiProduct);
+        }
+
+        private void GoToNewIndex(MaterialDto semiProduct)
+        {
+            if (semiProduct != null)
+            {
+                int index = 0;
+                foreach (DataRowView row in _semiProductView)
+                {
+                    if (Convert.ToInt64(row["intermediate_nrD"]) == semiProduct.IntermediateNrD)
+                    {
+                        DgRowIndex = index;
+                        OnPropertyChanged(nameof(DgRowIndex));
+                        break;
+                    }
+                    index++;
+                }
+            }
         }
 
         public void DeleteSemiProduct()
         {
-
+            if (ActualRow != null)
+            {
+                _ = _materialService.Delete(ActualRow);
+                int index = 0;
+                foreach(DataRowView view in _semiProductView)
+                {
+                    if (view["id"].Equals(ActualRow["id"]))
+                        break;
+                    index++;
+                }
+                _semiProductView.Delete(index);
+                OnPropertyChanged(nameof(GetSemiProductView));
+            }
         }
 
         public void OpenClpForm()

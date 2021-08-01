@@ -152,7 +152,7 @@ namespace LabBook.ADO.Repository
 
             return labBook;
         }
-    
+
         public void RefreshMainTable(DataTable dataTable)
         {
             using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
@@ -175,16 +175,16 @@ namespace LabBook.ADO.Repository
             }
         }
 
-        public LabBookDto GetById(string query, long id)
+        public override LabBookDto GetById(long id, string query)
         {
             LabBookDto labBookDto = null;
 
-            using (var connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            using (SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
             {
                 try
                 {
-                    var sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
-                    sqlCmd.Parameters.AddWithValue("@id", id);
+                    SqlCommand sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    _ = sqlCmd.Parameters.AddWithValue("@id", id);
                     connection.Open();
 
                     SqlDataReader reader = sqlCmd.ExecuteReader();
@@ -207,12 +207,12 @@ namespace LabBook.ADO.Repository
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
                         "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
                         "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally

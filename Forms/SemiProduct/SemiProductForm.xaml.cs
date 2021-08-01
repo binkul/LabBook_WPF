@@ -1,4 +1,5 @@
-﻿using LabBook.Forms.Navigation;
+﻿using LabBook.Dto;
+using LabBook.Forms.Navigation;
 using LabBook.Forms.SemiProduct.ModelView;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,11 +13,11 @@ namespace LabBook.Forms.SemiProduct
     /// </summary>
     public partial class SemiProductForm : Window
     {
-        public SemiProductForm()
+        public SemiProductForm(LabBookDto labBookDto)
         {
             InitializeComponent();
 
-            SemiProductFormMV semiProductFormMV = new SemiProductFormMV();
+            SemiProductFormMV semiProductFormMV = new SemiProductFormMV(labBookDto);
             DataContext = semiProductFormMV;
 
             FilterMV filterMV = Resources["filter"] as FilterMV;

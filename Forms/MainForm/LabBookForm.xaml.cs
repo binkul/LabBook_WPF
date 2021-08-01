@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Data;
 using LabBook.Forms.MainForm.ModelView;
 using LabBook.Forms.Navigation;
+using LabBook.EntityFramework;
 
 namespace LabBook.Forms.MainForm
 {

@@ -118,8 +118,7 @@ namespace LabBook.ADO.Service
 
         public MaterialDto AddNew()
         {
-            MaterialDto material = new MaterialDto("");
-            var name = "";
+            string name = "";
 
             InputBox inputBox = new InputBox("Podaj nazwę nowego surowca:", "Nazwa");
             if (inputBox.ShowDialog() == true)
@@ -127,19 +126,71 @@ namespace LabBook.ADO.Service
 
             if (string.IsNullOrEmpty(name))
             {
-                MessageBox.Show("Nazwa surowca nie może byc pusta!", "Pusta nazwa", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _ = MessageBox.Show("Nazwa surowca nie może byc pusta!", "Pusta nazwa", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return null;
             }
 
             if (_repository.ExistByName(name, MaterialRepository.ExistByNameQuery))
             {
-                MessageBox.Show("Surowiec o nazwie '" + name + "' istnieje już w bazie danych!", "Pusta nazwa", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _ = MessageBox.Show("Surowiec o nazwie '" + name + "' istnieje już w bazie danych!", "Pusta nazwa", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return null;
             }
 
-            material.Name = name;
-            material.LoginId = UserSingleton.Id;
+            MaterialDto material = new MaterialDto(name) { LoginId = UserSingleton.Id };
+            return Save(material);
+        }
 
+        public MaterialDto AddNewSemiProduct()
+        {
+            string input = "";
+            InputBox inputBox = new InputBox("Podaj numer D nowego półproduktu:", "Numer D");
+            if (inputBox.ShowDialog() == true) input = inputBox.Answer;
+            if (string.IsNullOrEmpty(input) || !long.TryParse(input, out long nrD))
+            {
+                _ = MessageBox.Show("Wprowadzony numer nie jest liczbą całkowitą!", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+
+            LabBookRepository repository = new LabBookRepository();
+            LabBookDto labBookDto = repository.GetById(nrD, LabBookRepository.GetByIdQuery);
+            if (labBookDto == null)
+            {
+                _ = MessageBox.Show("Podany numer D" + nrD + " nie istnieje w bazie danych!", "Brak numeru", MessageBoxButton.OK, MessageBoxImage.Information);
+                return null;
+            }
+            if (_repository.ExistById(nrD, MaterialRepository.ExistByIntDQuery))
+            {
+                _ = MessageBox.Show("Półprodukt o numerze D" + nrD + " istnieje już w tabeli półprodukty.", "Brak numeru", MessageBoxButton.OK, MessageBoxImage.Information);
+                return new MaterialDto("", nrD);
+            }
+
+            MaterialDto material = new MaterialDto(labBookDto.Title, nrD) { LoginId = UserSingleton.Id };
+
+            return Save(material);
+        }
+
+        public MaterialDto AddNewSemiProduct(long nrD, string name)
+        {
+            InputBox inputBox = new InputBox("Podaj nazwę nowego półproduktu:", name);
+            if (inputBox.ShowDialog() == true) name = inputBox.Answer;
+            if (string.IsNullOrEmpty(name))
+            {
+                _ = MessageBox.Show("Nazwa nie może być pusta", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            if (_repository.ExistById(nrD, MaterialRepository.ExistByIntDQuery))
+            {
+                _ = MessageBox.Show("Półprodukt o numerze D" + nrD + " istnieje już w tabeli półprodukty.", "Brak numeru", MessageBoxButton.OK, MessageBoxImage.Information);
+                return new MaterialDto("", nrD);
+            }
+
+            MaterialDto material = new MaterialDto(name, nrD) { LoginId = UserSingleton.Id };
+
+            return Save(material);
+        }
+
+        private MaterialDto Save(MaterialDto material)
+        {
             material = _repository.Save(material);
             if (material != null)
             {
@@ -166,9 +217,9 @@ namespace LabBook.ADO.Service
                 newRow["date_created"] = material.DateCreated;
                 newRow["date_update"] = material.DateUpdated;
 
-                var tmp = _modified;
+                bool tmp = _modified;
                 _dataTable.Rows.Add(newRow);
-                var row = _dataTable.AsEnumerable()
+                DataRow row = _dataTable.AsEnumerable()
                     .SingleOrDefault(r => r.Field<long>("id") == material.Id);
                 row.AcceptChanges();
                 _modified = tmp;
@@ -200,11 +251,17 @@ namespace LabBook.ADO.Service
         public bool Delete(DataRowView row)
         {
             bool result = true;
+            bool semi = Convert.ToBoolean(row["is_intermediate"]);
             string name = row["name"].ToString();
             long id = Convert.ToInt32(row["id"]);
             bool tmp = _modified;
+            string type = "surowiec";
 
-            if (MessageBox.Show("Czy usunąć surowiec '" + name + "' z bazy danych?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            if (semi)
+            {
+                type = "półprodukt";
+            }
+            if (MessageBox.Show("Czy usunąć " + type + " '" + name + "' z bazy danych?", "Usuwanie", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
                 return false;
             }
@@ -215,12 +272,6 @@ namespace LabBook.ADO.Service
                 return result;
             }
 
-            DataRow dr = _dataTable.AsEnumerable().SingleOrDefault(r => r.Field<long>("id") == id);
-            if (dr != null)
-            {
-                dr.Delete();
-                dr.AcceptChanges();
-            }
             _ = _repository.Delete(id, ClpRepository.DeleteMaterialClpQuery);
             _ = _repository.Delete(id, ClpRepository.DeleteMaterialGHSQuery);
 

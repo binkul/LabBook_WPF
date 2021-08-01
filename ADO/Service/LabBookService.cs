@@ -150,8 +150,7 @@ namespace LabBook.ADO.Service
                 return null;
             }
 
-            LabBookRepository repository = (LabBookRepository)_repository;
-            LabBookDto labBookDto = repository.GetById(LabBookRepository.GetByIdQuery, id);
+            LabBookDto labBookDto = _repository.GetById(id, LabBookRepository.GetByIdQuery);
 
             if (labBookDto != null)
             {
