@@ -30,6 +30,8 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private ICommand _saveButton;
         private ICommand _deleteButton;
         private ICommand _clpButton;
+        private ICommand _calcPrice;
+        private ICommand _calcVOC;
 
         private bool _ghs01 = true;
         private bool _ghs02 = true;
@@ -40,6 +42,9 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs07 = true;
         private bool _ghs08 = true;
         private bool _ghs09 = true;
+
+        private bool _progressVisible = false;
+        private int _progressCurrentValue = 1;
 
         public NavigationMV NavigationMV { get; set; }
         private readonly LabBookDto _labBookDto;
@@ -316,6 +321,21 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public bool IsProgressVisible => _progressVisible;
+
+        public int ProgressValue
+        {
+            get => _progressCurrentValue;
+            set
+            {
+                if (_progressCurrentValue != value)
+                {
+                    _progressCurrentValue = value;
+                    OnPropertyChanged(nameof(ProgressValue));
+                }
+            }
+        }
+
         public double ChbFilterDangerLeftPosition => _startLeftPosition + _columnStatus + (ColumnDenger / 2) - _chbWidthHalf;
 
         public double TxtFilerNumberLeftPosition => _startLeftPosition + _columnStatus + ColumnDenger;
@@ -381,6 +401,8 @@ namespace LabBook.Forms.SemiProduct.ModelView
         {
             NavigationMV.Refresh();
         }
+
+        public bool IsEmptyView => _semiProductView.Count > 0;
 
         public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]);
 
@@ -496,6 +518,24 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
+        public ICommand CalcPriceButton
+        {
+            get
+            {
+                if (_calcPrice == null) _calcPrice = new PriceButton(this);
+                return _calcPrice;
+            }
+        }
+
+        public ICommand CalcVocButton
+        {
+            get
+            {
+                if (_calcVOC == null) _calcVOC = new VocButton(this);
+                return _calcVOC;
+            }
+        }
+
         private void RefreshClp()
         {
             IDictionary<int, bool> ghs = _materialService.GetAllGhs(MaterialId);
@@ -533,6 +573,28 @@ namespace LabBook.Forms.SemiProduct.ModelView
         {
             MaterialDto semiProduct = _materialService.AddNewSemiProduct(_labBookDto.Id, _labBookDto.Title);
             GoToNewIndex(semiProduct);
+        }
+
+        public void CalculatePrice()
+        {
+            _progressVisible = true;
+            OnPropertyChanged(nameof(IsProgressVisible));
+
+            _materialService.CalculateSemiProductPrice(this);
+
+            _progressVisible = false;
+            OnPropertyChanged(nameof(IsProgressVisible));
+        }
+
+        public void CalculateVOC()
+        {
+            _progressVisible = true;
+            OnPropertyChanged(nameof(IsProgressVisible));
+
+            _materialService.CalculateSemiProductVOC(this);
+
+            _progressVisible = false;
+            OnPropertyChanged(nameof(IsProgressVisible));
         }
 
         private void GoToNewIndex(MaterialDto semiProduct)

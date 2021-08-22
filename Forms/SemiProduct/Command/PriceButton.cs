@@ -4,11 +4,11 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.SemiProduct.Command
 {
-    public class ClpButton : ICommand
+    public class PriceButton : ICommand
     {
         private readonly SemiProductFormMV _modelView;
 
-        public ClpButton(SemiProductFormMV modelView)
+        public PriceButton(SemiProductFormMV modelView)
         {
             if (modelView == null) throw new ArgumentNullException("Model widoku jest null");
             _modelView = modelView;
@@ -28,12 +28,13 @@ namespace LabBook.Forms.SemiProduct.Command
 
         public bool CanExecute(object parameter)
         {
-            return _modelView.IsDanger;
+            return _modelView.IsEmptyView;
         }
 
         public void Execute(object parameter)
         {
-            _modelView.OpenClpForm();
+            _modelView.CalculatePrice();
         }
+
     }
 }

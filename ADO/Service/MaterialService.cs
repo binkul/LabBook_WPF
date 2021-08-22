@@ -4,6 +4,7 @@ using LabBook.ADO.Repository;
 using LabBook.Dto;
 using LabBook.Forms.ClpData.Model;
 using LabBook.Forms.InputBox;
+using LabBook.Forms.SemiProduct.ModelView;
 using LabBook.Security;
 using System;
 using System.Collections.Generic;
@@ -299,5 +300,16 @@ namespace LabBook.ADO.Service
 
             return delClp & delGhs;
         }
+
+        public void CalculateSemiProductPrice(SemiProductFormMV mv)
+        {
+
+        }
+
+        public void CalculateSemiProductVOC(SemiProductFormMV mv)
+        {
+
+        }
+
     }
 }

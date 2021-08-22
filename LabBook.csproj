@@ -240,8 +240,10 @@
     <Compile Include="Forms\MainForm\Command\SemiProductButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\AddFromExistingButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\AddNewButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\VocButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\ClpButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\DeleteButton.cs" />
+    <Compile Include="Forms\SemiProduct\Command\PriceButton.cs" />
     <Compile Include="Forms\SemiProduct\Command\SaveButton.cs" />
     <Compile Include="Forms\SemiProduct\Converters\NumberToNumberDConverter.cs" />
     <Compile Include="Forms\SemiProduct\Converters\PriceWithPlnConverter.cs" />
@@ -399,9 +401,20 @@
   <ItemGroup>
     <Resource Include="Img\Pictogram\biohazard.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Img\semimaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\money.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\poison.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\benzene.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\money.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
