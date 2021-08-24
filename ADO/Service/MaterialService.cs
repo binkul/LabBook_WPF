@@ -8,6 +8,7 @@ using LabBook.Forms.SemiProduct.ModelView;
 using LabBook.Security;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,14 @@ namespace LabBook.ADO.Service
     {
         Material,
         SemiProduct
+    }
+
+    public enum PriceError
+    {
+        NoRecipe = -1,
+        NoMaterialPrice = -2,
+        NoCurrency = -3,
+        NoSemiproduct = -4
     }
 
     public class MaterialService
@@ -301,9 +310,65 @@ namespace LabBook.ADO.Service
             return delClp & delGhs;
         }
 
-        public void CalculateSemiProductPrice(SemiProductFormMV mv)
+        public void CalculateSemiProductPrice(object sender, DoWorkEventArgs e)
         {
+            int count = 0;
+            //_dataTable.RowChanged -= DataTable_RowChanged;
 
+            foreach (DataRow row in _dataTable.Rows)
+            {
+                long numberD = Convert.ToInt64(row["intermediate_nrD"]);
+                double price = CalculatePrice(numberD, 100d);
+                row["price"] = price;
+                count++;
+                (sender as BackgroundWorker).ReportProgress(count);
+            }
+
+            //_dataTable.RowChanged += DataTable_RowChanged;
+            //_modified = true;
+        }
+
+        private double CalculatePrice(long numberD, double percent)
+        {
+            double totalPrice = 0d;
+            _dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);
+            if (_dataTable.Rows.Count == 0) 
+            {
+                return (double)PriceError.NoRecipe;
+            }
+
+            foreach(DataRow row in _dataTable.Rows)
+            {
+                if (row["is_intermediate"].Equals(DBNull.Value)) return (double)PriceError.NoSemiproduct;
+
+                bool intermediate = Convert.ToBoolean(row["is_intermediate"]);
+                double amount = Convert.ToDouble(row["amount"]);
+                if (intermediate)
+                {
+                    long nr = Convert.ToInt64(row["intermediate_nrD"]);
+                    double semiPrice = CalculatePrice(nr, amount);
+                    if (semiPrice < 0) return semiPrice;
+                    totalPrice += semiPrice;
+                    continue;
+                }
+
+                double price = Convert.ToDouble(row["price"]);
+                double rate = Convert.ToDouble(row["rate"]);
+                if (price < 0)
+                {
+                    return (double)PriceError.NoMaterialPrice;
+                }
+                else if (rate < 0)
+                {
+                    return (double)PriceError.NoCurrency;
+                }
+                else
+                {
+                    totalPrice += amount * price * rate;
+                }
+            }
+
+            return Math.Round(percent / 100 * (totalPrice / 100), 4);
         }
 
         public void CalculateSemiProductVOC(SemiProductFormMV mv)

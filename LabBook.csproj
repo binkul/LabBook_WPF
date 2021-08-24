@@ -114,6 +114,7 @@
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Commons\DelegateCommand.cs" />
     <Compile Include="Dto\ClpDto.cs" />
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />

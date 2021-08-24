@@ -100,7 +100,7 @@
                 </RibbonGroup>
                 <RibbonGroup Header="Obliczenia" FontSize="10">
                     <RibbonButton Label="Ceny" LargeImageSource="/Img/money.png"  FontSize="12" FontWeight="Regular" 
-                                  Command="{Binding CalculatePrice}"/>
+                                  Command="{Binding CalcPriceButton}"/>
                     <RibbonButton Label="VOC" LargeImageSource="/Img/benzene.png"  FontSize="12" FontWeight="Regular" 
                                   Command="{Binding CalcVocButton}"/>
                 </RibbonGroup>
@@ -440,14 +440,14 @@
                 </Button>
 
                 <ProgressBar x:Name="PrgBar" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"
-                             Canvas.Left="210" Canvas.Top="2" Width="542" 
-                             Visibility="{Binding IsProgressVisible, Mode=OneWay}">
-                    
+                             Canvas.Left="210" Canvas.Top="2" Width="542" Minimum="0"
+                             Visibility="{Binding IsProgressVisible, Mode=OneWay, Converter={StaticResource BoolToHiddenConverter}}"
+                             Maximum="{Binding ProgressMaximum, Mode=OneWay}"
+                             Value="{Binding ProgressValue, Mode=OneWay}">
+
                 </ProgressBar>
 
             </Canvas>
-
-
         </Grid>
     </DockPanel>
 </Window>

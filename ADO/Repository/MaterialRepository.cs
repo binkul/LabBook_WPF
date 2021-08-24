@@ -27,10 +27,12 @@ namespace LabBook.ADO.Repository
         public static readonly string ExistByNameQuery = "Select Count(1) From LabBook.dbo.Material m Where m.name=@name";
         public static readonly string ExistByIdQuery = "Select Count(1) From LabBook.dbo.Material m Where m.id=@id";
         public static readonly string ExistByIntDQuery = "Select Count(1) From LabBook.dbo.Material m Where m.intermediate_nrD=@id";
+        public static readonly string GetForPrice = "Select c.amount, ISNULL(m.price, -1) as price, ISNULL(r.rate, -1) as rate, " +
+            "ISNULL(m.intermediate_nrD, -1) as intermediate_nrD, m.is_intermediate from LabBook.dbo.ExpComposition c Left Join(LabBook.dbo.Material m Left Join " +
+            "LabBook.dbo.CmbCurrency r on m.currency_id= r.id) on c.component=m.name Where c.labbook_id=";
         private static readonly string _getIdByNameQuery = "Select Max(id) as id From LabBook.dbo.Material Where name=@name";
         private static readonly string _saveMaterialGhs = "Insert Into LabBook.dbo.MaterialGHS(material_id, ghs_id, date_created) Values(@material_id, @ghs_id, @date_created)";
         private static readonly string _saveMaterialClp = "Insert Into LabBook.dbo.MaterialCLP(material_id, clp_id, date_created) Values(@material_id, @clp_id, @date_created)";
-
 
         public override ExceptionCode Update(DataRow row, string query)
         {

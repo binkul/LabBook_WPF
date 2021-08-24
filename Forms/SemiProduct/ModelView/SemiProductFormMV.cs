@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
+using LabBook.Commons;
 using LabBook.Dto;
-using LabBook.EntityFramework;
 using LabBook.Forms.ClpData;
 using LabBook.Forms.Navigation;
 using LabBook.Forms.SemiProduct.Command;
@@ -9,10 +9,8 @@ using LabBook.Forms.SemiProduct.Model;
 using LabBook.Security;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -43,8 +41,10 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs08 = true;
         private bool _ghs09 = true;
 
-        private bool _progressVisible = false;
+        private bool _progressVisible = true;
         private int _progressCurrentValue = 1;
+        private int _progressMax = 100;
+        private BackgroundWorker _worker;
 
         public NavigationMV NavigationMV { get; set; }
         private readonly LabBookDto _labBookDto;
@@ -68,6 +68,13 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
             OnSelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(OnSelectionChangedCommandExecuted);
+
+            _worker = new BackgroundWorker();
+            _worker.WorkerReportsProgress = true;
+            _worker.WorkerSupportsCancellation = true;
+            _worker.DoWork += _materialService.CalculateSemiProductPrice;
+            _worker.ProgressChanged += ProgressChanged;
+            _worker.RunWorkerCompleted += ProgressFinished;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -321,7 +328,15 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
-        public bool IsProgressVisible => _progressVisible;
+        public bool IsProgressVisible
+        {
+            get => _progressVisible;
+            set
+            {
+                _progressVisible = value;
+                OnPropertyChanged(nameof(IsProgressVisible));
+            }
+        }
 
         public int ProgressValue
         {
@@ -333,6 +348,16 @@ namespace LabBook.Forms.SemiProduct.ModelView
                     _progressCurrentValue = value;
                     OnPropertyChanged(nameof(ProgressValue));
                 }
+            }
+        }
+
+        public int ProgressMaximum
+        {
+            get => _progressMax;
+            set
+            {
+                _progressMax = value;
+                OnPropertyChanged(nameof(ProgressMaximum));
             }
         }
 
@@ -577,24 +602,38 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public void CalculatePrice()
         {
-            _progressVisible = true;
-            OnPropertyChanged(nameof(IsProgressVisible));
+            //IsProgressVisible = true;
+            ProgressMaximum = _semiProductView.Count;
+            ProgressValue = 0;
+            //BackgroundWorker worker = new BackgroundWorker();            
+            //    worker.WorkerReportsProgress = true;
+            //    worker.DoWork += _materialService.CalculateSemiProductPrice;
+            //    worker.ProgressChanged += ProgressChanged;
+            //    worker.RunWorkerCompleted += ProgressFinished;
+            _worker.RunWorkerAsync();
+            
 
-            _materialService.CalculateSemiProductPrice(this);
+            //_materialService.CalculateSemiProductPrice(this);
+            //IsProgressVisible = false;
+        }
 
-            _progressVisible = false;
-            OnPropertyChanged(nameof(IsProgressVisible));
+        private void ProgressFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //IsProgressVisible = false;
+        }
+
+        private void ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            ProgressValue = e.ProgressPercentage;
         }
 
         public void CalculateVOC()
         {
-            _progressVisible = true;
-            OnPropertyChanged(nameof(IsProgressVisible));
-
+            IsProgressVisible = true;
+            ProgressMaximum = _semiProductView.Count;
+            ProgressValue = 1;
             _materialService.CalculateSemiProductVOC(this);
-
-            _progressVisible = false;
-            OnPropertyChanged(nameof(IsProgressVisible));
+            IsProgressVisible = false;
         }
 
         private void GoToNewIndex(MaterialDto semiProduct)
