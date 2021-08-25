@@ -42,9 +42,11 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs09 = true;
 
         private bool _progressVisible = false;
-        private int _progressCurrentValue = 1;
-        private int _progressMax = 100;
+        private int _progressCurrentValue = 0;
+        private int _progressMax = 0;
         private readonly BackgroundWorker _worker;
+        public bool IsNameFocused { get; set; } = false;
+        public bool IsGridFocused { get; set; } = false;
 
         public NavigationMV NavigationMV { get; set; }
         private readonly LabBookDto _labBookDto;
@@ -609,34 +611,6 @@ namespace LabBook.Forms.SemiProduct.ModelView
             _worker.RunWorkerAsync();
         }
 
-        private void ProgressRun(object sender, DoWorkEventArgs e)
-        {
-            IsProgressVisible = true;
-            ProgressMaximum = _semiProductView.Count;
-            int count = 0;
-
-            foreach (DataRowView row in _semiProductView)
-            {
-                long numberD = Convert.ToInt64(row["intermediate_nrD"]);
-                double price = _materialService.CalculatePrice(numberD, 100d);
-                row["price"] = price;
-                count++;
-                (sender as BackgroundWorker).ReportProgress(count);
-            }
-
-        }
-
-        private void ProgressFinished(object sender, RunWorkerCompletedEventArgs e)
-        {
-            IsProgressVisible = false;
-            OnPropertyChanged(nameof(IsBusy), nameof(IsPermited));
-        }
-
-        private void ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            ProgressValue = e.ProgressPercentage;
-        }
-
         public void CalculateVOC()
         {
             IsProgressVisible = true;
@@ -722,5 +696,49 @@ namespace LabBook.Forms.SemiProduct.ModelView
             return clp;
         }
 
+        #region ProgressBar operation
+
+        public void SetFocus()
+        {
+            // just to refresh form after ProgressBar running
+            IsNameFocused = false;
+            OnPropertyChanged(nameof(IsNameFocused));
+            IsGridFocused = true;
+            OnPropertyChanged(nameof(IsGridFocused));
+            IsNameFocused = true;
+            OnPropertyChanged(nameof(IsNameFocused));
+            IsGridFocused = false;
+            OnPropertyChanged(nameof(IsGridFocused));
+        }
+
+        private void ProgressRun(object sender, DoWorkEventArgs e)
+        {
+            IsProgressVisible = true;
+            ProgressMaximum = _semiProductView.Count;
+            int count = 0;
+
+            foreach (DataRowView row in _semiProductView)
+            {
+                long numberD = Convert.ToInt64(row["intermediate_nrD"]);
+                double price = _materialService.CalculatePrice(numberD, 100d);
+                row["price"] = price;
+                count++;
+                (sender as BackgroundWorker).ReportProgress(count);
+            }
+
+        }
+
+        private void ProgressFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
+            IsProgressVisible = false;
+            SetFocus();
+        }
+
+        private void ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            ProgressValue = e.ProgressPercentage;
+        }
+
+        #endregion
     }
 }
