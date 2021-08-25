@@ -310,25 +310,7 @@ namespace LabBook.ADO.Service
             return delClp & delGhs;
         }
 
-        public void CalculateSemiProductPrice(object sender, DoWorkEventArgs e)
-        {
-            int count = 0;
-            //_dataTable.RowChanged -= DataTable_RowChanged;
-
-            foreach (DataRow row in _dataTable.Rows)
-            {
-                long numberD = Convert.ToInt64(row["intermediate_nrD"]);
-                double price = CalculatePrice(numberD, 100d);
-                row["price"] = price;
-                count++;
-                (sender as BackgroundWorker).ReportProgress(count);
-            }
-
-            //_dataTable.RowChanged += DataTable_RowChanged;
-            //_modified = true;
-        }
-
-        private double CalculatePrice(long numberD, double percent)
+        public double CalculatePrice(long numberD, double percent)
         {
             double totalPrice = 0d;
             _dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);

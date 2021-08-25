@@ -28,7 +28,7 @@ namespace LabBook.Forms.SemiProduct.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _modelView.IsBusy;
         }
 
         public void Execute(object parameter)

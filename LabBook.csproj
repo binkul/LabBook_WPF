@@ -248,6 +248,7 @@
     <Compile Include="Forms\SemiProduct\Command\SaveButton.cs" />
     <Compile Include="Forms\SemiProduct\Converters\NumberToNumberDConverter.cs" />
     <Compile Include="Forms\SemiProduct\Converters\PriceWithPlnConverter.cs" />
+    <Compile Include="Forms\SemiProduct\FocusExtension.cs" />
     <Compile Include="Forms\SemiProduct\ModelView\SemiProductFormMV.cs" />
     <Compile Include="Forms\SemiProduct\ModelView\FilterMV.cs" />
     <Compile Include="Forms\SemiProduct\Model\WindowData.cs" />

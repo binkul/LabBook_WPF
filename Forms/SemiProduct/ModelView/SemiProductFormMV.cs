@@ -41,10 +41,10 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs08 = true;
         private bool _ghs09 = true;
 
-        private bool _progressVisible = true;
+        private bool _progressVisible = false;
         private int _progressCurrentValue = 1;
         private int _progressMax = 100;
-        private BackgroundWorker _worker;
+        private readonly BackgroundWorker _worker;
 
         public NavigationMV NavigationMV { get; set; }
         private readonly LabBookDto _labBookDto;
@@ -72,7 +72,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
             _worker = new BackgroundWorker();
             _worker.WorkerReportsProgress = true;
             _worker.WorkerSupportsCancellation = true;
-            _worker.DoWork += _materialService.CalculateSemiProductPrice;
+            _worker.DoWork += ProgressRun;
             _worker.ProgressChanged += ProgressChanged;
             _worker.RunWorkerCompleted += ProgressFinished;
         }
@@ -406,7 +406,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
-        public bool Modified => _materialService.Modified;
+        public bool Modified => _materialService.Modified && IsBusy;
 
         public long GetRowCount => GetSemiProductView.Count;
 
@@ -429,7 +429,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public bool IsEmptyView => _semiProductView.Count > 0;
 
-        public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]);
+        public bool IsDanger => ActualRow != null && Convert.ToBoolean(ActualRow["is_danger"]) && IsBusy;
 
         public bool IsPermited
         {
@@ -439,9 +439,9 @@ namespace LabBook.Forms.SemiProduct.ModelView
                     return false;
                 else
                 {
-                    if (UserSingleton.Id == Convert.ToInt64(_actualRow["login_id"]))
+                    if (UserSingleton.Id == Convert.ToInt64(_actualRow["login_id"]) && IsBusy)
                         return true;
-                    else if (UserSingleton.Id != Convert.ToInt64(_actualRow["login_id"]) && UserSingleton.Permission.Equals("admin"))
+                    else if (UserSingleton.Id != Convert.ToInt64(_actualRow["login_id"]) && UserSingleton.Permission.Equals("admin") & IsBusy)
                         return true;
                     else
                         return false;
@@ -449,7 +449,9 @@ namespace LabBook.Forms.SemiProduct.ModelView
             }
         }
 
-        public bool CanDelete => IsPermited && GetRowCount > 0;
+        public bool IsBusy => !_worker.IsBusy;
+
+        public bool CanDelete => IsPermited && IsBusy && GetRowCount > 0;
 
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {
@@ -602,24 +604,32 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public void CalculatePrice()
         {
-            //IsProgressVisible = true;
-            ProgressMaximum = _semiProductView.Count;
-            ProgressValue = 0;
-            //BackgroundWorker worker = new BackgroundWorker();            
-            //    worker.WorkerReportsProgress = true;
-            //    worker.DoWork += _materialService.CalculateSemiProductPrice;
-            //    worker.ProgressChanged += ProgressChanged;
-            //    worker.RunWorkerCompleted += ProgressFinished;
+            if (_worker.IsBusy)
+                return;
             _worker.RunWorkerAsync();
-            
+        }
 
-            //_materialService.CalculateSemiProductPrice(this);
-            //IsProgressVisible = false;
+        private void ProgressRun(object sender, DoWorkEventArgs e)
+        {
+            IsProgressVisible = true;
+            ProgressMaximum = _semiProductView.Count;
+            int count = 0;
+
+            foreach (DataRowView row in _semiProductView)
+            {
+                long numberD = Convert.ToInt64(row["intermediate_nrD"]);
+                double price = _materialService.CalculatePrice(numberD, 100d);
+                row["price"] = price;
+                count++;
+                (sender as BackgroundWorker).ReportProgress(count);
+            }
+
         }
 
         private void ProgressFinished(object sender, RunWorkerCompletedEventArgs e)
         {
-            //IsProgressVisible = false;
+            IsProgressVisible = false;
+            OnPropertyChanged(nameof(IsBusy), nameof(IsPermited));
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -673,6 +683,8 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public void OpenClpForm()
         {
+            if (_worker.IsBusy)
+                return;
             IDictionary<int, bool> ghs = CollectGHS();
             IList<int> clp = CollectClpId();
             string name = ActualRow["name"].ToString();

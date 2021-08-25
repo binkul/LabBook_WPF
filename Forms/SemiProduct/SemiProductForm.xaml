@@ -86,7 +86,7 @@
         <!-- Menu -->
         <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14" >
             <RibbonTab Header="Plik" >
-                <RibbonGroup Header="Operacje"  FontSize="10">
+                <RibbonGroup Header="Operacje"  FontSize="10" >
                     <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding SaveButton}"/>
                     <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
@@ -116,9 +116,10 @@
         <Grid Margin="5,0,0,0">
             <Label Content="Nazwa" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" FontWeight="Bold" FontSize="14"  />
             <TextBox x:Name="TxtName" Margin="97,10,130.6,0" Padding="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
-                 FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" Height="28"
-                 Text="{Binding SelectedItem.name, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsEnabled="{Binding IsPermited, Mode=OneWay}" />
+                     FontWeight="Bold" KeyUp="TxtBox_KeyUp" FontSize="14" Height="28"
+                     local:FocusExtension.IsFocused="{Binding IsNameFocused}"
+                     Text="{Binding SelectedItem.name, ElementName=DgMaterials, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding IsPermited, Mode=OneWay}" />
             <Label Name="LblDate" Content="{Binding SelectedItem.date_update, ElementName=DgMaterials, Mode=OneWay, Converter={StaticResource DateTimeConverter}}" 
                    Margin="0,13,9.6,0" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Height="23"  FontSize="18"
                    Padding="0" Foreground="Red" />
