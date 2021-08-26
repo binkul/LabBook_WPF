@@ -721,7 +721,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
             {
                 long numberD = Convert.ToInt64(row["intermediate_nrD"]);
                 double price = _materialService.CalculatePrice(numberD, 100d);
-                row["price"] = price;
+                row["price"] = Math.Round(price, 2);
                 count++;
                 (sender as BackgroundWorker).ReportProgress(count);
             }

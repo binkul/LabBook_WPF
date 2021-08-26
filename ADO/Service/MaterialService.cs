@@ -34,7 +34,7 @@ namespace LabBook.ADO.Service
     {
         private readonly IRepository<MaterialDto> _repository;
         private bool _modified = false;
-        private DataTable _dataTable;
+        private DataTable dataTable;
         private DataTable _dataTableClp;
 
         public MaterialService()
@@ -60,9 +60,9 @@ namespace LabBook.ADO.Service
                     break;
             }
 
-            _dataTable = _repository.GetAll(query);
-            _dataTable.RowChanged += DataTable_RowChanged;
-            DataView view = new DataView(_dataTable) { Sort = "name" };
+            dataTable = _repository.GetAll(query);
+            dataTable.RowChanged += DataTable_RowChanged;
+            DataView view = new DataView(dataTable) { Sort = "name" };
             return view;
         }
 
@@ -204,7 +204,7 @@ namespace LabBook.ADO.Service
             material = _repository.Save(material);
             if (material != null)
             {
-                DataRow newRow = _dataTable.NewRow();
+                DataRow newRow = dataTable.NewRow();
                 newRow["id"] = material.Id;
                 newRow["name"] = material.Name;
                 newRow["is_intermediate"] = material.IsIntermediate;
@@ -228,8 +228,8 @@ namespace LabBook.ADO.Service
                 newRow["date_update"] = material.DateUpdated;
 
                 bool tmp = _modified;
-                _dataTable.Rows.Add(newRow);
-                DataRow row = _dataTable.AsEnumerable()
+                dataTable.Rows.Add(newRow);
+                DataRow row = dataTable.AsEnumerable()
                     .SingleOrDefault(r => r.Field<long>("id") == material.Id);
                 row.AcceptChanges();
                 _modified = tmp;
@@ -242,7 +242,7 @@ namespace LabBook.ADO.Service
             var result = true;
             if (!_modified) return result;
 
-            foreach (DataRow row in _dataTable.Rows)
+            foreach (DataRow row in dataTable.Rows)
             {
                 if (row.RowState == DataRowState.Modified)
                 {
@@ -310,47 +310,49 @@ namespace LabBook.ADO.Service
             return delClp & delGhs;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numberD"></param>
+        /// <param name="percent"></param>
+        /// <returns> price per 1 kg in double </returns>
         public double CalculatePrice(long numberD, double percent)
         {
             double totalPrice = 0d;
-            _dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);
-            if (_dataTable.Rows.Count == 0) 
-            {
-                return (double)PriceError.NoRecipe;
-            }
+            dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);
+            if (dataTable.Rows.Count == 0) return (double)PriceError.NoRecipe;
 
-            foreach(DataRow row in _dataTable.Rows)
+            foreach (DataRow row in dataTable.Rows)
             {
-                if (row["is_intermediate"].Equals(DBNull.Value)) return (double)PriceError.NoSemiproduct;
-
+                if (row["is_intermediate"].Equals(DBNull.Value)) return (double)PriceError.NoRecipe;
                 bool intermediate = Convert.ToBoolean(row["is_intermediate"]);
+
+                if (row["price"].Equals(DBNull.Value) && !intermediate) return (double)PriceError.NoMaterialPrice;
+                if (row["rate"].Equals(DBNull.Value)) return (double)PriceError.NoCurrency;
+
                 double amount = Convert.ToDouble(row["amount"]);
+                double price = Convert.ToDouble(row["price"]);
+                double rate = Convert.ToDouble(row["rate"]);
+
                 if (intermediate)
                 {
                     long nr = Convert.ToInt64(row["intermediate_nrD"]);
-                    double semiPrice = CalculatePrice(nr, amount);
-                    if (semiPrice < 0) return semiPrice;
-                    totalPrice += semiPrice;
-                    continue;
+                    price = CalculatePrice(nr, 100d);
+                    rate = 1;
                 }
+                if (price < 0) return price;
 
-                double price = Convert.ToDouble(row["price"]);
-                double rate = Convert.ToDouble(row["rate"]);
-                if (price < 0)
-                {
-                    return (double)PriceError.NoMaterialPrice;
-                }
-                else if (rate < 0)
-                {
-                    return (double)PriceError.NoCurrency;
-                }
-                else
-                {
-                    totalPrice += amount * price * rate;
-                }
+                totalPrice += amount * price * rate;
             }
 
-            return Math.Round(percent / 100 * (totalPrice / 100), 4);
+            return totalPrice > 0 ? ((percent / 100) * totalPrice) / 100 : totalPrice;
+        }
+
+        public double CalculateVOC(long numberD, double percent)
+        {
+            double totalVOC = 0d;
+
+            return Math.Round((percent / 100) * (totalVOC / 100), 2);
         }
 
         public void CalculateSemiProductVOC(SemiProductFormMV mv)
