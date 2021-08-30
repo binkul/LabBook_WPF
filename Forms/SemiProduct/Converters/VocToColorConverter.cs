@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace LabBook.Forms.Materials.Converters
+namespace LabBook.Forms.SemiProduct.Converters
 {
-    public class PriceToColorConverter : IValueConverter
+    public class VocToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -15,7 +15,7 @@ namespace LabBook.Forms.Materials.Converters
             if (!string.IsNullOrEmpty(num))
                 _ = double.TryParse(num, out price);
 
-            return price > 0 ? Brushes.White : Brushes.Yellow;
+            return price >= 0 ? Brushes.White : Brushes.Yellow;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

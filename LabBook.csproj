@@ -248,6 +248,8 @@
     <Compile Include="Forms\SemiProduct\Command\SaveButton.cs" />
     <Compile Include="Forms\SemiProduct\Converters\NumberToNumberDConverter.cs" />
     <Compile Include="Forms\SemiProduct\Converters\PriceWithPlnConverter.cs" />
+    <Compile Include="Forms\SemiProduct\Converters\VocToColorConverter.cs" />
+    <Compile Include="Forms\SemiProduct\Converters\VocToNumberConverter.cs" />
     <Compile Include="Forms\SemiProduct\FocusExtension.cs" />
     <Compile Include="Forms\SemiProduct\ModelView\SemiProductFormMV.cs" />
     <Compile Include="Forms\SemiProduct\ModelView\FilterMV.cs" />

@@ -1,42 +1,40 @@
 ﻿using LabBook.ADO.Service;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace LabBook.Forms.SemiProduct.Converters
 {
-    public class PriceWithPlnConverter : IValueConverter
+    public class VocToNumberConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double price = 0d;
+            double voc = 0d;
             string num = value.ToString();
 
             if (!string.IsNullOrEmpty(num))
             {
-                _ = double.TryParse(num, out price);
+                _ = double.TryParse(num, out voc);
             }
 
             string result;
-            switch (price)
+            switch (voc)
             {
-                case (double)PriceError.NoRecipe:
+                case (double)VocError.NoRecipe:
                     result = "Brak rec.";
                     break;
-                case (double)PriceError.NoMaterialPrice:
-                    result = "Brak ceny sur.";
+                case (double)VocError.NoMaterialVOC:
+                    result = "Brak VOC sur.";
                     break;
-                case (double)PriceError.NoCurrency:
-                    result = "Brak waluty";
-                    break;
-                case (double)PriceError.NoSemiproduct:
+                case (double)VocError.NoSemiproduct:
                     result = "Brak polprod.";
                     break;
-                case 0:
-                    result = "-- Brak --";
-                    break;
                 default:
-                    result = price.ToString() + " zł";
+                    result = voc.ToString() + " %";
                     break;
             }
 

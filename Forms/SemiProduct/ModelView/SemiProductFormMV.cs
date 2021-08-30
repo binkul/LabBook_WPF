@@ -17,6 +17,12 @@ using System.Windows.Input;
 
 namespace LabBook.Forms.SemiProduct.ModelView
 {
+    enum CalculationType
+    {
+        price,
+        voc
+    }
+
     public class SemiProductFormMV : INotifyPropertyChanged, INavigation
     {
         private readonly double _chbWidthHalf = 6.4d;
@@ -41,6 +47,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _ghs08 = true;
         private bool _ghs09 = true;
 
+        private CalculationType _calculationType = CalculationType.price;
         private bool _progressVisible = false;
         private int _progressCurrentValue = 0;
         private int _progressMax = 0;
@@ -57,6 +64,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
         private bool _notScroll = true;
         private DataRowView _actualRow;
         private readonly DataView _semiProductView;
+        private string _status = "Gotowy";
 
 
         public RelayCommand<SelectionChangedEventArgs> OnSelectionChangedCommand { get; set; }
@@ -371,6 +379,16 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public double CmbFilterFunctionLeftPosition => TxtFilerNameLeftPosition + ColumnName;
 
+        public string TxtStatus
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged(nameof(TxtStatus));
+            }
+        }
+
         public DataView ClpData
         {
             get
@@ -390,6 +408,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
             set
             {
                 _actualRow = value;
+                TxtStatus = "Gotowy";
                 OnPropertyChanged(
                     nameof(IsPermited),
                     nameof(CanDelete),
@@ -589,35 +608,41 @@ namespace LabBook.Forms.SemiProduct.ModelView
 
         public void SaveAll()
         {
-            _ = _materialService.Update();
+            bool result = _materialService.Update();
+            TxtStatus = result ? "Zapisano" : "Błąd";
         }
 
         public void AddNewRecord()
         {
             MaterialDto semiProduct = _materialService.AddNewSemiProduct();
             GoToNewIndex(semiProduct);
+            TxtStatus = "Dodano nowy";
         }
 
         public void AddNewFromExisting()
         {
             MaterialDto semiProduct = _materialService.AddNewSemiProduct(_labBookDto.Id, _labBookDto.Title);
             GoToNewIndex(semiProduct);
+            TxtStatus = "Dodano nowy";
         }
 
         public void CalculatePrice()
         {
             if (_worker.IsBusy)
                 return;
+            _calculationType = CalculationType.price;
             _worker.RunWorkerAsync();
         }
 
         public void CalculateVOC()
         {
-            IsProgressVisible = true;
-            ProgressMaximum = _semiProductView.Count;
-            ProgressValue = 1;
-            _materialService.CalculateSemiProductVOC(this);
-            IsProgressVisible = false;
+            if (_worker.IsBusy)
+                return;
+            _calculationType = CalculationType.voc;
+            _worker.RunWorkerAsync();
+
+            //double t = _materialService.CalculateVOC(7102, 100);
+            //t = t / 100;
         }
 
         private void GoToNewIndex(MaterialDto semiProduct)
@@ -642,7 +667,13 @@ namespace LabBook.Forms.SemiProduct.ModelView
         {
             if (ActualRow != null)
             {
-                _ = _materialService.Delete(ActualRow);
+                bool result = _materialService.Delete(ActualRow);
+                if (!result)
+                {
+                    TxtStatus = "Błąd";
+                    return;
+                }
+
                 int index = 0;
                 foreach(DataRowView view in _semiProductView)
                 {
@@ -651,6 +682,7 @@ namespace LabBook.Forms.SemiProduct.ModelView
                     index++;
                 }
                 _semiProductView.Delete(index);
+                TxtStatus = "Usunięto";
                 OnPropertyChanged(nameof(GetSemiProductView));
             }
         }
@@ -720,18 +752,26 @@ namespace LabBook.Forms.SemiProduct.ModelView
             foreach (DataRowView row in _semiProductView)
             {
                 long numberD = Convert.ToInt64(row["intermediate_nrD"]);
-                double price = _materialService.CalculatePrice(numberD, 100d);
-                row["price"] = Math.Round(price, 2);
+                if (_calculationType == CalculationType.price)
+                {
+                    double price = _materialService.CalculatePrice(numberD);
+                    row["price"] = Math.Round(price, 2);
+                }
+                else
+                {
+                    double voc = _materialService.CalculateVOC(numberD);
+                    row["VOC"] = voc;
+                }
                 count++;
                 (sender as BackgroundWorker).ReportProgress(count);
             }
-
         }
 
         private void ProgressFinished(object sender, RunWorkerCompletedEventArgs e)
         {
             IsProgressVisible = false;
             SetFocus();
+            TxtStatus = "Obliczono";
         }
 
         private void ProgressChanged(object sender, ProgressChangedEventArgs e)

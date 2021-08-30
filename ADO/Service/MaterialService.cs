@@ -30,11 +30,18 @@ namespace LabBook.ADO.Service
         NoSemiproduct = -4
     }
 
+    public enum VocError
+    {
+        NoRecipe = -1,
+        NoMaterialVOC = -2,
+        NoSemiproduct = -3
+    }
+
     public class MaterialService
     {
         private readonly IRepository<MaterialDto> _repository;
         private bool _modified = false;
-        private DataTable dataTable;
+        private DataTable _dataTableMaterial;
         private DataTable _dataTableClp;
 
         public MaterialService()
@@ -60,9 +67,9 @@ namespace LabBook.ADO.Service
                     break;
             }
 
-            dataTable = _repository.GetAll(query);
-            dataTable.RowChanged += DataTable_RowChanged;
-            DataView view = new DataView(dataTable) { Sort = "name" };
+            _dataTableMaterial = _repository.GetAll(query);
+            _dataTableMaterial.RowChanged += DataTable_RowChanged;
+            DataView view = new DataView(_dataTableMaterial) { Sort = "name" };
             return view;
         }
 
@@ -204,7 +211,7 @@ namespace LabBook.ADO.Service
             material = _repository.Save(material);
             if (material != null)
             {
-                DataRow newRow = dataTable.NewRow();
+                DataRow newRow = _dataTableMaterial.NewRow();
                 newRow["id"] = material.Id;
                 newRow["name"] = material.Name;
                 newRow["is_intermediate"] = material.IsIntermediate;
@@ -228,8 +235,8 @@ namespace LabBook.ADO.Service
                 newRow["date_update"] = material.DateUpdated;
 
                 bool tmp = _modified;
-                dataTable.Rows.Add(newRow);
-                DataRow row = dataTable.AsEnumerable()
+                _dataTableMaterial.Rows.Add(newRow);
+                DataRow row = _dataTableMaterial.AsEnumerable()
                     .SingleOrDefault(r => r.Field<long>("id") == material.Id);
                 row.AcceptChanges();
                 _modified = tmp;
@@ -242,7 +249,7 @@ namespace LabBook.ADO.Service
             var result = true;
             if (!_modified) return result;
 
-            foreach (DataRow row in dataTable.Rows)
+            foreach (DataRow row in _dataTableMaterial.Rows)
             {
                 if (row.RowState == DataRowState.Modified)
                 {
@@ -316,10 +323,10 @@ namespace LabBook.ADO.Service
         /// <param name="numberD"></param>
         /// <param name="percent"></param>
         /// <returns> price per 1 kg in double </returns>
-        public double CalculatePrice(long numberD, double percent)
+        public double CalculatePrice(long numberD)
         {
             double totalPrice = 0d;
-            dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);
+            DataTable dataTable = _repository.GetAll(MaterialRepository.GetForPrice + numberD);
             if (dataTable.Rows.Count == 0) return (double)PriceError.NoRecipe;
 
             foreach (DataRow row in dataTable.Rows)
@@ -337,7 +344,7 @@ namespace LabBook.ADO.Service
                 if (intermediate)
                 {
                     long nr = Convert.ToInt64(row["intermediate_nrD"]);
-                    price = CalculatePrice(nr, 100d);
+                    price = CalculatePrice(nr);
                     rate = 1;
                 }
                 if (price < 0) return price;
@@ -345,20 +352,45 @@ namespace LabBook.ADO.Service
                 totalPrice += amount * price * rate;
             }
 
-            return totalPrice > 0 ? ((percent / 100) * totalPrice) / 100 : totalPrice;
+            return totalPrice > 0 ? totalPrice/ 100 : totalPrice;
         }
 
-        public double CalculateVOC(long numberD, double percent)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numberD"></param>
+        /// <param name="percent"></param>
+        /// <returns> VOC % in double </returns>
+        public double CalculateVOC(long numberD)
         {
             double totalVOC = 0d;
+            DataTable dataTable = _repository.GetAll(MaterialRepository.GetForVOC + numberD);
+            if (dataTable.Rows.Count == 0) return (double)PriceError.NoRecipe;
 
-            return Math.Round((percent / 100) * (totalVOC / 100), 2);
+            foreach (DataRow row in dataTable.Rows)
+            {
+
+                if (row["is_intermediate"].Equals(DBNull.Value)) return (double)VocError.NoRecipe;
+                bool intermediate = Convert.ToBoolean(row["is_intermediate"]);
+                if (row["VOC"].Equals(DBNull.Value) && !intermediate) return (double)VocError.NoMaterialVOC;
+
+                double amount = Convert.ToDouble(row["amount"]);
+                double voc = 0;
+                if (!intermediate)
+                {
+                    voc = Convert.ToDouble(row["VOC"]);
+                }
+                else
+                {
+                    long nr = Convert.ToInt64(row["intermediate_nrD"]);
+                    voc = CalculateVOC(nr);
+                }
+                if (voc < 0) return voc;
+
+                totalVOC += amount * voc;
+            }
+
+            return totalVOC > 0 ? Math.Round((totalVOC / 100), 2) : totalVOC;
         }
-
-        public void CalculateSemiProductVOC(SemiProductFormMV mv)
-        {
-
-        }
-
     }
 }

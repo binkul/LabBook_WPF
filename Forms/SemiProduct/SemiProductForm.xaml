@@ -51,6 +51,8 @@
         <ConvertMat:ClpToColorConverter x:Key="ClpToColorConverter" />
         <ConvertSemi:NumberToNumberDConverter x:Key="NumberToNumberDConverter" />
         <ConvertSemi:PriceWithPlnConverter x:Key="PriceWithPlnConverter" />
+        <ConvertSemi:VocToNumberConverter x:Key="VOCToNumberConverter" />
+        <ConvertSemi:VocToColorConverter x:Key="VOCToColorConverter" />
         <CollectionViewSource x:Key="FunctionView" Source="{Binding GetFunctionView}" />
         <CollectionViewSource x:Key="CurrencyView" Source="{Binding GetCurrencyView}" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
@@ -242,7 +244,7 @@
                                                         DisplayMemberPath="name"
                                                         SelectedValueBinding="{Binding function_id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=1}" />
 
-                                <DataGridTextColumn Header="Cena" IsReadOnly="True"
+                                <DataGridTextColumn Header="Cena [kg]" IsReadOnly="True"
                                                     CanUserSort="False"
                                                     Binding="{Binding price, Mode=OneWay, Converter={StaticResource PriceWithPlnConverter}}"
                                                     Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
@@ -261,9 +263,9 @@
                                 </DataGridTextColumn>
 
                                 <DataGridTextColumn x:Name="ColVOC" IsReadOnly="True"
-                                                    Header="VOC %" 
+                                                    Header="VOC [%]" 
                                                     CanUserSort="False"
-                                                    Binding="{Binding VOC, Mode=OneWay, Converter={StaticResource DensityConverter}}"
+                                                    Binding="{Binding VOC, Mode=OneWay, Converter={StaticResource VOCToNumberConverter}}"
                                                     Width="{Binding Data.ColumnVOC, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                                     ElementStyle="{StaticResource AllignCellCenter}"
                                                     HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
@@ -272,7 +274,7 @@
                                             <Setter Property="FontWeight" Value="{Binding VOC, Converter={StaticResource PriceToBoldConverter}}" />
                                             <Style.Triggers>
                                                 <Trigger Property="DataGridCell.IsSelected" Value="False">
-                                                    <Setter Property="Background" Value="{Binding VOC, Converter={StaticResource PriceTocColorConverter}}" />
+                                                    <Setter Property="Background" Value="{Binding VOC, Converter={StaticResource VOCToColorConverter}}" />
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
@@ -433,7 +435,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20" 
+                <Button x:Name="BtnNaviRightLast" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"  Width="20"
                     Canvas.Left="185" Canvas.Top="2" Tag="last"
                     Command="{Binding MoveLast, Source={StaticResource navi}}">
                     <StackPanel Orientation="Horizontal" >
@@ -441,8 +443,13 @@
                     </StackPanel>
                 </Button>
 
+                <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="18" Width="80" Canvas.Left="212" Canvas.Top="2"
+                       FontSize="11" Padding="0,2,0,0" Foreground="Blue" FontWeight="SemiBold"
+                       Content="{Binding TxtStatus, Mode=OneWay}">
+                </Label>
+                
                 <ProgressBar x:Name="PrgBar" HorizontalAlignment="Left" Height="20" VerticalAlignment="Bottom"
-                             Canvas.Left="210" Canvas.Top="2" Width="542" Minimum="0"
+                             Canvas.Left="300" Canvas.Top="2" Width="452" Minimum="0"
                              Visibility="{Binding IsProgressVisible, Mode=OneWay, Converter={StaticResource BoolToHiddenConverter}}"
                              Maximum="{Binding ProgressMaximum, Mode=OneWay}"
                              Value="{Binding ProgressValue, Mode=OneWay}">
