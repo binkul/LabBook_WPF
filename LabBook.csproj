@@ -93,6 +93,7 @@
     <Compile Include="ADO\Common\RepositoryCommon.cs" />
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ClpRepository.cs" />
+    <Compile Include="ADO\Repository\CompositionRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalAshBurnRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalCommonRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Commons\DelegateCommand.cs" />
     <Compile Include="Dto\ClpDto.cs" />
     <Compile Include="Dto\ComboListDto.cs" />
+    <Compile Include="Dto\CompositionDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="EntityFramework\CmbClpDataSheets.cs" />
@@ -145,8 +147,15 @@
     <Compile Include="Forms\ClpData\Model\Clp.cs" />
     <Compile Include="Forms\ClpData\Model\ClpList.cs" />
     <Compile Include="Forms\ClpData\Model\SelectedClpData.cs" />
+    <Compile Include="Forms\Composition\CompositionForm.xaml.cs">
+      <DependentUpon>CompositionForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Composition\ModelView\CompositionFormMV.cs" />
+    <Compile Include="Forms\Composition\Model\WindowData.cs" />
+    <Compile Include="Forms\Composition\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateBurn.cs" />
+    <Compile Include="Forms\MainForm\Command\CompositionButton.cs" />
     <Compile Include="Forms\MainForm\Command\MaterialButtton.cs" />
     <Compile Include="Forms\MainForm\Converters\FloatConverter.cs" />
     <Compile Include="Forms\MainForm\ModelView\AshBurnMV.cs" />
@@ -264,6 +273,10 @@
     <Compile Include="Security\UserSingleton.cs" />
     <Compile Include="System\Text\ASCII.cs" />
     <Page Include="Forms\ClpData\ClpForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Composition\CompositionForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -420,6 +433,13 @@
   <ItemGroup>
     <Resource Include="Img\money.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\compos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\compos1.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

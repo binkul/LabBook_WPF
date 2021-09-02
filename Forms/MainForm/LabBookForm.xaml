@@ -121,7 +121,6 @@
                     <RibbonButton Label="Kopia z ..." LargeImageSource="/Img/copy.png"  FontSize="12" FontWeight="Regular"
                                   Command="{Binding CopyFrom}"/>
                 </RibbonGroup>
-
             </RibbonTab>
 
             <!--#### Edycja menu ####-->
@@ -166,11 +165,12 @@
             <!--#### Okna menu ####-->
             <RibbonTab Header="Okna" >
                 <RibbonGroup Header="Otwieranie"  FontSize="10">
-                    <RibbonButton Label="Surowce" LargeImageSource="/Img/rawmaterial.png"  FontSize="12" FontWeight="Regular"
+                    <RibbonButton Label="Surowce" LargeImageSource="/Img/rawmaterial.png" FontSize="12" FontWeight="Regular"
                                  Command="{Binding MaterialButton}" />
-                    <RibbonButton Label="Półprodukty" LargeImageSource="/Img/semimaterial.png"  FontSize="12" FontWeight="Regular"
+                    <RibbonButton Label="Półprodukty" LargeImageSource="/Img/semimaterial.png" FontSize="12" FontWeight="Regular"
                                  Command="{Binding SemiProductButton}" />
-
+                    <RibbonButton Label="Skład" LargeImageSource="/Img/compos.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding CompositionButton}" />
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
@@ -238,7 +238,8 @@
 
             <ComboBox x:Name="CmbCycle" HorizontalAlignment="Left" VerticalAlignment="Top" Width="250" Margin="100,53,0,0"
                       IsEnabled="{Binding IsPermited, Mode=OneWay}"
-                      DisplayMemberPath="name" SelectedValuePath="id" 
+                      DisplayMemberPath="name" 
+                      SelectedValuePath="id" 
                       ItemsSource="{Binding GetExpCycleView}" 
                       SelectedValue="{Binding SelectedItem.cycle_id, ElementName=DgLabBook, Mode=TwoWay}" />
 

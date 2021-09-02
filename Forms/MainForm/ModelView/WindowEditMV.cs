@@ -12,6 +12,7 @@ using LabBook.Dto;
 using LabBook.Forms.Materials;
 using LabBook.Forms.Navigation;
 using LabBook.Forms.SemiProduct;
+using LabBook.Forms.Composition;
 
 namespace LabBook.Forms.MainForm.ModelView
 {
@@ -29,6 +30,7 @@ namespace LabBook.Forms.MainForm.ModelView
         private ICommand _calculateAndSaveBurn;
         private ICommand _materialButton;
         private ICommand _semiProductButton;
+        private ICommand _compositionButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private ViscosityMV _viscosityMV;
@@ -500,6 +502,15 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
+        public ICommand CompositionButton
+        {
+            get
+            {
+                if (_compositionButton == null) _compositionButton = new CompositionButton(this);
+                return _compositionButton;
+            }
+        }
+
         public void SaveAll()
         {
             _ = _labBookService.Update();
@@ -515,7 +526,6 @@ namespace LabBook.Forms.MainForm.ModelView
         {
             MaterialForm material = new MaterialForm();
             material.ShowDialog();
-            material = null;
         }
 
         public void OpenSemiProduct()
@@ -523,6 +533,12 @@ namespace LabBook.Forms.MainForm.ModelView
             LabBookDto labBookDto = new LabBookDto() { Id = Convert.ToInt64(ActualRow["id"]), Title = ActualRow["title"].ToString() };
             SemiProductForm semiProduct = new SemiProductForm(labBookDto);
             _ = semiProduct.ShowDialog();
+        }
+
+        public void OpenComposition()
+        {
+            CompositionForm compositionForm = new CompositionForm(Convert.ToInt64(ActualRow["id"]), ActualRow["title"].ToString(), Convert.ToDecimal(ActualRow["density"]));
+            _ = compositionForm.ShowDialog();
         }
 
         public void DeleteExperiment()
