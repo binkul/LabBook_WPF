@@ -12,11 +12,15 @@ namespace LabBook.Forms.Composition.ModelView
 {
     public class CompositionFormMV : INotifyPropertyChanged
     {
+        private readonly double _startLeftPosition = 34d;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private long _numberD;
         private string _title;
         private decimal _density;
+        private bool _amountMode = true;
+        private bool _massMode = false;
+
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
 
         public CompositionFormMV(Int64 numberD, string title, decimal density)
@@ -78,11 +82,143 @@ namespace LabBook.Forms.Composition.ModelView
             }
         }
 
+        public double ColumnLP
+        {
+            get => _windowData.ColumnLP;
+            set
+            {
+                _windowData.ColumnLP = value;
+                OnPropertyChanged(
+                    nameof(CmbMatrialLeftPosition),
+                    nameof(TxtAmountLeftPosition),
+                    nameof(RdAmountLeftPosition),
+                    nameof(RdAmountKgLeftPosition),
+                    nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnComponent
+        {
+            get => _windowData.ColumnComponent;
+            set
+            {
+                _windowData.ColumnComponent = value;
+                OnPropertyChanged(
+                    nameof(ColumnComponent),
+                    nameof(CmbMatrialLeftPosition),
+                    nameof(TxtAmountLeftPosition),
+                    nameof(RdAmountLeftPosition),
+                    nameof(RdAmountKgLeftPosition),
+                    nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnAmount
+        {
+            get => _windowData.ColumnAmount;
+            set
+            {
+                _windowData.ColumnAmount = value;
+                OnPropertyChanged(
+                   nameof(TxtAmountLeftPosition),
+                   nameof(RdAmountLeftPosition),
+                   nameof(RdAmountKgLeftPosition),
+                   nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnMass
+        {
+            get => _windowData.ColumnMass;
+            set
+            {
+                _windowData.ColumnMass = value;
+                OnPropertyChanged(
+                  nameof(RdAmountLeftPosition),
+                  nameof(RdAmountKgLeftPosition),
+                  nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnPriceKg
+        {
+            get => _windowData.ColumnPriceKg;
+            set
+            {
+                _windowData.ColumnPriceKg = value;
+                OnPropertyChanged(
+                 nameof(RdAmountLeftPosition),
+                 nameof(RdAmountKgLeftPosition),
+                 nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnPrice
+        {
+            get => _windowData.ColumnPrice;
+            set
+            {
+                _windowData.ColumnPrice = value;
+                OnPropertyChanged(
+                   nameof(RdAmountKgLeftPosition),
+                   nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnVoc
+        {
+            get => _windowData.ColumnVOC;
+            set
+            {
+                _windowData.ColumnVOC = value;
+                OnPropertyChanged(nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public double ColumnComment
+        {
+            get => _windowData.ColumnComment;
+            set
+            {
+                _windowData.ColumnComment = value;
+                OnPropertyChanged(nameof(TxtCommentLeftPosition));
+            }
+        }
+
+        public bool AmountMode
+        {
+            get => _amountMode;
+            set
+            {
+                _amountMode = value;
+                OnPropertyChanged(nameof(AmountMode));
+            }
+        }
+
+        public bool MassMode
+        {
+            get => _massMode;
+            set
+            {
+                _massMode = value;
+                OnPropertyChanged(nameof(MassMode));
+            }
+        }
+
+
+        public double CmbMatrialLeftPosition => _startLeftPosition + ColumnLP;
+
+        public double TxtAmountLeftPosition => CmbMatrialLeftPosition + ColumnComponent + 1;
+
+        public double RdAmountLeftPosition => TxtAmountLeftPosition + ColumnAmount + ColumnMass + (ColumnPrice / 2);
+
+        public double RdAmountKgLeftPosition => RdAmountLeftPosition + (ColumnPrice / 2) + (ColumnPriceKg / 2);
+
+        public double TxtCommentLeftPosition => RdAmountKgLeftPosition + (ColumnPriceKg / 2) + ColumnVoc;
+
         public string GetTitle => "D-" + _numberD.ToString() + "  " + _title;
 
         public decimal GetDensity => _density;
-
-
 
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {

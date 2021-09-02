@@ -107,10 +107,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public bool ProfilStandard
         {
-            get
-            {
-                return _profilStd;
-            }
+            get => _profilStd;
             set
             {
                 _profilStd = value;

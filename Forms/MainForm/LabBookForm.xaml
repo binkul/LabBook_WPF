@@ -319,7 +319,8 @@
 
                             <DataGrid.Columns>
 
-                                <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" IsReadOnly="True" CanUserSort="False"
+                                <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False"
+                                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
                                                         Width="{Binding Data.ColumnStatus, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}">
                                     <DataGridTemplateColumn.CellTemplate >
                                         <DataTemplate>

@@ -25,6 +25,7 @@
     <Window.Resources>
         <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
         <Convertors:DotConverter x:Key="DecimalConverter" />
+        <Convertors:BoolToHiddenConverter x:Key="BoolToHiddenConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -86,24 +87,24 @@
                           ItemsSource="{Binding GetMatrials}" 
                           SelectedValue="{Binding SelectedItem.component, ElementName=DgMaterials, Mode=TwoWay}" />
                 <TextBox x:Name="TxtAmount" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
-                         IsEnabled="true"
+                         IsEnabled="true" KeyUp="TxtBox_KeyUp"
                          Canvas.Top="4"
                          Canvas.Left="{Binding TxtAmountLeftPosition, Mode=OneWay, FallbackValue=200}"
                          Width="{Binding ElementName=ColAmountPr, Path=ActualWidth}"
                          Text="{Binding SelectedItem.amount, ElementName=DgMaterials, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
-                         KeyUp="TxtBox_KeyUp" />
+                         Visibility="{Binding AmountMode, Converter={StaticResource BoolToHiddenConverter}}" />
                 <RadioButton x:Name="RdMaterial" Content="Ilość" FontWeight="Bold" GroupName="Amonut"
                              Canvas.Top="8"
                              Canvas.Left="{Binding RdAmountLeftPosition, Mode=OneWay, FallbackValue=270}"
-                             IsChecked="{Binding AmounMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             IsChecked="{Binding AmountMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <RadioButton x:Name="RdSemiproduct" Content="Masa" FontWeight="Bold" GroupName="Amonut"
                              Canvas.Top="8"
                              Canvas.Left="{Binding RdAmountKgLeftPosition, Mode=OneWay, FallbackValue=340}"
-                             IsChecked="{Binding AmounKgMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             IsChecked="{Binding MassMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBox x:Name="TxtComment" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
                          IsEnabled="true"
                          Canvas.Top="4"
-                         Canvas.Left="{Binding TxtAmountLeftPosition, Mode=OneWay, FallbackValue=400}"
+                         Canvas.Left="{Binding TxtCommentLeftPosition, Mode=OneWay, FallbackValue=400}"
                          Width="{Binding ElementName=ColComment, Path=ActualWidth}"
                          Text="{Binding SelectedItem.comment, ElementName=DgMaterials, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
                          KeyUp="TxtBox_KeyUp" />
@@ -120,14 +121,14 @@
                     <DataGridTextColumn Binding="{Binding is_intermediate}" Visibility="Collapsed" />
                     <DataGridTextColumn Binding="{Binding operation}" Visibility="Collapsed" />
 
-                    <DataGridTemplateColumn x:Name="ColStatus" HeaderStyle="{StaticResource AllignColmnHeaderCenter}" 
-                                                        IsReadOnly="True" CanUserSort="False" CanUserResize="False"
-                                                        Width="32">
+                    <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"
+                                            HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
+                                            Width="32">
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
                                 <StackPanel Background="#FFE5E5E5" >
                                     <Image x:Name="ArrowRight" Width="18" Height="16" Margin="1,1,1,1" Source="/Img/arrow-right.png" 
-                                                   Visibility="Hidden">
+                                           Visibility="Hidden">
                                     </Image>
                                 </StackPanel>
                                 <DataTemplate.Triggers>
@@ -142,49 +143,49 @@
                     <DataGridTextColumn x:Name="ColLP" IsReadOnly="True"
                                         Header="L.P."
                                         Binding="{Binding ordering, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnLP, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True"
                                         Header="Surowiec"
                                         Binding="{Binding component, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnComponent, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True"
                                         Header="Ilość [%]"
                                         Binding="{Binding amount, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnAmount, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColAmountMass" IsReadOnly="True"
                                         Header="Masa [kg]"
                                         Binding="{Binding mass, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnMass, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColPriceKg" IsReadOnly="True"
                                         Header="Cena/kg"
                                         Binding="{Binding priceKg, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnPriceKg, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColPrice" IsReadOnly="True"
                                         Header="Cena"
                                         Binding="{Binding price, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnPrice, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColVoc" IsReadOnly="True"
                                         Header="Voc [kg]"
                                         Binding="{Binding voc, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnVoc, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                     <DataGridTextColumn x:Name="ColComment" IsReadOnly="True"
                                         Header="Komentarz"
                                         Binding="{Binding comment, Mode=OneWay}"
-                                        Width="{Binding Data.ColumnNumberD, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                                        Width="{Binding Data.ColumnComment, Source={StaticResource proxy}, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
 
                 </DataGrid.Columns>
