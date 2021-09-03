@@ -1,12 +1,16 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using LabBook.ADO.Service;
 using LabBook.Forms.Composition.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Component = LabBook.Forms.Composition.Model.Component;
 
 namespace LabBook.Forms.Composition.ModelView
 {
@@ -15,13 +19,17 @@ namespace LabBook.Forms.Composition.ModelView
         private readonly double _startLeftPosition = 34d;
 
         private readonly WindowData _windowData = WindowSetting.Read();
-        private long _numberD;
-        private string _title;
-        private decimal _density;
+        private readonly CompositionService _service = new CompositionService();
+        private readonly long _numberD;
+        private readonly string _title;
+        private readonly decimal _density;
         private bool _amountMode = true;
         private bool _massMode = false;
+        private readonly DataView _materialList;
 
+        public ObservableCollection<Component> Recipe { get; } = new ObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public CompositionFormMV(Int64 numberD, string title, decimal density)
         {
@@ -30,17 +38,22 @@ namespace LabBook.Forms.Composition.ModelView
             _density = density;
 
             OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
+
+            FillRecipe();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(params string[] names)
+
+        private void FillRecipe()
         {
-            if (PropertyChanged != null)
+            DataTable table = _service.GetRecipe(_numberD);
+
+            foreach(DataRow row in table.Rows)
             {
-                foreach (string name in names)
-                    PropertyChanged(this, new PropertyChangedEventArgs(name));
+
             }
         }
+
+        public DataView GetMatrials => _materialList;
 
         public double FormXpos
         {
@@ -91,6 +104,7 @@ namespace LabBook.Forms.Composition.ModelView
                 OnPropertyChanged(
                     nameof(CmbMatrialLeftPosition),
                     nameof(TxtAmountLeftPosition),
+                    nameof(TxtMassLeftPosition),
                     nameof(RdAmountLeftPosition),
                     nameof(RdAmountKgLeftPosition),
                     nameof(TxtCommentLeftPosition));
@@ -107,6 +121,7 @@ namespace LabBook.Forms.Composition.ModelView
                     nameof(ColumnComponent),
                     nameof(CmbMatrialLeftPosition),
                     nameof(TxtAmountLeftPosition),
+                    nameof(TxtMassLeftPosition),
                     nameof(RdAmountLeftPosition),
                     nameof(RdAmountKgLeftPosition),
                     nameof(TxtCommentLeftPosition));
@@ -121,6 +136,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _windowData.ColumnAmount = value;
                 OnPropertyChanged(
                    nameof(TxtAmountLeftPosition),
+                   nameof(TxtMassLeftPosition),
                    nameof(RdAmountLeftPosition),
                    nameof(RdAmountKgLeftPosition),
                    nameof(TxtCommentLeftPosition));
@@ -134,6 +150,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _windowData.ColumnMass = value;
                 OnPropertyChanged(
+                  nameof(TxtMassLeftPosition),
                   nameof(RdAmountLeftPosition),
                   nameof(RdAmountKgLeftPosition),
                   nameof(TxtCommentLeftPosition));
@@ -205,10 +222,11 @@ namespace LabBook.Forms.Composition.ModelView
             }
         }
 
-
         public double CmbMatrialLeftPosition => _startLeftPosition + ColumnLP;
 
         public double TxtAmountLeftPosition => CmbMatrialLeftPosition + ColumnComponent + 1;
+
+        public double TxtMassLeftPosition => TxtAmountLeftPosition + ColumnAmount;
 
         public double RdAmountLeftPosition => TxtAmountLeftPosition + ColumnAmount + ColumnMass + (ColumnPrice / 2);
 
@@ -219,6 +237,15 @@ namespace LabBook.Forms.Composition.ModelView
         public string GetTitle => "D-" + _numberD.ToString() + "  " + _title;
 
         public decimal GetDensity => _density;
+
+        protected void OnPropertyChanged(params string[] names)
+        {
+            if (PropertyChanged != null)
+            {
+                foreach (string name in names)
+                    PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
         public void OnClosingCommandExecuted(CancelEventArgs e)
         {

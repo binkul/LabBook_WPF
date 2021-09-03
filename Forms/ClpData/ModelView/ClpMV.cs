@@ -6,7 +6,7 @@ namespace LabBook.Forms.ClpData.ModelView
 {
     public class ClpMV : INotifyPropertyChanged, IComparable<ClpMV>
     {
-        private Clp _clpModel;
+        private readonly Clp _clpModel;
 
         public ClpMV(Clp clpModel)
         {

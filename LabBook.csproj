@@ -105,6 +105,7 @@
     <Compile Include="ADO\Repository\MaterialRepository.cs" />
     <Compile Include="ADO\Repository\UserRepository.cs" />
     <Compile Include="ADO\Service\ComboListService.cs" />
+    <Compile Include="ADO\Service\CompositionService.cs" />
     <Compile Include="ADO\Service\ExperimentalAshBurnService.cs" />
     <Compile Include="ADO\Service\ExperimentalCommonService.cs" />
     <Compile Include="ADO\Service\ExperimentalGlossService.cs" />
@@ -151,6 +152,7 @@
       <DependentUpon>CompositionForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\Composition\ModelView\CompositionFormMV.cs" />
+    <Compile Include="Forms\Composition\Model\Component.cs" />
     <Compile Include="Forms\Composition\Model\WindowData.cs" />
     <Compile Include="Forms\Composition\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />
