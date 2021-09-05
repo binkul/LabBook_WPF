@@ -31,25 +31,48 @@ namespace LabBook.Forms.Composition.ModelView
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public CompositionFormMV(Int64 numberD, string title, decimal density)
+        public CompositionFormMV() //Int64 numberD, string title, decimal density)
         {
-            _numberD = numberD;
-            _title = title;
-            _density = density;
+            _numberD = 12875; // numberD;
+            _title = "Spray granit szary"; // title;
+            _density = 1.2M; // density;
 
-            OnClosingCommand = new RelayCommand<CancelEventArgs>(this.OnClosingCommandExecuted);
+            OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
 
             FillRecipe();
         }
 
-
         private void FillRecipe()
         {
             DataTable table = _service.GetRecipe(_numberD);
+            double recMass = _service.GetRecipeMass(_numberD);
+            double price = -1d;
 
             foreach(DataRow row in table.Rows)
             {
+                int ordering = Convert.ToInt32(row["ordering"]);
+                string name = row["component"].ToString();
+                bool isSemi = Convert.ToBoolean(row["is_intermediate"]);
+                double amount = Convert.ToDouble(row["amount"]);
+                double amountKg = (amount * recMass) / 100;
+                int operation = Convert.ToInt32(row["operation"]);
+                string operationName = row["name"].ToString();
+                string comment = row["comment"].ToString();
+                double priceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : -1d;
+                double rate = Convert.ToDouble(row["rate"]);
+                long semiNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
+                decimal voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDecimal(row["VOC"]) : -1M;
+                double density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : 0d;
 
+                if (priceKg > 0 && rate > 0)
+                {
+                    priceKg *= rate;
+                    price = priceKg * amountKg;
+                }
+
+                Component component = new Component(ordering, name, amount, amountKg, priceKg, price, voc, comment, isSemi, 
+                    semiNrD, operation, operationName, density);
+                Recipe.Add(component);
             }
         }
 

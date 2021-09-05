@@ -10,18 +10,20 @@ namespace LabBook.Forms.Composition.Model
         private string _name;
         private double _amount;
         private double _mass;
-        private decimal _priceKg;
-        private decimal _price;
+        private double _priceKg;
+        private double _price;
         private decimal _voc;
         private string _comment;
         private bool _isSemi;
         private long _semiNrD;
         private int _semiLevel = 0;
         private int _operation;
+        private string _operationName;
+        private double _density;
         public ObservableCollection<Component> SemiProduct { get; } = new ObservableCollection<Component>();
 
-        public Component(int ordering, string name, double amount, double mass, decimal priceKg, decimal price, decimal voc, 
-            string comment, bool isSemi, long semiNrD, int semiLevel, int operation)
+        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc, 
+            string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
         {
             _ordering = ordering;
             _name = name;
@@ -35,10 +37,12 @@ namespace LabBook.Forms.Composition.Model
             _semiNrD = semiNrD;
             _semiLevel = semiLevel;
             _operation = operation;
+            _operationName = operationName;
+            _density = density;
         }
 
-        public Component(int ordering, string name, double amount, double mass, decimal priceKg, decimal price, decimal voc,
-            string comment, bool isSemi, long semiNrD, int operation)
+        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc,
+            string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
         {
             _ordering = ordering;
             _name = name;
@@ -51,6 +55,8 @@ namespace LabBook.Forms.Composition.Model
             _isSemi = isSemi;
             _semiNrD = semiNrD;
             _operation = operation;
+            _operationName = operationName;
+            _density = density;
         }
 
         public int Ordering
@@ -93,7 +99,7 @@ namespace LabBook.Forms.Composition.Model
             }
         }
 
-        public decimal Price
+        public double Price
         {
             get => _price;
             set
@@ -103,7 +109,7 @@ namespace LabBook.Forms.Composition.Model
             }
         }
 
-        public decimal PriceKg
+        public double PriceKg
         {
             get => _priceKg;
             set
@@ -165,6 +171,22 @@ namespace LabBook.Forms.Composition.Model
                 _operation = value;
                 OnPropertyChanged(nameof(Operation));
             }
+        }
+
+        public string OperationName
+        {
+            get => _operationName;
+            set
+            {
+                _operationName = value;
+                OnPropertyChanged(nameof(OperationName));
+            }
+        }
+
+        public double Density
+        {
+            get => _density;
+            set => _density = value;
         }
 
         public void AddSemiProduct(Component component)

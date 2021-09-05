@@ -20,12 +20,12 @@ namespace LabBook.Forms.Composition
     /// </summary>
     public partial class CompositionForm : Window
     {
-        public CompositionForm(Int64 numberD, string title, decimal density)
+        public CompositionForm(long numberD, string title, decimal density)
         {
             InitializeComponent();
 
-            CompositionFormMV compositionFormMV = new CompositionFormMV(numberD, title, density);
-            DataContext = compositionFormMV;
+            //CompositionFormMV compositionFormMV = new CompositionFormMV(numberD, title, density);
+            //DataContext = compositionFormMV;
         }
 
         private void TxtBox_KeyUp(object sender, KeyEventArgs e)
