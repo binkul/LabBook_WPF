@@ -57,6 +57,9 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
+        <Style x:Key="AllignCellContentCenter" TargetType="DataGridCell">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
     
     <DockPanel>
@@ -132,8 +135,8 @@
                       ItemsSource="{Binding Recipe}">
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
-                    <DataGridTextColumn Binding="{Binding Operation}" Visibility="Collapsed" />
+                    <DataGridTextColumn x:Name="ColSemiProd" Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
+                    <DataGridTextColumn x:Name="ColOperation" Binding="{Binding Operation}" Visibility="Collapsed" />
 
                     <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"
                                             HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
@@ -154,17 +157,112 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
+                    <!-- Column L.P. -->
                     <DataGridTextColumn x:Name="ColLP" IsReadOnly="True"
                                         Header="L.P."
                                         Binding="{Binding Ordering, Mode=OneWay}"
                                         Width="10*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" >
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- Default value -->
+                                <Setter Property="Background" Value="#FFFFF700" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="BorderThickness" Value="2,2,0,2" />
+                                <Setter Property="BorderBrush" Value="Black" />
+                                <!-- Value depends on condition -->
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="1"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="2"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="2,2,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="3"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="2,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="4"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="2,0,0,2" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
+                    <!-- Column material name -->
                     <DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True"
                                         Header="Surowiec"
                                         Binding="{Binding Name, Mode=OneWay}"
                                         Width="50*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" >
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontSize" Value="12" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- Default value -->
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Background" Value="#FFFFF700"/>
+                                <Setter Property="BorderThickness" Value="0,2,0,2" />
+                                <Setter Property="BorderBrush" Value="Black" />
+                                <!-- Value depends on condition -->
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="1"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="White" />
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="2"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="0,2,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="3"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Operation}" Value="4"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="BorderThickness" Value="0,0,0,2" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+
+                    </DataGridTextColumn>
 
                     <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True"
                                         Header="Ilość [%]"
