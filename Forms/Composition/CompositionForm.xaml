@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:LabBook.Forms.Composition"
         xmlns:localOut="clr-namespace:LabBook.Forms.MainForm"
         xmlns:mv="clr-namespace:LabBook.Forms.Composition.ModelView"
-        xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters" 
+        xmlns:Convertors="clr-namespace:LabBook.Forms.MainForm.Converters"
+        xmlns:ConvertorsLocal="clr-namespace:LabBook.Forms.Composition.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
         xmlns:cmd="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
@@ -29,9 +30,13 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <Convertors:DataGridLenghtToDoubleConverter x:Key="DoubleConverter" />
+        <Convertors:DataGridLenghtToDoubleConverter x:Key="LengthToDoubleConverter" />
         <Convertors:DotConverter x:Key="DecimalConverter" />
         <Convertors:BoolToHiddenConverter x:Key="BoolToHiddenConverter" />
+        <ConvertorsLocal:StartEndToThicknesConverter x:Key="BorderThicknesConverter" />
+        <ConvertorsLocal:StartEndToBackColorConverter x:Key="BackColorConverter" />
+        <ConvertorsLocal:StartEndBorderColorConverter x:Key="BorderColorConverter" />
+        <ConvertorsLocal:LeftPositionConverter x:Key="LeftPositionConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -91,10 +96,17 @@
                           DisplayMemberPath="name" 
                           SelectedValuePath="name"
                           Canvas.Top="4"
-                          Canvas.Left="{Binding ColumnLP, Mode=OneWay, FallbackValue=100}"
                           Width="{Binding ElementName=ColMaterial, Path=ActualWidth}"
                           ItemsSource="{Binding GetMatrials}" 
-                          SelectedValue="{Binding SelectedItem.Name, ElementName=DgMaterials, Mode=TwoWay}" />
+                          SelectedValue="{Binding SelectedItem.Name, ElementName=DgMaterials, Mode=TwoWay}" >
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="top">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </ComboBox>
                 <TextBox x:Name="TxtAmount" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
                          IsEnabled="true" KeyUp="TxtBox_KeyUp"
                          Canvas.Top="4"
@@ -132,7 +144,8 @@
                       ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                       CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
                       FrozenColumnCount="1" HeadersVisibility="Column" 
-                      ItemsSource="{Binding Recipe}">
+                      ItemsSource="{Binding Recipe}" >
+                
                 <DataGrid.Columns>
 
                     <DataGridTextColumn x:Name="ColSemiProd" Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
@@ -161,7 +174,7 @@
                     <DataGridTextColumn x:Name="ColLP" IsReadOnly="True"
                                         Header="L.P."
                                         Binding="{Binding Ordering, Mode=OneWay}"
-                                        Width="10*"
+                                        Width="{Binding Data.ColumnLP, Source={StaticResource proxy}, Converter={StaticResource LengthToDoubleConverter}, Mode=OneWayToSource, FallbackValue=10*}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}" >
@@ -169,43 +182,71 @@
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="FontSize" Value="12" />
                                 <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Foreground" Value="Black" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
-                                <!-- Default value -->
-                                <Setter Property="Background" Value="#FFFFF700" />
-                                <Setter Property="Foreground" Value="Black" />
-                                <Setter Property="BorderThickness" Value="2,2,0,2" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <!-- Value depends on condition -->
+                               <!-- BackGround color - yellow/white or blue selected -->
+                               <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border color around Star/End area -->
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border thiskness around Start/End area -->
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <!-- Another possibility to chahge color and thickness of GridCell, depends from another rules
                                 <Style.Triggers>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=Operation}" Value="1"/>
-                                        </MultiDataTrigger.Conditions>
-                                        <Setter Property="Background" Value="White" />
-                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
-                                    </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding Path=Operation}" Value="2"/>
                                         </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#FFFFF700" />
+                                        <Setter Property="BorderBrush" Value="Blue" />
                                         <Setter Property="BorderThickness" Value="2,2,0,0" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding Path=Operation}" Value="3"/>
                                         </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#FFFFF700" />
+                                        <Setter Property="BorderBrush" Value="Blue" />
                                         <Setter Property="BorderThickness" Value="2,0,0,0" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding Path=Operation}" Value="4"/>
                                         </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="#FFFFF700" />
+                                        <Setter Property="BorderBrush" Value="Blue" />
                                         <Setter Property="BorderThickness" Value="2,0,0,2" />
                                     </MultiDataTrigger>
                                 </Style.Triggers>
+                                -->
+                                
+                                
+                                
+                                
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>

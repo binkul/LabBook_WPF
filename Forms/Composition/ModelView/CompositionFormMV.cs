@@ -17,6 +17,8 @@ namespace LabBook.Forms.Composition.ModelView
     public class CompositionFormMV : INotifyPropertyChanged
     {
         private readonly double _startLeftPosition = 34d;
+        private double _dataGridWidth;
+
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();

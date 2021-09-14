@@ -15,8 +15,15 @@ namespace LabBook.Forms.MainForm.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var number = (DataGridLength)value;
-            return number.Value;
+            try
+            {
+                var number = (DataGridLength)value;
+                return number.Value;
+            }
+            catch
+            {
+                return 0d;
+            }
         }
     }
 }
