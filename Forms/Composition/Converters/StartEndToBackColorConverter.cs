@@ -16,10 +16,12 @@ namespace LabBook.Forms.Composition.Converters
             bool rowActive = System.Convert.ToBoolean(values[0]);
             int operation = System.Convert.ToInt32(values[1]);
 
-            if (operation > 1)
+            if (!rowActive && operation > 1)
                 return new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0xF7, 0x00));
-            else
+            else if (!rowActive && operation == 1)
                 return Brushes.White;
+            else
+                return new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD7));
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

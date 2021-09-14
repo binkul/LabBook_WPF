@@ -15,15 +15,29 @@ namespace LabBook.Forms.Composition.Converters
         {
             bool rowActive = System.Convert.ToBoolean(values[0]);
             int operation = System.Convert.ToInt32(values[1]);
+            string type = parameter.ToString();
 
-            if (operation == 2)
-                return new Thickness(2, 2, 0, 0);
-            else if (operation == 3)
-                return new Thickness(2, 0, 0, 0);
-            else if (operation == 4)
-                return new Thickness(2, 0, 0, 2);
-            else
-                return new Thickness(0, 0, 0, 0);
+            switch (type)
+            {
+                case "left":
+                    if (operation == 2)
+                        return new Thickness(2, 2, 0, 0);
+                    else if (operation == 3)
+                        return new Thickness(2, 0, 0, 0);
+                    else if (operation == 4)
+                        return new Thickness(2, 0, 0, 2);
+                    else
+                        return new Thickness(0, 0, 0, 0);
+                case "mid":
+                    if (operation == 2)
+                        return new Thickness(0, 2, 0, 0);
+                    else if (operation == 4)
+                        return new Thickness(0, 0, 0, 2);
+                    else
+                        return new Thickness(0, 0, 0, 0);
+                default:
+                    return new Thickness(0, 0, 0, 0);
+            }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

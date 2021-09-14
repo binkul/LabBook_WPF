@@ -16,8 +16,10 @@ namespace LabBook.Forms.Composition.Converters
             bool rowActive = System.Convert.ToBoolean(values[0]);
             int operation = System.Convert.ToInt32(values[1]);
 
-            if (operation > 1)
+            if (!rowActive && operation > 1)
                 return Brushes.Blue;
+            else if (rowActive && operation > 1)
+                return Brushes.Red;
             else
                 return Brushes.Black;
         }
