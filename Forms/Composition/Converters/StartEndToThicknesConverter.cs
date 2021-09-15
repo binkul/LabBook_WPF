@@ -35,6 +35,15 @@ namespace LabBook.Forms.Composition.Converters
                         return new Thickness(0, 0, 0, 2);
                     else
                         return new Thickness(0, 0, 0, 0);
+                case "right":
+                    if (operation == 2)
+                        return new Thickness(0, 2, 2, 0);
+                    else if (operation == 3)
+                        return new Thickness(0, 0, 2, 0);
+                    else if (operation == 4)
+                        return new Thickness(0, 0, 2, 2);
+                    else
+                        return new Thickness(0, 0, 0, 0);
                 default:
                     return new Thickness(0, 0, 0, 0);
             }

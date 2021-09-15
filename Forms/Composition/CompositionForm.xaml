@@ -37,6 +37,8 @@
         <ConvertorsLocal:StartEndToBackColorConverter x:Key="BackColorConverter" />
         <ConvertorsLocal:StartEndBorderColorConverter x:Key="BorderColorConverter" />
         <ConvertorsLocal:LeftPositionConverter x:Key="LeftPositionConverter" />
+        <ConvertorsLocal:MassRoundConverter x:Key="MassRoundConverter" />
+        <ConvertorsLocal:VocRoundConverter x:Key="VocRoundConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -64,6 +66,20 @@
         </Style>
         <Style x:Key="AllignCellContentCenter" TargetType="DataGridCell">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="DataGridTextLeftStyle" TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="3,0,0,0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style x:Key="DataGridTextCenterStyle" TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="5,0,0,0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Normal" />
         </Style>
     </Window.Resources>
     
@@ -344,16 +360,8 @@
                                         Header="Surowiec"
                                         Binding="{Binding Name, Mode=OneWay}"
                                         Width="50*"
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}" >
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Padding" Value="3,0,0,0" />
-                                <Setter Property="FontSize" Value="12" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -398,16 +406,8 @@
                                         Header="Ilość [%]"
                                         Binding="{Binding Amount, Mode=OneWay}"
                                         Width="20*"
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}" >
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Padding" Value="3,0,0,0" />
-                                <Setter Property="FontSize" Value="12" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -450,18 +450,10 @@
                     <!-- Column amount in kg -->
                     <DataGridTextColumn x:Name="ColAmountMass" IsReadOnly="True"
                                         Header="Masa [kg]"
-                                        Binding="{Binding Mass, Mode=OneWay}"
                                         Width="20*"
+                                        Binding="{Binding Mass, Converter={StaticResource MassRoundConverter}, Mode=OneWay}"
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}" >
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                                <Setter Property="Padding" Value="3,0,0,0" />
-                                <Setter Property="FontSize" Value="12" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -501,29 +493,189 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
+                    <!-- Column price per kg -->
                     <DataGridTextColumn x:Name="ColPriceKg" IsReadOnly="True"
                                         Header="Cena/kg"
-                                        Binding="{Binding PriceKg, Mode=OneWay}"
                                         Width="20*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        Binding="{Binding PriceKg, Mode=OneWay}"
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- ForeColor - white when selected -->
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <!-- BackGround color - yellow/white or blue selected -->
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border color around Star/End area -->
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border thiskness around Start/End area -->
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="mid">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
+                    <!-- Column price total -->
                     <DataGridTextColumn x:Name="ColPrice" IsReadOnly="True"
                                         Header="Cena"
                                         Binding="{Binding Price, Mode=OneWay}"
                                         Width="20*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- ForeColor - white when selected -->
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <!-- BackGround color - yellow/white or blue selected -->
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border color around Star/End area -->
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border thiskness around Start/End area -->
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="mid">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
+                    <!-- Column VOC -->
                     <DataGridTextColumn x:Name="ColVoc" IsReadOnly="True"
                                         Header="Voc [kg]"
-                                        Binding="{Binding VOC, Mode=OneWay}"
                                         Width="20*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        Binding="{Binding VOC, Converter={StaticResource VocRoundConverter}, Mode=OneWay}"
+                                        ElementStyle="{StaticResource DataGridTextCenterStyle}"
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- ForeColor - white when selected -->
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <!-- BackGround color - yellow/white or blue selected -->
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border color around Star/End area -->
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border thiskness around Start/End area -->
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="mid">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
+                    <!-- Column Comments -->
                     <DataGridTextColumn x:Name="ColComment" IsReadOnly="True"
                                         Header="Komentarz"
                                         Binding="{Binding Comment, Mode=OneWay}"
                                         Width="30*"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" />
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <!-- ForeColor - white when selected -->
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                <!-- BackGround color - yellow/white or blue selected -->
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border color around Star/End area -->
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- Border thiskness around Start/End area -->
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="right">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
 
                 </DataGrid.Columns>
             

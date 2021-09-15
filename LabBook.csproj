@@ -152,9 +152,11 @@
       <DependentUpon>CompositionForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\Composition\Converters\LeftPositionConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\MassRoundConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndBorderColorConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndToBackColorConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndToThicknesConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\VocRoundConverter.cs" />
     <Compile Include="Forms\Composition\ModelView\CompositionFormMV.cs" />
     <Compile Include="Forms\Composition\Model\Component.cs" />
     <Compile Include="Forms\Composition\Model\WindowData.cs" />
