@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace LabBook.Forms.Composition.Converters
 {
-    public class StartEndToBackColorConverter : IMultiValueConverter
+    public class StartEndVocToBackColorConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,17 +13,20 @@ namespace LabBook.Forms.Composition.Converters
             int operation = System.Convert.ToInt32(values[1]);
             bool cellContent = false;
             double cellValue = 1d;
-            
+
             if (parameter != null)
             {
                 cellContent = System.Convert.ToBoolean(parameter);
                 cellValue = System.Convert.ToDouble(values[2]);
             }
-            
+
             if (rowActive)
                 return new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD7)); // blue
 
-            if (cellContent && cellValue <= 0)
+            if (cellContent && cellValue == 0)
+                return Brushes.Orange;                                              // orange
+
+            if (cellContent && cellValue < 0)
                 return new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x33, 0x33)); // red
 
             if (operation > 1)

@@ -39,6 +39,8 @@
         <ConvertorsLocal:LeftPositionConverter x:Key="LeftPositionConverter" />
         <ConvertorsLocal:MassRoundConverter x:Key="MassRoundConverter" />
         <ConvertorsLocal:VocRoundConverter x:Key="VocRoundConverter" />
+        <ConvertorsLocal:PriceRoundConverter x:Key="PriceRounConverter" />
+        <ConvertorsLocal:StartEndVocToBackColorConverter x:Key="BackColorVocConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -497,7 +499,7 @@
                     <DataGridTextColumn x:Name="ColPriceKg" IsReadOnly="True"
                                         Header="Cena/kg"
                                         Width="20*"
-                                        Binding="{Binding PriceKg, Mode=OneWay}"
+                                        Binding="{Binding PriceKg, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
                                         ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
                         <DataGridTextColumn.CellStyle>
@@ -511,9 +513,10 @@
                                 <!-- BackGround color - yellow/white or blue selected -->
                                 <Setter Property="Background" >
                                     <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}" ConverterParameter="true">
                                             <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
                                             <Binding Path="Operation"/>
+                                            <Binding Path="PriceKg" />
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
@@ -542,8 +545,8 @@
                     <!-- Column price total -->
                     <DataGridTextColumn x:Name="ColPrice" IsReadOnly="True"
                                         Header="Cena"
-                                        Binding="{Binding Price, Mode=OneWay}"
                                         Width="20*"
+                                        Binding="{Binding Price, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
                                         ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
                         <DataGridTextColumn.CellStyle>
@@ -557,9 +560,10 @@
                                 <!-- BackGround color - yellow/white or blue selected -->
                                 <Setter Property="Background" >
                                     <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}" ConverterParameter="true">
                                             <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
                                             <Binding Path="Operation"/>
+                                            <Binding Path="PriceKg" />
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
@@ -603,9 +607,10 @@
                                 <!-- BackGround color - yellow/white or blue selected -->
                                 <Setter Property="Background" >
                                     <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                        <MultiBinding Converter="{StaticResource BackColorVocConverter}" ConverterParameter="true">
                                             <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
                                             <Binding Path="Operation"/>
+                                            <Binding Path="VOC" />
                                         </MultiBinding>
                                     </Setter.Value>
                                 </Setter>
