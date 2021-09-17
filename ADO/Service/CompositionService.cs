@@ -9,6 +9,7 @@ namespace LabBook.ADO.Service
     public class CompositionService
     {
         private readonly IRepository<CompositionDto> _repository = new CompositionRepository();
+        private DataTable _dataTableMaterial;
 
         public DataTable GetRecipe(long numberD)
         {
@@ -21,5 +22,13 @@ namespace LabBook.ADO.Service
 
             return !table.Rows[0]["mass"].Equals(DBNull.Value) ? Convert.ToDouble(table.Rows[0]["mass"]) : 1000d;
         }
+
+        public DataView GetAllMaterials()
+        {
+            _dataTableMaterial = _repository.GetAll(CompositionRepository.MaterialListQuery);
+            DataView view = new DataView(_dataTableMaterial) { Sort = "name" };
+            return view;
+        }
+
     }
 }

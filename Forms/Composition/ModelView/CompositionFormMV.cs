@@ -4,6 +4,7 @@ using LabBook.Forms.Composition.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -14,10 +15,8 @@ using Component = LabBook.Forms.Composition.Model.Component;
 
 namespace LabBook.Forms.Composition.ModelView
 {
-    public class CompositionFormMV : INotifyPropertyChanged
+    public class CompositionFormMV : INotifyPropertyChanged, INotifyCollectionChanged
     {
-        private readonly double _startLeftPosition = 34d;
-
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
         private readonly long _numberD;
@@ -25,11 +24,12 @@ namespace LabBook.Forms.Composition.ModelView
         private readonly decimal _density;
         private bool _amountMode = true;
         private bool _massMode = false;
-        private readonly DataView _materialList;
+        private readonly DataView _materialView;
 
         public ObservableCollection<Component> Recipe { get; } = new ObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public CompositionFormMV() //Int64 numberD, string title, decimal density)
         {
@@ -37,8 +37,9 @@ namespace LabBook.Forms.Composition.ModelView
             _title = "Spray granit szary"; // title;
             _density = 1.2M; // density;
 
+            _materialView = _service.GetAllMaterials();
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
-
+            
             FillRecipe();
         }
 
@@ -78,9 +79,10 @@ namespace LabBook.Forms.Composition.ModelView
                     semiNrD, operation, operationName, density);
                 Recipe.Add(component);
             }
+            Recipe.CollectionChanged += Recipe_CollectionChanged;
         }
 
-        public DataView GetMatrials => _materialList;
+        public DataView GetMatrials => _materialView;
 
         public double FormXpos
         {
@@ -146,7 +148,13 @@ namespace LabBook.Forms.Composition.ModelView
 
         public decimal GetDensity => _density;
 
-        protected void OnPropertyChanged(params string[] names)
+        private void Recipe_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            object n = e.NewItems;
+            object o = e.OldItems;
+        }
+
+       protected void OnPropertyChanged(params string[] names)
         {
             if (PropertyChanged != null)
             {

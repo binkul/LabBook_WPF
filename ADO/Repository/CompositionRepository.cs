@@ -9,6 +9,7 @@ namespace LabBook.ADO.Repository
             "o.name, c.comment, m.price, m.currency_id, r.rate, m.intermediate_nrD, m.VOC, m.density From LabBook.dbo.ExpComposition c " +
             "Left Join(LabBook.dbo.Material m Left Join LabBook.dbo.CmbCurrency r on m.currency_id= r.id) on c.component=m.name " +
             "Left Join LabBook.dbo.CmbCompOperation o on c.operation= o.id Where c.labbook_id=";
+        public static readonly string MaterialListQuery = "Select id, name from LabBook.dbo.Material Order By name";
         public static readonly string RecipeDataQuery = "Select Top 1 * From LabBook.dbo.ExpCompositionData Where labbook_id=";
     }
 }
