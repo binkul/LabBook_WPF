@@ -537,7 +537,8 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public void OpenComposition()
         {
-            CompositionForm compositionForm = new CompositionForm(Convert.ToInt64(ActualRow["id"]), ActualRow["title"].ToString(), Convert.ToDecimal(ActualRow["density"]));
+            CompositionEnterDto recipe = new CompositionEnterDto(Convert.ToInt64(ActualRow["id"]), ActualRow["title"].ToString(), Convert.ToDecimal(ActualRow["density"]));
+            CompositionForm compositionForm = new CompositionForm(recipe);
             _ = compositionForm.ShowDialog();
         }
 

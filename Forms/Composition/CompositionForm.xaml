@@ -40,7 +40,10 @@
         <ConvertorsLocal:MassRoundConverter x:Key="MassRoundConverter" />
         <ConvertorsLocal:VocRoundConverter x:Key="VocRoundConverter" />
         <ConvertorsLocal:PriceRoundConverter x:Key="PriceRounConverter" />
+        <ConvertorsLocal:PercentRounConverter x:Key="PercentRounConverter" />
         <ConvertorsLocal:StartEndVocToBackColorConverter x:Key="BackColorVocConverter" />
+        <ConvertorsLocal:SumAmountToStringConverter x:Key="SumAmountToStringConverter" />
+        <ConvertorsLocal:SumPercentToColorConverter x:Key="SumPercentToColorConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -108,18 +111,23 @@
                    Content="{Binding GetTitle, Mode=OneWay}"/>
 
             <!-- Setting values for recipes -->
-            <Canvas x:Name="CanvasFilterData" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30">
                 
                 <!-- Combo with material list -->
                 <ComboBox x:Name="CmbMaterial"
-                          IsEnabled="true"
-                          IsTextSearchEnabled="True"
-                          DisplayMemberPath="name" 
-                          SelectedValuePath="name"
+                          IsEditable="true"
+                          IsTextSearchEnabled="true"
+                          StaysOpenOnEdit="true"
                           Canvas.Top="4"
                           Width="{Binding ElementName=ColMaterial, Path=ActualWidth}"
+                          Text="{Binding ComponentName}"
                           ItemsSource="{Binding GetMatrials}" 
-                          SelectedValue="{Binding SelectedItem.Name, ElementName=DgMaterials, Mode=TwoWay}" >
+                          DisplayMemberPath="name">
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="cmbMaterial">
                             <Binding ElementName="ColStatus" Path="ActualWidth" />
@@ -141,7 +149,7 @@
                          Height="22"
                          Canvas.Top="4"
                          Width="{Binding ElementName=ColAmountPr, Path=ActualWidth}"
-                         Text="{Binding SelectedItem.Amount, ElementName=DgMaterials, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
+                         Text="{Binding ComponentPercent, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
                          Visibility="{Binding AmountMode, Converter={StaticResource BoolToHiddenConverter}}" >
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtAmount">
@@ -164,7 +172,7 @@
                          Height="22"
                          Canvas.Top="4"
                          Width="{Binding ElementName=ColAmountMass, Path=ActualWidth}"
-                         Text="{Binding SelectedItem.Mass, ElementName=DgMaterials, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
+                         Text="{Binding ComponentMass, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
                          Visibility="{Binding MassMode, Converter={StaticResource BoolToHiddenConverter}}" >
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtMass">
@@ -244,11 +252,11 @@
 
             </Canvas>
 
-
-            <DataGrid x:Name="DgMaterials" Margin="2,70,2,40"  HorizontalAlignment="Stretch" AutoGenerateColumns="False" 
+            <DataGrid x:Name="DgMaterials" Margin="2,70,2,45"  HorizontalAlignment="Stretch" AutoGenerateColumns="False" 
                       ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                       CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
-                      FrozenColumnCount="1" HeadersVisibility="Column" 
+                      FrozenColumnCount="1" HeadersVisibility="Column"
+                      SelectedIndex="{Binding SelectedIndex}"
                       ItemsSource="{Binding Recipe}" >
                 
                 <DataGrid.Columns>
@@ -406,7 +414,7 @@
                     <!-- Column amount in % -->
                     <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True"
                                         Header="Ilość [%]"
-                                        Binding="{Binding Amount, Mode=OneWay}"
+                                        Binding="{Binding Amount, Converter={StaticResource PercentRounConverter}, Mode=OneWay}"
                                         Width="20*"
                                         ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
@@ -686,6 +694,70 @@
             
             </DataGrid>
 
+            <!-- Sum of recipe data -->
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="45" >
+                
+                <!-- Density -->
+                <Label Canvas.Left="5" Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" 
+                       Content="{Binding GetDensity, Mode=OneWay}" />
+
+                <!-- Caption 'SUMA' -->
+                <Label Content="SUMA:" Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" >
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="SumText">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+
+                </Label>
+
+                <!-- Sum of % -->
+                <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetSumPercent, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Percent'}" 
+                       Foreground="{Binding GetSumPercent, Converter={StaticResource SumPercentToColorConverter}, Mode=OneWay}">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtAmount">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
+                <!-- Sum of mass -->
+                <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetSumMass, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Mass'}"
+                       Foreground="Green">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtMass">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+            </Canvas>
+            
         </Grid>
     </DockPanel>
 </Window>

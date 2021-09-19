@@ -1,8 +1,10 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Repository;
 using LabBook.Dto;
-using System;
+using LabBook.Forms.Composition.Model;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace LabBook.ADO.Service
 {
@@ -16,11 +18,10 @@ namespace LabBook.ADO.Service
             return _repository.GetAll(CompositionRepository.AllRecipeQuery + numberD.ToString());
         }
 
-        public double GetRecipeMass(long numberD)
+        public CompositionData GetRecipeData(long numberD, string title, decimal density)
         {
-            DataTable table = _repository.GetAll(CompositionRepository.RecipeDataQuery + numberD.ToString());
-
-            return !table.Rows[0]["mass"].Equals(DBNull.Value) ? Convert.ToDouble(table.Rows[0]["mass"]) : 1000d;
+            CompositionRepository repository = (CompositionRepository)_repository;
+            return repository.GetRecipeData(numberD, title, density);
         }
 
         public DataView GetAllMaterials()
@@ -30,5 +31,20 @@ namespace LabBook.ADO.Service
             return view;
         }
 
+        public double SumOfPercent(IList<Component> recipe)
+        {
+            return recipe
+                .Where(x => x.Level == 0)
+                .Select(x => x.Amount)
+                .Sum();
+        }
+
+        public double SumOfMass(IList<Component> recipe)
+        {
+            return recipe
+                .Where(x => x.Level == 0)
+                .Select(x => x.Mass)
+                .Sum();
+        }
     }
 }

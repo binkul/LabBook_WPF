@@ -6,6 +6,7 @@ namespace LabBook.Forms.Composition.Model
 {
     public class Component : INotifyPropertyChanged, IComparable<Component>
     {
+        private int _level = 0;
         private int _ordering;
         private string _name;
         private double _amount;
@@ -22,9 +23,10 @@ namespace LabBook.Forms.Composition.Model
         private double _density;
         public ObservableCollection<Component> SemiProduct { get; } = new ObservableCollection<Component>();
 
-        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc, 
+        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc, 
             string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
         {
+            _level = level;
             _ordering = ordering;
             _name = name;
             _amount = amount;
@@ -57,6 +59,16 @@ namespace LabBook.Forms.Composition.Model
             _operation = operation;
             _operationName = operationName;
             _density = density;
+        }
+
+        public int Level
+        {
+            get => _level;
+            set
+            {
+                _level = value;
+                OnPropertyChanged(nameof(Level));
+            }
         }
 
         public int Ordering

@@ -1,4 +1,5 @@
-﻿using LabBook.Forms.Composition.ModelView;
+﻿using LabBook.Dto;
+using LabBook.Forms.Composition.ModelView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace LabBook.Forms.Composition
     /// </summary>
     public partial class CompositionForm : Window
     {
-        public CompositionForm(long numberD, string title, decimal density)
+        public CompositionForm(CompositionEnterDto recipe)
         {
             InitializeComponent();
 
-            //CompositionFormMV compositionFormMV = new CompositionFormMV(numberD, title, density);
+            //CompositionFormMV compositionFormMV = new CompositionFormMV(recipe);
             //DataContext = compositionFormMV;
         }
 

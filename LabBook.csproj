@@ -117,9 +117,11 @@
     <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
     <Compile Include="Commons\DelegateCommand.cs" />
+    <Compile Include="Commons\SortableObservableCollection.cs" />
     <Compile Include="Dto\ClpDto.cs" />
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\CompositionDto.cs" />
+    <Compile Include="Dto\CompositionEnterDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="EntityFramework\CmbClpDataSheets.cs" />
@@ -153,14 +155,18 @@
     </Compile>
     <Compile Include="Forms\Composition\Converters\LeftPositionConverter.cs" />
     <Compile Include="Forms\Composition\Converters\MassRoundConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\PercentRounConverter.cs" />
     <Compile Include="Forms\Composition\Converters\PriceRoundConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndBorderColorConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndToBackColorConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndToThicknesConverter.cs" />
     <Compile Include="Forms\Composition\Converters\StartEndVocToBackColorConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\SumPercentToColorConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\SumAmountToStringConverter.cs" />
     <Compile Include="Forms\Composition\Converters\VocRoundConverter.cs" />
     <Compile Include="Forms\Composition\ModelView\CompositionFormMV.cs" />
     <Compile Include="Forms\Composition\Model\Component.cs" />
+    <Compile Include="Forms\Composition\Model\CompositionData.cs" />
     <Compile Include="Forms\Composition\Model\WindowData.cs" />
     <Compile Include="Forms\Composition\Model\WindowSetting.cs" />
     <Compile Include="Forms\MainForm\Command\CalculateAndSaveBurn.cs" />

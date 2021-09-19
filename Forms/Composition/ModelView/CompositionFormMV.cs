@@ -1,61 +1,62 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
+using LabBook.Commons;
+using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using Component = LabBook.Forms.Composition.Model.Component;
 
 namespace LabBook.Forms.Composition.ModelView
 {
-    public class CompositionFormMV : INotifyPropertyChanged, INotifyCollectionChanged
+    public class CompositionFormMV : INotifyPropertyChanged
     {
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
         private readonly long _numberD;
+        private readonly CompositionData _recipeData;
         private readonly string _title;
         private readonly decimal _density;
+        private double _componentPercent;
+        private double _componentMass;
+        private double _totalMass = 1000;
+        private string _componentName;
         private bool _amountMode = true;
         private bool _massMode = false;
         private readonly DataView _materialView;
+        private int _selectedIndex;
 
-        public ObservableCollection<Component> Recipe { get; } = new ObservableCollection<Component>();
+        public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public CompositionFormMV() //Int64 numberD, string title, decimal density)
+        public CompositionFormMV() //CompositionEnterDto data)
         {
-            _numberD = 12875; // numberD;
-            _title = "Spray granit szary"; // title;
-            _density = 1.2M; // density;
+            _numberD = 12875; // data.NumberD;
+            _title =  "Spray granit szary"; // data.Title;
+            _density =  1.2M; // data.Density;
 
             _materialView = _service.GetAllMaterials();
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
-            
+
+            _recipeData = _service.GetRecipeData(_numberD, _title, _density);
             FillRecipe();
         }
 
         private void FillRecipe()
         {
             DataTable table = _service.GetRecipe(_numberD);
-            double recMass = _service.GetRecipeMass(_numberD);
-            double price = -1d;
 
-            foreach(DataRow row in table.Rows)
+            foreach (DataRow row in table.Rows)
             {
                 int ordering = Convert.ToInt32(row["ordering"]);
                 string name = row["component"].ToString();
                 bool isSemi = Convert.ToBoolean(row["is_intermediate"]);
                 double amount = Convert.ToDouble(row["amount"]);
-                double amountKg = (amount * recMass) / 100;
+                double amountKg = amount * _recipeData.Mass / 100;
                 int operation = Convert.ToInt32(row["operation"]);
                 string operationName = row["name"].ToString();
                 string comment = row["comment"].ToString();
@@ -65,6 +66,7 @@ namespace LabBook.Forms.Composition.ModelView
                 decimal voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDecimal(row["VOC"]) : -1M;
                 double density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : 0d;
 
+                double price;
                 if (priceKg > 0 && rate > 0)
                 {
                     priceKg *= rate;
@@ -75,11 +77,11 @@ namespace LabBook.Forms.Composition.ModelView
                     price = -1d;
                 }
 
-                Component component = new Component(ordering, name, amount, amountKg, priceKg, price, voc, comment, isSemi, 
+                Component component = new Component(ordering, name, amount, amountKg, priceKg, price, voc, comment, isSemi,
                     semiNrD, operation, operationName, density);
                 Recipe.Add(component);
             }
-            Recipe.CollectionChanged += Recipe_CollectionChanged;
+            if (Recipe.Count > 0) SelectedIndex = 0;
         }
 
         public DataView GetMatrials => _materialView;
@@ -146,15 +148,66 @@ namespace LabBook.Forms.Composition.ModelView
 
         public string GetTitle => "D-" + _numberD.ToString() + "  " + _title;
 
-        public decimal GetDensity => _density;
+        public string GetDensity => "Gęstość: " + _density.ToString("F4", CultureInfo.CurrentCulture) + " g/cm3";
 
-        private void Recipe_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public double GetSumPercent => _service.SumOfPercent(Recipe);
+
+        public double GetSumMass => _service.SumOfMass(Recipe);
+
+        public int SelectedIndex
         {
-            object n = e.NewItems;
-            object o = e.OldItems;
+            get => _selectedIndex;
+            set
+            {
+                _selectedIndex = value;
+                _componentPercent = Recipe[_selectedIndex].Amount;
+                _componentMass = Recipe[_selectedIndex].Mass;
+                _componentName = Recipe[_selectedIndex].Name;
+                OnPropertyChanged(nameof(ComponentPercent));
+                OnPropertyChanged(nameof(ComponentMass));
+                OnPropertyChanged(nameof(ComponentName));
+            }
         }
 
-       protected void OnPropertyChanged(params string[] names)
+        public double ComponentPercent
+        {
+            get => _componentPercent;
+            set
+            {
+                _componentPercent = Convert.ToDouble(value);
+                Recipe[_selectedIndex].Amount = _componentPercent;
+                OnPropertyChanged(nameof(GetSumPercent));
+            }
+        }
+
+        public double ComponentMass
+        {
+            get => _componentMass;
+            set
+            {
+                _componentMass = Convert.ToDouble(value);
+                Recipe[_selectedIndex].Mass = _componentMass;
+            }
+        }
+
+        public double TotalMass
+        {
+            get => _totalMass;
+            set => _totalMass = Convert.ToDouble(value);
+        }
+
+        public string ComponentName
+        {
+            get => _componentName;
+            set => _componentName = value;
+        }
+
+        private void SortRecipe()
+        {
+            Recipe.Sort(x => x.Ordering, ListSortDirection.Ascending);
+        }
+
+        protected void OnPropertyChanged(params string[] names)
         {
             if (PropertyChanged != null)
             {

@@ -49,6 +49,9 @@ namespace LabBook.Forms.Composition.Converters
                     result = start + colStatus + colLP + colMaterial + colAmountPr
                         + colAmountMass + colPriceKg + colPrice + colVoc;
                     break;
+                case "SumText":
+                    result = start + colStatus + colLP + colMaterial - 60;
+                    break;
                 default:
                     result = 0;
                     break;
