@@ -46,5 +46,15 @@ namespace LabBook.ADO.Service
                 .Select(x => x.Mass)
                 .Sum();
         }
+
+        public double SumOfPrices(IList<Component> recipe)
+        {
+            return recipe.Count(x => x.PriceKg <= 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.Price).Sum();
+        }
+
+        public double SumOfVoc(IList<Component> recipe)
+        {
+            return recipe.Count(x => x.VOC < 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.VOC).Sum();
+        }
     }
 }

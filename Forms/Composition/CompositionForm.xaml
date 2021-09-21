@@ -236,7 +236,7 @@
                          Text="{Binding SelectedItem.Comment, ElementName=DgMaterials, Mode=TwoWay, Converter={StaticResource DecimalConverter} }" 
                          KeyUp="TxtBox_KeyUp" >
                     <Canvas.Left>
-                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtVoc">
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtComment">
                             <Binding ElementName="ColStatus" Path="ActualWidth" />
                             <Binding ElementName="ColLP" Path="ActualWidth" />
                             <Binding ElementName="ColMaterial" Path="ActualWidth" />
@@ -264,6 +264,7 @@
                     <DataGridTextColumn x:Name="ColSemiProd" Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
                     <DataGridTextColumn x:Name="ColOperation" Binding="{Binding Operation}" Visibility="Collapsed" />
 
+                    <!-- Column status -->
                     <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"
                                             HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
                                             Width="32">
@@ -284,7 +285,7 @@
                     </DataGridTemplateColumn>
                     
                     <!-- Column L.P. -->
-                    <DataGridTextColumn x:Name="ColLP" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColLP" IsReadOnly="True" CanUserSort="False"
                                         Header="L.P."
                                         Binding="{Binding Ordering, Mode=OneWay}"
                                         Width="10*"
@@ -366,7 +367,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column material name -->
-                    <DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False"
                                         Header="Surowiec"
                                         Binding="{Binding Name, Mode=OneWay}"
                                         Width="50*"
@@ -412,7 +413,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column amount in % -->
-                    <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True" CanUserSort="False"
                                         Header="Ilość [%]"
                                         Binding="{Binding Amount, Converter={StaticResource PercentRounConverter}, Mode=OneWay}"
                                         Width="20*"
@@ -458,7 +459,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column amount in kg -->
-                    <DataGridTextColumn x:Name="ColAmountMass" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColAmountMass" IsReadOnly="True" CanUserSort="False"
                                         Header="Masa [kg]"
                                         Width="20*"
                                         Binding="{Binding Mass, Converter={StaticResource MassRoundConverter}, Mode=OneWay}"
@@ -504,7 +505,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column price per kg -->
-                    <DataGridTextColumn x:Name="ColPriceKg" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColPriceKg" IsReadOnly="True" CanUserSort="False"
                                         Header="Cena/kg"
                                         Width="20*"
                                         Binding="{Binding PriceKg, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
@@ -551,7 +552,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column price total -->
-                    <DataGridTextColumn x:Name="ColPrice" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColPrice" IsReadOnly="True" CanUserSort="False"
                                         Header="Cena"
                                         Width="20*"
                                         Binding="{Binding Price, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
@@ -598,7 +599,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column VOC -->
-                    <DataGridTextColumn x:Name="ColVoc" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColVoc" IsReadOnly="True" CanUserSort="False"
                                         Header="Voc [kg]"
                                         Width="20*"
                                         Binding="{Binding VOC, Converter={StaticResource VocRoundConverter}, Mode=OneWay}"
@@ -645,7 +646,7 @@
                     </DataGridTextColumn>
 
                     <!-- Column Comments -->
-                    <DataGridTextColumn x:Name="ColComment" IsReadOnly="True"
+                    <DataGridTextColumn x:Name="ColComment" IsReadOnly="True" CanUserSort="False"
                                         Header="Komentarz"
                                         Binding="{Binding Comment, Mode=OneWay}"
                                         Width="30*"
@@ -756,6 +757,64 @@
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
+            
+                <!-- Sum of price -->
+                <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetSumPrice, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Price'}"
+                       Foreground="Green">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPrice">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+              
+                <!-- Sum of VOC -->
+                <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetSumVoc, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Voc'}"
+                       Foreground="Green">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtVoc">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
+                <!-- Sum of VOC g/l -->
+                <Label Canvas.Top="22" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetSumVocPerLiter, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='VocPerL'}"
+                       Foreground="Green">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtVoc">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
             </Canvas>
             
         </Grid>

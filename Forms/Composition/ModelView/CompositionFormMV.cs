@@ -22,7 +22,6 @@ namespace LabBook.Forms.Composition.ModelView
         private readonly decimal _density;
         private double _componentPercent;
         private double _componentMass;
-        private double _totalMass = 1000;
         private string _componentName;
         private bool _amountMode = true;
         private bool _massMode = false;
@@ -63,7 +62,7 @@ namespace LabBook.Forms.Composition.ModelView
                 double priceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : -1d;
                 double rate = Convert.ToDouble(row["rate"]);
                 long semiNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
-                decimal voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDecimal(row["VOC"]) : -1M;
+                double voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
                 double density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : 0d;
 
                 double price;
@@ -152,7 +151,22 @@ namespace LabBook.Forms.Composition.ModelView
 
         public double GetSumPercent => _service.SumOfPercent(Recipe);
 
+        public double GetSumPrice => _service.SumOfPrices(Recipe);
+
         public double GetSumMass => _service.SumOfMass(Recipe);
+
+        public double GetSumVoc => _service.SumOfVoc(Recipe);
+
+        public double GetSumVocPerLiter
+        {
+            get
+            {
+                if (GetSumVoc >= 0 && _recipeData.Density > 0)
+                    return GetSumVoc * Convert.ToDouble(_recipeData.Density) * 10;
+                else
+                    return -1;
+            }
+        }
 
         public int SelectedIndex
         {
@@ -187,13 +201,8 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentMass = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Mass = _componentMass;
+                OnPropertyChanged(nameof(GetSumMass));
             }
-        }
-
-        public double TotalMass
-        {
-            get => _totalMass;
-            set => _totalMass = Convert.ToDouble(value);
         }
 
         public string ComponentName

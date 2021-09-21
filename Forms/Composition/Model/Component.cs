@@ -13,7 +13,7 @@ namespace LabBook.Forms.Composition.Model
         private double _mass;
         private double _priceKg;
         private double _price;
-        private decimal _voc;
+        private double _voc;
         private string _comment;
         private bool _isSemi;
         private long _semiNrD;
@@ -23,7 +23,7 @@ namespace LabBook.Forms.Composition.Model
         private double _density;
         public ObservableCollection<Component> SemiProduct { get; } = new ObservableCollection<Component>();
 
-        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc, 
+        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, double voc, 
             string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
         {
             _level = level;
@@ -43,7 +43,7 @@ namespace LabBook.Forms.Composition.Model
             _density = density;
         }
 
-        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, decimal voc,
+        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, double voc,
             string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
         {
             _ordering = ordering;
@@ -131,7 +131,7 @@ namespace LabBook.Forms.Composition.Model
             }
         }
 
-        public decimal VOC
+        public double VOC
         {
             get => _voc;
             set
