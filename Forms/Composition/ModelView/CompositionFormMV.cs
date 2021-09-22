@@ -4,9 +4,12 @@ using LabBook.Commons;
 using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using Component = LabBook.Forms.Composition.Model.Component;
 
@@ -145,9 +148,27 @@ namespace LabBook.Forms.Composition.ModelView
             }
         }
 
+        public double GetTotalMass
+        {
+            get => _recipeData.Mass;
+            set
+            {
+                _recipeData.Mass = value;
+            }
+        }
+
         public string GetTitle => "D-" + _numberD.ToString() + "  " + _title;
 
-        public string GetDensity => "Gęstość: " + _density.ToString("F4", CultureInfo.CurrentCulture) + " g/cm3";
+        public string GetDensity
+        {
+            get
+            {
+                if (_density > 0)
+                    return "Gęstość: " + _density.ToString("F4", CultureInfo.CurrentCulture) + " g/cm3";
+                else
+                    return "Gęstość: -- Brak --"
+            }
+        }
 
         public double GetSumPercent => _service.SumOfPercent(Recipe);
 
@@ -156,7 +177,7 @@ namespace LabBook.Forms.Composition.ModelView
         public double GetSumMass => _service.SumOfMass(Recipe);
 
         public double GetSumVoc => _service.SumOfVoc(Recipe);
-
+        
         public double GetSumVocPerLiter
         {
             get

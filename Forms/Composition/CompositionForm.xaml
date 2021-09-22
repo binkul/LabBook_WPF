@@ -757,7 +757,44 @@
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
-            
+
+                <!-- Caption 'SUMA' -->
+                <Label Content="MASA:" Canvas.Top="21" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" >
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="MasaText">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
+                <!-- Set total mass -->
+                <TextBox Canvas.Top="20" FontWeight="Bold" Padding="5,0,0,2" Foreground="Black" FontSize="14" KeyUp="TxtBox_KeyUp"
+                         Width="{Binding ElementName=ColAmountMass, Path=ActualWidth}"
+                         Text="{Binding GetTotalMass, Mode=TwoWay, Converter={StaticResource DecimalConverter}}"
+                         IsEnabled="{Binding AmountMode, Mode=OneWay}">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtMass">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </TextBox>
+                
                 <!-- Sum of price -->
                 <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
                        Content="{Binding GetSumPrice, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Price'}"

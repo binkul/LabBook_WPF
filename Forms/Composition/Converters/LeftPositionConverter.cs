@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace LabBook.Forms.Composition.Converters
@@ -59,6 +54,9 @@ namespace LabBook.Forms.Composition.Converters
                     break;
                 case "SumText":
                     result = start + colStatus + colLP + colMaterial - 60;
+                    break;
+                case "MasaText":
+                    result = start + colStatus + colLP + colMaterial + colAmountPr - 55;
                     break;
                 default:
                     result = 0;
