@@ -1,7 +1,9 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Repository;
+using LabBook.Commons;
 using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -13,9 +15,43 @@ namespace LabBook.ADO.Service
         private readonly IRepository<CompositionDto> _repository = new CompositionRepository();
         private DataTable _dataTableMaterial;
 
-        public DataTable GetRecipe(long numberD)
+        public void GetRecipe(IList<Component> recipe, CompositionData data)
         {
-            return _repository.GetAll(CompositionRepository.AllRecipeQuery + numberD.ToString());
+            DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + data.LabBookId.ToString());
+
+            foreach (DataRow row in table.Rows)
+            {
+                Component component = new Component
+                {
+                    Ordering = Convert.ToInt32(row["ordering"]),
+                    Name = row["component"].ToString(),
+                    IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]),
+                    Amount = Convert.ToDouble(row["amount"]),
+                    Operation = Convert.ToInt32(row["operation"]),
+                    OperationName = row["name"].ToString(),
+                    Comment = row["comment"].ToString()
+                };
+
+                component.Mass = component.Amount * data.Mass / 100;
+                component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : -1d;
+                component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
+                component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
+                component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
+
+                double rate = Convert.ToDouble(row["rate"]);
+                if (component.PriceKg > 0 && rate > 0)
+                {
+                    component.PriceKg *= rate;
+                    component.Price = component.PriceKg * component.Mass;
+                }
+
+                if (component.VocPercent > 0)
+                {
+                    component.VOC = component.VocPercent * component.Mass / 100;
+                }
+
+                recipe.Add(component);
+            }
         }
 
         public CompositionData GetRecipeData(long numberD, string title, decimal density)
@@ -55,6 +91,59 @@ namespace LabBook.ADO.Service
         public double SumOfVoc(IList<Component> recipe)
         {
             return recipe.Count(x => x.VOC < 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.VOC).Sum();
+        }
+
+        public void RecalculateByAmount(IList<Component> recipe, CompositionData compositionData)
+        {
+            foreach(Component component in recipe)
+            {
+                if (component.Level > 0) continue;
+
+                double amount = component.Amount;
+                component.Mass = amount * compositionData.Mass / 100;
+                if (component.PriceKg > 0)
+                {
+                    component.Price = component.PriceKg * component.Mass;
+                }
+                if (component.VocPercent >= 0)
+                {
+                    component.VOC = component.VocPercent * component.Mass / 100;
+                }
+            }
+        }
+
+        public void RecalculateByMass(IList<Component> recipe, CompositionData compositionData)
+        {
+            compositionData.Mass = SumOfMass(recipe);
+
+            foreach (Component component in recipe)
+            {
+                if (component.Level > 0) continue;
+
+                component.Amount = component.Mass / compositionData.Mass * 100;
+                if (component.PriceKg > 0)
+                {
+                    component.Price = component.PriceKg * component.Mass;
+                }
+                if (component.VocPercent >= 0)
+                {
+                    component.VOC = component.VocPercent * component.Mass / 100;
+                }
+            }
+        }
+
+        public void UpdateComponent(Component component, CompositionData compositionData)
+        {
+            MaterialRepository materialRepository = new MaterialRepository();
+            MaterialDto material = materialRepository.GetByName(component.Name);
+            decimal rate = 0;
+
+            if (material.Id > 0)
+            {
+                CurrencyRepository currencyRepository = new CurrencyRepository();
+                CurrencyDto currency = currencyRepository.GetById(material.CurrencyId, CurrencyRepository.GetByIdQuery);
+                rate = currency.Rate;
+            }
         }
     }
 }

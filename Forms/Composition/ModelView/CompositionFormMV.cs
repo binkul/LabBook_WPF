@@ -45,44 +45,7 @@ namespace LabBook.Forms.Composition.ModelView
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
 
             _recipeData = _service.GetRecipeData(_numberD, _title, _density);
-            FillRecipe();
-        }
-
-        private void FillRecipe()
-        {
-            DataTable table = _service.GetRecipe(_numberD);
-
-            foreach (DataRow row in table.Rows)
-            {
-                int ordering = Convert.ToInt32(row["ordering"]);
-                string name = row["component"].ToString();
-                bool isSemi = Convert.ToBoolean(row["is_intermediate"]);
-                double amount = Convert.ToDouble(row["amount"]);
-                double amountKg = amount * _recipeData.Mass / 100;
-                int operation = Convert.ToInt32(row["operation"]);
-                string operationName = row["name"].ToString();
-                string comment = row["comment"].ToString();
-                double priceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : -1d;
-                double rate = Convert.ToDouble(row["rate"]);
-                long semiNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
-                double voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
-                double density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : 0d;
-
-                double price;
-                if (priceKg > 0 && rate > 0)
-                {
-                    priceKg *= rate;
-                    price = priceKg * amountKg;
-                }
-                else
-                {
-                    price = -1d;
-                }
-
-                Component component = new Component(ordering, name, amount, amountKg, priceKg, price, voc, comment, isSemi,
-                    semiNrD, operation, operationName, density);
-                Recipe.Add(component);
-            }
+            _service.GetRecipe(Recipe, _recipeData);
             if (Recipe.Count > 0) SelectedIndex = 0;
         }
 
@@ -154,6 +117,12 @@ namespace LabBook.Forms.Composition.ModelView
             set
             {
                 _recipeData.Mass = value;
+                _service.RecalculateByAmount(Recipe, _recipeData);
+                OnPropertyChanged(nameof(GetSumPercent));
+                OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetSumMass));
+                OnPropertyChanged(nameof(GetSumVoc));
+                OnPropertyChanged(nameof(GetSumVocPerLiter));
             }
         }
 
@@ -166,7 +135,7 @@ namespace LabBook.Forms.Composition.ModelView
                 if (_density > 0)
                     return "Gęstość: " + _density.ToString("F4", CultureInfo.CurrentCulture) + " g/cm3";
                 else
-                    return "Gęstość: -- Brak --"
+                    return "Gęstość: -- Brak --";
             }
         }
 
@@ -177,7 +146,7 @@ namespace LabBook.Forms.Composition.ModelView
         public double GetSumMass => _service.SumOfMass(Recipe);
 
         public double GetSumVoc => _service.SumOfVoc(Recipe);
-        
+
         public double GetSumVocPerLiter
         {
             get
@@ -211,7 +180,12 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentPercent = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Amount = _componentPercent;
+                _service.RecalculateByAmount(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
+                OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetSumMass));
+                OnPropertyChanged(nameof(GetSumVoc));
+                OnPropertyChanged(nameof(GetSumVocPerLiter));
             }
         }
 
@@ -222,14 +196,26 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentMass = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Mass = _componentMass;
+                _service.RecalculateByMass(Recipe, _recipeData);
+                OnPropertyChanged(nameof(GetSumPercent));
+                OnPropertyChanged(nameof(GetSumPrice));
                 OnPropertyChanged(nameof(GetSumMass));
+                OnPropertyChanged(nameof(GetSumVoc));
+                OnPropertyChanged(nameof(GetSumVocPerLiter));
+                OnPropertyChanged(nameof(GetTotalMass));
             }
         }
 
         public string ComponentName
         {
             get => _componentName;
-            set => _componentName = value;
+            set
+            {
+                _componentName = value;
+                Recipe[_selectedIndex].Name = _componentName;
+                _service.UpdateComponent(Recipe[_selectedIndex], _recipeData);
+
+            }
         }
 
         private void SortRecipe()

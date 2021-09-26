@@ -5,7 +5,7 @@ namespace LabBook.Dto
 {
     public class MaterialDto
     {
-        public long Id { get; set; }
+        public long Id { get; set; } = -1;
         public string Name { get; set; }
         public bool IsIntermediate { get; set; } = false;
         public bool IsDanger { get; set; } = false;

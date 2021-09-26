@@ -7,24 +7,28 @@ namespace LabBook.Forms.Composition.Model
     public class Component : INotifyPropertyChanged, IComparable<Component>
     {
         private int _level = 0;
-        private int _ordering;
+        private int _ordering = 1;
         private string _name;
-        private double _amount;
-        private double _mass;
-        private double _priceKg;
-        private double _price;
-        private double _voc;
+        private double _amount = 0;
+        private double _mass = 0;
+        private double _priceKg = -1;
+        private double _price = -1;
+        private double _vocPercent = -1;
+        private double _voc = -1;
         private string _comment;
-        private bool _isSemi;
-        private long _semiNrD;
+        private bool _isSemi = false;
+        private long _semiNrD = -1;
         private int _semiLevel = 0;
-        private int _operation;
+        private int _operation = 1;
         private string _operationName;
-        private double _density;
+        private double _density = -1;
         public ObservableCollection<Component> SemiProduct { get; } = new ObservableCollection<Component>();
 
-        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, double voc, 
-            string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
+        public Component()
+        { }
+
+        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price,
+            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
         {
             _level = level;
             _ordering = ordering;
@@ -33,6 +37,7 @@ namespace LabBook.Forms.Composition.Model
             _mass = mass;
             _priceKg = priceKg;
             _price = price;
+            _vocPercent = vocPercent;
             _voc = voc;
             _comment = comment;
             _isSemi = isSemi;
@@ -43,8 +48,8 @@ namespace LabBook.Forms.Composition.Model
             _density = density;
         }
 
-        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, double voc,
-            string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
+        public Component(int ordering, string name, double amount, double mass, double priceKg, double price,
+            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
         {
             _ordering = ordering;
             _name = name;
@@ -52,6 +57,7 @@ namespace LabBook.Forms.Composition.Model
             _mass = mass;
             _priceKg = priceKg;
             _price = price;
+            _vocPercent = vocPercent;
             _voc = voc;
             _comment = comment;
             _isSemi = isSemi;
@@ -131,6 +137,16 @@ namespace LabBook.Forms.Composition.Model
             }
         }
 
+        public double VocPercent
+        {
+            get => _vocPercent;
+            set
+            {
+                _vocPercent = value;
+                OnPropertyChanged(nameof(VocPercent));
+            }
+        }
+
         public double VOC
         {
             get => _voc;
@@ -161,7 +177,7 @@ namespace LabBook.Forms.Composition.Model
             }
         }
 
-        public long IsSemiProductNrD
+        public long SemiProductNrD
         {
             get => _semiNrD;
             set => _semiNrD = value;

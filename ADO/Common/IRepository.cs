@@ -14,5 +14,6 @@ namespace LabBook.ADO.Common
         bool ExistById(long id, string query);
         bool ExistByName(string name, string query);
         T GetById(long id, string query);
+        T GetByName(string name);
     }
 }

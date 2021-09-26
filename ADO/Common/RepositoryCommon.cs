@@ -163,5 +163,10 @@ namespace LabBook.ADO.Common
         {
             throw new NotImplementedException();
         }
+
+        public virtual T GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

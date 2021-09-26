@@ -64,7 +64,5 @@ namespace LabBook.ADO.Repository
 
             return data;
         }
-
-
     }
 }

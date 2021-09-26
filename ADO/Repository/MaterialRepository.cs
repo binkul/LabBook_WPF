@@ -16,6 +16,9 @@ namespace LabBook.ADO.Repository
         public static readonly string AllSemiProductQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, " +
             "price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where is_intermediate = 'true' " +
             "Order by name";
+        public static readonly string GetByNameQuery = "Select id, name, is_intermediate, is_danger, is_production, is_active, " +
+            "intermediate_nrD, clp_signal_word_id, clp_msds_id, function_id, price, currency_id, unit_id, density, solids, " +
+            "ash_450, VOC, remarks, login_id, date_created, date_update From LabBook.dbo.Material Where name=@name";
         public static readonly string SaveQuery = "Insert Into LabBook.dbo.Material(name, is_intermediate, is_danger, is_production, is_active, intermediate_nrD, clp_signal_word_id, " +
             "clp_msds_id, function_id, price, currency_id, unit_id, density, solids, ash_450, VOC, remarks, login_id, date_created, date_update) Values(@name, @is_intermediate, @is_danger, " +
             "@is_production, @is_active, @intermediate_nrD, @clp_signal_word_id, @clp_msds_id, @function_id, @price, @currency_id, @unit_id, @density, @solids, @ash_450, @VOC, @remarks, " +
@@ -173,6 +176,62 @@ namespace LabBook.ADO.Repository
             if (!error)
                 material.Id = GetId(data.Name);
 
+            return material;
+        }
+
+        public override MaterialDto GetByName(string name)
+        {
+            MaterialDto material = new MaterialDto(name);
+
+            using (SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    SqlCommand sqlCmd = new SqlCommand(GetByNameQuery, connection) { CommandType = CommandType.Text };
+                    sqlCmd.Parameters.AddWithValue("@name", name);
+                    connection.Open();
+                    SqlDataReader reader = sqlCmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        _ = reader.Read();
+                        material.Id = reader.GetInt64(0);
+                        material.IsIntermediate = reader.GetBoolean(2);
+                        material.IsDanger = reader.GetBoolean(3);
+                        material.IsProduction = reader.GetBoolean(4);
+                        material.IsActive = reader.GetBoolean(5);
+                        material.IntermediateNrD = reader.GetInt64(6);
+                        material.ClpSignalWordId = reader.GetInt32(7);
+                        material.ClpMsdsId = reader.GetInt32(8);
+                        material.FunctionId = reader.GetInt32(9);
+                        material.Price = !reader.GetValue(10).Equals(DBNull.Value) ? reader.GetDecimal(10) : -1;
+                        material.CurrencyId = reader.GetInt32(11);
+                        material.UnitId = reader.GetInt32(12);
+                        material.Density = !reader.GetValue(13).Equals(DBNull.Value) ? reader.GetDouble(13) : -1;
+                        material.Solids = !reader.GetValue(14).Equals(DBNull.Value) ? reader.GetDouble(14) : -1;
+                        material.Ash450 = !reader.GetValue(15).Equals(DBNull.Value) ? reader.GetDouble(15) : -1;
+                        material.VOC = !reader.GetValue(16).Equals(DBNull.Value) ? reader.GetDouble(16) : -1;
+                        material.Remarks = !reader.GetValue(17).Equals(DBNull.Value) ? reader.GetDouble(17).ToString() : null;
+                        material.LoginId = reader.GetInt32(18);
+                        material.DateCreated = reader.GetDateTime(19);
+                        material.DateUpdated = reader.GetDateTime(20);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
             return material;
         }
 

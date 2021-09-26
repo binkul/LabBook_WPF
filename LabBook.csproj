@@ -94,6 +94,7 @@
     <Compile Include="ADO\Exceptions\ExceptionCode.cs" />
     <Compile Include="ADO\Repository\ClpRepository.cs" />
     <Compile Include="ADO\Repository\CompositionRepository.cs" />
+    <Compile Include="ADO\Repository\CurrencyRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalAshBurnRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalCommonRepository.cs" />
     <Compile Include="ADO\Repository\ExperimentalGlossRepository.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\CompositionDto.cs" />
     <Compile Include="Dto\CompositionEnterDto.cs" />
+    <Compile Include="Dto\CurrencyDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
     <Compile Include="EntityFramework\CmbClpDataSheets.cs" />

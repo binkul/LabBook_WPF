@@ -82,7 +82,7 @@ namespace LabBook.ADO.Repository
             }
         }
 
-        override public ExceptionCode Save(DataRow row, string query)
+        public override ExceptionCode Save(DataRow row, string query)
         {
             ExceptionCode error = ExceptionCode.NoError;
 
@@ -139,7 +139,7 @@ namespace LabBook.ADO.Repository
             return error;
         }
 
-        override public ExceptionCode Update(DataRow row, string query)
+        public override ExceptionCode Update(DataRow row, string query)
         {
             ExceptionCode error = ExceptionCode.NoError;
 

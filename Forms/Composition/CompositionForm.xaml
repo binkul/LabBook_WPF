@@ -114,7 +114,7 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30">
                 
                 <!-- Combo with material list -->
-                <ComboBox x:Name="CmbMaterial"
+                <ComboBox x:Name="CmbMaterial" TabIndex="3"
                           IsEditable="true"
                           IsTextSearchEnabled="true"
                           StaysOpenOnEdit="true"
@@ -145,7 +145,7 @@
                 
                 <!-- TextBox with % amount -->
                 <TextBox x:Name="TxtAmount" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
-                         IsEnabled="true" KeyUp="TxtBox_KeyUp"
+                         IsEnabled="true" KeyUp="TxtBox_KeyUp" TabIndex="0"
                          Height="22"
                          Canvas.Top="4"
                          Width="{Binding ElementName=ColAmountPr, Path=ActualWidth}"
@@ -168,7 +168,7 @@
                 
                 <!-- TextBox with mass amount -->
                 <TextBox x:Name="TxtMass" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
-                         IsEnabled="true" KeyUp="TxtBox_KeyUp"
+                         IsEnabled="true" KeyUp="TxtBox_KeyUp" TabIndex="0"
                          Height="22"
                          Canvas.Top="4"
                          Width="{Binding ElementName=ColAmountMass, Path=ActualWidth}"
@@ -229,7 +229,7 @@
 
                 <!-- TxtComment to set comments -->
                 <TextBox x:Name="TxtComment" TextWrapping="Wrap" FontWeight="Bold" Padding="0,3,0,0"
-                         IsEnabled="true"
+                         IsEnabled="true" TabIndex="1"
                          Height="22"
                          Canvas.Top="4"
                          Width="{Binding ElementName=ColComment, Path=ActualWidth}"
@@ -777,7 +777,7 @@
 
                 <!-- Set total mass -->
                 <TextBox Canvas.Top="20" FontWeight="Bold" Padding="5,0,0,2" Foreground="Black" FontSize="14" KeyUp="TxtBox_KeyUp"
-                         Width="{Binding ElementName=ColAmountMass, Path=ActualWidth}"
+                         Width="{Binding ElementName=ColAmountMass, Path=ActualWidth}" TabIndex="2"
                          Text="{Binding GetTotalMass, Mode=TwoWay, Converter={StaticResource DecimalConverter}}"
                          IsEnabled="{Binding AmountMode, Mode=OneWay}">
                     <Canvas.Left>
