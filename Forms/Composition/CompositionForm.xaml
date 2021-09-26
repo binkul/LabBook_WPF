@@ -114,13 +114,13 @@
             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30">
                 
                 <!-- Combo with material list -->
-                <ComboBox x:Name="CmbMaterial" TabIndex="3"
+                <ComboBox x:Name="CmbMaterial" KeyUp="ComboBox_KeyUp" TabIndex="3"
                           IsEditable="true"
                           IsTextSearchEnabled="true"
                           StaysOpenOnEdit="true"
                           Canvas.Top="4"
                           Width="{Binding ElementName=ColMaterial, Path=ActualWidth}"
-                          Text="{Binding ComponentName}"
+                          Text="{Binding ComponentName, UpdateSourceTrigger=LostFocus}"
                           ItemsSource="{Binding GetMatrials}" 
                           DisplayMemberPath="name">
                     <ComboBox.ItemsPanel>
@@ -252,10 +252,11 @@
 
             </Canvas>
 
+            <!-- Main Data Grdi -->
             <DataGrid x:Name="DgMaterials" Margin="2,70,2,45"  HorizontalAlignment="Stretch" AutoGenerateColumns="False" 
                       ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                       CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
-                      FrozenColumnCount="1" HeadersVisibility="Column"
+                      FrozenColumnCount="1" HeadersVisibility="Column" TabIndex="4"
                       SelectedIndex="{Binding SelectedIndex}"
                       ItemsSource="{Binding Recipe}" >
                 

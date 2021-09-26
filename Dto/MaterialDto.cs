@@ -21,7 +21,7 @@ namespace LabBook.Dto
         public double Density { get; set; } = 0d;
         public double Solids { get; set; } = 0d;
         public double Ash450 { get; set; } = 0d;
-        public double VOC { get; set; } = 0d;
+        public double VOC { get; set; } = -1d;
         public string Remarks { get; set; }
         public long LoginId { get; set; } = 1;
         public DateTime DateCreated { get; set; } = DateTime.Now;

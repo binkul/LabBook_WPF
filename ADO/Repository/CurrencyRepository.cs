@@ -29,7 +29,7 @@ namespace LabBook.ADO.Repository
                     {
                         _ = reader.Read();
                         currency.Id = reader.GetInt32(0);
-                        currency.Name = reader.GetValue(1).ToString();
+                        currency.Name = reader.GetString(1);
                         currency.Rate = reader.GetDecimal(2);
                         currency.DateCreated = reader.GetDateTime(3);
                     }

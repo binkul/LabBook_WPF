@@ -47,5 +47,22 @@ namespace LabBook.Forms.Composition
             }
         }
 
+        private void ComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ComboBox tBox = (ComboBox)sender;
+                DependencyProperty prop = ComboBox.TextProperty;
+
+                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+                if (binding != null) { binding.UpdateSource(); }
+
+                TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
+                if (Keyboard.FocusedElement is UIElement keyboardFocus)
+                {
+                    keyboardFocus.MoveFocus(tRequest);
+                }
+            }
+        }
     }
 }

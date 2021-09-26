@@ -101,14 +101,8 @@ namespace LabBook.ADO.Service
 
                 double amount = component.Amount;
                 component.Mass = amount * compositionData.Mass / 100;
-                if (component.PriceKg > 0)
-                {
-                    component.Price = component.PriceKg * component.Mass;
-                }
-                if (component.VocPercent >= 0)
-                {
-                    component.VOC = component.VocPercent * component.Mass / 100;
-                }
+                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
+                component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
             }
         }
 
@@ -121,14 +115,8 @@ namespace LabBook.ADO.Service
                 if (component.Level > 0) continue;
 
                 component.Amount = component.Mass / compositionData.Mass * 100;
-                if (component.PriceKg > 0)
-                {
-                    component.Price = component.PriceKg * component.Mass;
-                }
-                if (component.VocPercent >= 0)
-                {
-                    component.VOC = component.VocPercent * component.Mass / 100;
-                }
+                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
+                component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
             }
         }
 
@@ -136,13 +124,20 @@ namespace LabBook.ADO.Service
         {
             MaterialRepository materialRepository = new MaterialRepository();
             MaterialDto material = materialRepository.GetByName(component.Name);
-            decimal rate = 0;
+
+            component.VocPercent = material.VOC;
+            component.Density = material.Density;
+            component.IsSemiProduct = material.IsIntermediate;
+            component.SemiProductNrD = material.IntermediateNrD;
+            component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
 
             if (material.Id > 0)
             {
                 CurrencyRepository currencyRepository = new CurrencyRepository();
                 CurrencyDto currency = currencyRepository.GetById(material.CurrencyId, CurrencyRepository.GetByIdQuery);
-                rate = currency.Rate;
+                decimal rate = currency.Rate;
+                component.PriceKg = (double)(material.Price * rate);
+                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
             }
         }
     }

@@ -15,7 +15,7 @@ namespace LabBook.Forms.Composition.Converters
             switch(type)
             {
                 case "Percent":
-                    result = sum.ToString("F4", CultureInfo.CurrentCulture) + "%";
+                    result = sum.ToString("F4", CultureInfo.CurrentCulture) + " %";
                     break;
                 case "Mass":
                     result = sum.ToString("F2", CultureInfo.CurrentCulture) + " kg";
@@ -24,10 +24,10 @@ namespace LabBook.Forms.Composition.Converters
                     result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł";
                     break;
                 case "Voc":
-                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + "%";
+                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " %";
                     break;
                 case "VocPerL":
-                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + "g/l";
+                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " g/l";
                     break;
                 default:
                     result = "0";

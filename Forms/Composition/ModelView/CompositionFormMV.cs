@@ -214,7 +214,12 @@ namespace LabBook.Forms.Composition.ModelView
                 _componentName = value;
                 Recipe[_selectedIndex].Name = _componentName;
                 _service.UpdateComponent(Recipe[_selectedIndex], _recipeData);
-
+                OnPropertyChanged(nameof(GetSumPercent));
+                OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetSumMass));
+                OnPropertyChanged(nameof(GetSumVoc));
+                OnPropertyChanged(nameof(GetSumVocPerLiter));
+                OnPropertyChanged(nameof(GetTotalMass));
             }
         }
 
