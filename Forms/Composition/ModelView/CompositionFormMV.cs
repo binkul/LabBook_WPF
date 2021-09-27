@@ -120,6 +120,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _service.RecalculateByAmount(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -142,6 +143,8 @@ namespace LabBook.Forms.Composition.ModelView
         public double GetSumPercent => _service.SumOfPercent(Recipe);
 
         public double GetSumPrice => _service.SumOfPrices(Recipe);
+
+        public double GetPricePerKg => _service.PricePerKg(Recipe, _recipeData);
 
         public double GetSumMass => _service.SumOfMass(Recipe);
 
@@ -183,6 +186,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _service.RecalculateByAmount(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -199,6 +203,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _service.RecalculateByMass(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -216,6 +221,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _service.UpdateComponent(Recipe[_selectedIndex], _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetSumPrice));
+                OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));

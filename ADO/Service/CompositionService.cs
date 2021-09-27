@@ -1,6 +1,5 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Repository;
-using LabBook.Commons;
 using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
 using System;
@@ -33,7 +32,7 @@ namespace LabBook.ADO.Service
                 };
 
                 component.Mass = component.Amount * data.Mass / 100;
-                component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : -1d;
+                component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
                 component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
                 component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
@@ -44,11 +43,7 @@ namespace LabBook.ADO.Service
                     component.PriceKg *= rate;
                     component.Price = component.PriceKg * component.Mass;
                 }
-
-                if (component.VocPercent > 0)
-                {
-                    component.VOC = component.VocPercent * component.Mass / 100;
-                }
+                component.VOC = CalculateVOC(component);
 
                 recipe.Add(component);
             }
@@ -88,6 +83,12 @@ namespace LabBook.ADO.Service
             return recipe.Count(x => x.PriceKg <= 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.Price).Sum();
         }
 
+        public double PricePerKg(IList<Component> recipe, CompositionData compositionData)
+        {
+            double price = SumOfPrices(recipe);
+            return compositionData.Mass > 0 ? price / compositionData.Mass : 0d;
+        }
+
         public double SumOfVoc(IList<Component> recipe)
         {
             return recipe.Count(x => x.VOC < 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.VOC).Sum();
@@ -101,8 +102,8 @@ namespace LabBook.ADO.Service
 
                 double amount = component.Amount;
                 component.Mass = amount * compositionData.Mass / 100;
-                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
-                component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
+                component.Price = CalculatePrice(component);
+                component.VOC = CalculateVOC(component);
             }
         }
 
@@ -115,8 +116,8 @@ namespace LabBook.ADO.Service
                 if (component.Level > 0) continue;
 
                 component.Amount = component.Mass / compositionData.Mass * 100;
-                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
-                component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
+                component.Price = CalculatePrice(component);
+                component.VOC = CalculateVOC(component);
             }
         }
 
@@ -129,7 +130,7 @@ namespace LabBook.ADO.Service
             component.Density = material.Density;
             component.IsSemiProduct = material.IsIntermediate;
             component.SemiProductNrD = material.IntermediateNrD;
-            component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Mass / 100 : -1;
+            component.VOC = CalculateVOC(component);
 
             if (material.Id > 0)
             {
@@ -137,8 +138,18 @@ namespace LabBook.ADO.Service
                 CurrencyDto currency = currencyRepository.GetById(material.CurrencyId, CurrencyRepository.GetByIdQuery);
                 decimal rate = currency.Rate;
                 component.PriceKg = (double)(material.Price * rate);
-                component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0;
+                component.Price = CalculatePrice(component);
             }
+        }
+
+        private double CalculatePrice(Component component)
+        {
+            return component.Price = component.PriceKg > 0 ? component.PriceKg * component.Mass : 0d;
+        }
+
+        private double CalculateVOC(Component component)
+        {
+            return component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Amount / 100 : -1d;
         }
     }
 }

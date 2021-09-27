@@ -815,6 +815,25 @@
                     </Canvas.Left>
                 </Label>
               
+                <!-- Price per kg -->
+                <Label Canvas.Top="22" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
+                       Content="{Binding GetPricePerKg, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='PriceKg'}"
+                       Foreground="Green">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPrice">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
                 <!-- Sum of VOC -->
                 <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
                        Content="{Binding GetSumVoc, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Voc'}"

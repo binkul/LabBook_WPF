@@ -21,13 +21,16 @@ namespace LabBook.Forms.Composition.Converters
                     result = sum.ToString("F2", CultureInfo.CurrentCulture) + " kg";
                     break;
                 case "Price":
-                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł";
+                    result = sum <= 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł";
+                    break;
+                case "PriceKg":
+                    result = sum <= 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł/kg";
                     break;
                 case "Voc":
-                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " %";
+                    result = sum < 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " %";
                     break;
                 case "VocPerL":
-                    result = sum == -1 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " g/l";
+                    result = sum < 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " g/l";
                     break;
                 default:
                     result = "0";
