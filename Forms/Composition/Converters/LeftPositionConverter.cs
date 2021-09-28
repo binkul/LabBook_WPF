@@ -44,6 +44,14 @@ namespace LabBook.Forms.Composition.Converters
                     result = start + colStatus + colLP + colMaterial + colAmountPr
                         + colAmountMass + colPriceKg;
                     break;
+                case "txtPriceKg":
+                    result = start + colStatus + colLP + colMaterial + colAmountPr
+                        + colAmountMass + colPriceKg - 65;
+                    break;
+                case "txtPriceL":
+                    result = start + colStatus + colLP + colMaterial + colAmountPr
+                        + colAmountMass + colPriceKg - 52;
+                    break;
                 case "txtVoc":
                     result = start + colStatus + colLP + colMaterial + colAmountPr
                         + colAmountMass + colPriceKg + colPrice;

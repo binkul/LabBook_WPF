@@ -795,10 +795,27 @@
                         </MultiBinding>
                     </Canvas.Left>
                 </TextBox>
-                
-                <!-- Sum of price -->
+
+                <!-- Caption 'Cena/kg' -->
+                <Label Content="Cena/kg:" Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" >
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPriceKg">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
+                <!-- Price per kg -->
                 <Label Canvas.Top="0" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
-                       Content="{Binding GetSumPrice, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Price'}"
+                       Content="{Binding GetPricePerKg, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='Price'}"
                        Foreground="Green">
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPrice">
@@ -814,10 +831,27 @@
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
-              
-                <!-- Price per kg -->
+
+                <!-- Caption 'Cena/l' -->
+                <Label Content="Cena/l:" Canvas.Top="22" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" >
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPriceL">
+                            <Binding ElementName="ColStatus" Path="ActualWidth" />
+                            <Binding ElementName="ColLP" Path="ActualWidth" />
+                            <Binding ElementName="ColMaterial" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountPr" Path="ActualWidth" />
+                            <Binding ElementName="ColAmountMass" Path="ActualWidth" />
+                            <Binding ElementName="ColPriceKg" Path="ActualWidth" />
+                            <Binding ElementName="ColPrice" Path="ActualWidth" />
+                            <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
+                            <Binding ElementName="ColVoc" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Label>
+
+                <!-- Price per l -->
                 <Label Canvas.Top="22" FontSize="14" FontWeight="Bold" Padding="5,0,0,2"
-                       Content="{Binding GetPricePerKg, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='PriceKg'}"
+                       Content="{Binding GetPricePerL, Mode=OneWay, Converter={StaticResource SumAmountToStringConverter}, ConverterParameter='PriceKg'}"
                        Foreground="Green">
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="txtPrice">

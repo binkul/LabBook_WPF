@@ -24,7 +24,7 @@ namespace LabBook.Forms.Composition.Converters
                     result = sum <= 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł";
                     break;
                 case "PriceKg":
-                    result = sum <= 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł/kg";
+                    result = sum <= 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " zł";
                     break;
                 case "Voc":
                     result = sum < 0 ? "-- Brak --" : sum.ToString("F2", CultureInfo.CurrentCulture) + " %";

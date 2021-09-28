@@ -89,6 +89,12 @@ namespace LabBook.ADO.Service
             return compositionData.Mass > 0 ? price / compositionData.Mass : 0d;
         }
 
+        public double PricePerL(IList<Component> recipe, CompositionData compositionData)
+        {
+            double price = PricePerKg(recipe, compositionData);
+            return compositionData.Mass > 0 ? price * (double)compositionData.Density : 0d;
+        }
+
         public double SumOfVoc(IList<Component> recipe)
         {
             return recipe.Count(x => x.VOC < 0) > 0 ? -1 : recipe.Where(x => x.Level == 0).Select(x => x.VOC).Sum();

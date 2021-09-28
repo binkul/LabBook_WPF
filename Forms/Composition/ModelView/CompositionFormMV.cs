@@ -119,8 +119,8 @@ namespace LabBook.Forms.Composition.ModelView
                 _recipeData.Mass = value;
                 _service.RecalculateByAmount(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetSumPrice));
                 OnPropertyChanged(nameof(GetPricePerKg));
+                OnPropertyChanged(nameof(GetPricePerL));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -142,9 +142,9 @@ namespace LabBook.Forms.Composition.ModelView
 
         public double GetSumPercent => _service.SumOfPercent(Recipe);
 
-        public double GetSumPrice => _service.SumOfPrices(Recipe);
-
         public double GetPricePerKg => _service.PricePerKg(Recipe, _recipeData);
+
+        public double GetPricePerL => _service.PricePerL(Recipe, _recipeData);
 
         public double GetSumMass => _service.SumOfMass(Recipe);
 
@@ -185,8 +185,8 @@ namespace LabBook.Forms.Composition.ModelView
                 Recipe[_selectedIndex].Amount = _componentPercent;
                 _service.RecalculateByAmount(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetSumPrice));
                 OnPropertyChanged(nameof(GetPricePerKg));
+                OnPropertyChanged(nameof(GetPricePerL));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -202,8 +202,8 @@ namespace LabBook.Forms.Composition.ModelView
                 Recipe[_selectedIndex].Mass = _componentMass;
                 _service.RecalculateByMass(Recipe, _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetSumPrice));
                 OnPropertyChanged(nameof(GetPricePerKg));
+                OnPropertyChanged(nameof(GetPricePerL));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
@@ -220,8 +220,8 @@ namespace LabBook.Forms.Composition.ModelView
                 Recipe[_selectedIndex].Name = _componentName;
                 _service.UpdateComponent(Recipe[_selectedIndex], _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetSumPrice));
                 OnPropertyChanged(nameof(GetPricePerKg));
+                OnPropertyChanged(nameof(GetPricePerL));
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
