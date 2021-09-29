@@ -16,6 +16,11 @@ namespace LabBook.ADO.Service
 
         public void GetRecipe(IList<Component> recipe, CompositionData data)
         {
+            char topRight = '\u250C';
+            char middleRight = '\u251C';
+            char bottomRight = '\u2514';
+            char minus = '\u2500';
+            int i = 0;
             DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + data.LabBookId.ToString());
 
             foreach (DataRow row in table.Rows)
@@ -30,6 +35,19 @@ namespace LabBook.ADO.Service
                     OperationName = row["name"].ToString(),
                     Comment = row["comment"].ToString()
                 };
+
+                if (i == 0)
+                    component.Name = "[-] " + row["component"].ToString();
+                else if (i == 1)
+                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
+                else if (i == 2)
+                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
+                else if (i == 3)
+                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
+                else if (i == 4)
+                    component.Name = "  " + bottomRight.ToString() + minus.ToString() + " " + row["component"].ToString();
+                i++;
+
 
                 component.Mass = component.Amount * data.Mass / 100;
                 component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;

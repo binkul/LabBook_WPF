@@ -759,7 +759,7 @@
                     </Canvas.Left>
                 </Label>
 
-                <!-- Caption 'SUMA' -->
+                <!-- Caption 'MASA' -->
                 <Label Content="MASA:" Canvas.Top="21" FontSize="14" FontWeight="Bold" Padding="0,0,0,2" >
                     <Canvas.Left>
                         <MultiBinding Converter="{StaticResource LeftPositionConverter}" ConverterParameter="MasaText">
