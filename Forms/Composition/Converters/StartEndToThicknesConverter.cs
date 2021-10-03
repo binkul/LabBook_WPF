@@ -13,6 +13,9 @@ namespace LabBook.Forms.Composition.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values.Any(x => x == DependencyProperty.UnsetValue))
+                return new Thickness(0, 0, 0, 0);
+
             bool rowActive = System.Convert.ToBoolean(values[0]);
             int operation = System.Convert.ToInt32(values[1]);
             string type = parameter.ToString();

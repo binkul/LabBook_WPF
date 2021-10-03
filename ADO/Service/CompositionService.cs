@@ -9,6 +9,24 @@ using System.Linq;
 
 namespace LabBook.ADO.Service
 {
+    public enum RecipeLevelType
+    {
+        mainLevel = 0,
+        firstLevel = 1,
+        secondLevel = 2,
+        thirdLevel = 3,
+        fourthLevel = 4
+    }
+
+    public enum SubRecipeOrdering
+    {
+        none = 0,
+        onlyOne = 1,
+        top = 2,
+        middle = 3,
+        bottom = 4
+    }
+
     public class CompositionService
     {
         private readonly IRepository<CompositionDto> _repository = new CompositionRepository();
@@ -20,7 +38,6 @@ namespace LabBook.ADO.Service
             char middleRight = '\u251C';
             char bottomRight = '\u2514';
             char minus = '\u2500';
-            int i = 0;
             DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + data.LabBookId.ToString());
 
             foreach (DataRow row in table.Rows)
@@ -35,19 +52,6 @@ namespace LabBook.ADO.Service
                     OperationName = row["name"].ToString(),
                     Comment = row["comment"].ToString()
                 };
-
-                if (i == 0)
-                    component.Name = "[-] " + row["component"].ToString();
-                else if (i == 1)
-                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
-                else if (i == 2)
-                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
-                else if (i == 3)
-                    component.Name = "  " + middleRight.ToString() + minus.ToString() + " " + row["component"].ToString();
-                else if (i == 4)
-                    component.Name = "  " + bottomRight.ToString() + minus.ToString() + " " + row["component"].ToString();
-                i++;
-
 
                 component.Mass = component.Amount * data.Mass / 100;
                 component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
@@ -64,6 +68,22 @@ namespace LabBook.ADO.Service
                 component.VOC = CalculateVOC(component);
 
                 recipe.Add(component);
+
+                // **** temporary
+                if (component.IsSemiProduct)
+                {
+                    component = new Component((int)RecipeLevelType.firstLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
+                    recipe.Add(component);
+                    component = new Component((int)RecipeLevelType.firstLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.middle, 3, "", 1d);
+                    recipe.Add(component);
+                    component = new Component((int)RecipeLevelType.firstLevel, 3, "Trzy", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
+                    recipe.Add(component);
+                    component = new Component((int)RecipeLevelType.secondLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
+                    recipe.Add(component);
+                    component = new Component((int)RecipeLevelType.secondLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
+                    recipe.Add(component);
+
+                }
             }
         }
 

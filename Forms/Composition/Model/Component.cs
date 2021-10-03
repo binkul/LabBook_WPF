@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabBook.ADO.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -6,7 +7,7 @@ namespace LabBook.Forms.Composition.Model
 {
     public class Component : INotifyPropertyChanged, IComparable<Component>
     {
-        private int _level = 0;
+        private int _level = (int)RecipeLevelType.mainLevel;
         private int _ordering = 1;
         private string _name;
         private double _amount = 0;
@@ -18,7 +19,7 @@ namespace LabBook.Forms.Composition.Model
         private string _comment;
         private bool _isSemi = false;
         private long _semiNrD = -1;
-        private int _semiLevel = 0;
+        SubRecipeOrdering _subOrdering = SubRecipeOrdering.none;
         private int _operation = 1;
         private string _operationName;
         private double _density = -1;
@@ -28,7 +29,7 @@ namespace LabBook.Forms.Composition.Model
         { }
 
         public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price,
-            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, int semiLevel, int operation, string operationName, double density)
+            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, SubRecipeOrdering subOrder, int operation, string operationName, double density)
         {
             _level = level;
             _ordering = ordering;
@@ -42,7 +43,7 @@ namespace LabBook.Forms.Composition.Model
             _comment = comment;
             _isSemi = isSemi;
             _semiNrD = semiNrD;
-            _semiLevel = semiLevel;
+            _subOrdering = subOrder;
             _operation = operation;
             _operationName = operationName;
             _density = density;
@@ -183,10 +184,10 @@ namespace LabBook.Forms.Composition.Model
             set => _semiNrD = value;
         }
 
-        public int SemiLevel
+        public SubRecipeOrdering SemiOrdering
         {
-            get => _semiLevel;
-            set => _semiLevel = value;
+            get => _subOrdering;
+            set => _subOrdering = value;
         }
 
         public bool IsSemiproductPresent => SemiProduct.Count > 0;

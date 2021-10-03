@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -13,6 +14,10 @@ namespace LabBook.Forms.Composition.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+
+            if (values.Any(x => x == DependencyProperty.UnsetValue))
+                return Brushes.White;
+
             bool rowActive = System.Convert.ToBoolean(values[0]);
             int operation = System.Convert.ToInt32(values[1]);
             bool cellContent = false;

@@ -44,6 +44,11 @@
         <ConvertorsLocal:StartEndVocToBackColorConverter x:Key="BackColorVocConverter" />
         <ConvertorsLocal:SumAmountToStringConverter x:Key="SumAmountToStringConverter" />
         <ConvertorsLocal:SumPercentToColorConverter x:Key="SumPercentToColorConverter" />
+        <ConvertorsLocal:OrderingToStringConverter x:Key="OrderToStrinngConveretr" />
+        <ConvertorsLocal:LevelFrameVisibilityConverter x:Key="LevelVisibilityConverter" />
+        <ConvertorsLocal:LevelFrameTypeConverter x:Key="LevelTypeConverter" />
+        <ConvertorsLocal:LevelFrameMarginConverter x:Key="LevelMarginConverter" />
+        <ConvertorsLocal:LevelFontSizeConverter x:Key="LevelFontSizeConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -252,7 +257,7 @@
 
             </Canvas>
 
-            <!-- Main Data Grdi -->
+            <!-- Main Data Grid -->
             <DataGrid x:Name="DgMaterials" Margin="2,70,2,45"  HorizontalAlignment="Stretch" AutoGenerateColumns="False" 
                       ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                       CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
@@ -264,6 +269,7 @@
 
                     <DataGridTextColumn x:Name="ColSemiProd" Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
                     <DataGridTextColumn x:Name="ColOperation" Binding="{Binding Operation}" Visibility="Collapsed" />
+                    <DataGridTextColumn x:Name="ColLevel" Binding="{Binding Level}" Visibility="Collapsed" />
 
                     <!-- Column status -->
                     <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"
@@ -284,13 +290,18 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <!-- Column L.P. -->
                     <DataGridTextColumn x:Name="ColLP" IsReadOnly="True" CanUserSort="False"
                                         Header="L.P."
-                                        Binding="{Binding Ordering, Mode=OneWay}"
-                                        Width="10*"
+                                        Width="5*"
                                         HeaderStyle="{StaticResource AllignColmnHeaderCenter}" >
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource OrderToStrinngConveretr}" >
+                                <Binding Path="Level" />
+                                <Binding Path="Ordering" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}" >
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -367,25 +378,39 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <!-- Column material name -->
-                    <DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False"
-                                        Header="Surowiec"
-                                        Binding="{Binding Name, Mode=OneWay}"
-                                        Width="50*"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                        <DataGridTextColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
+                    <!-- Column material name with subrecipes -->
+                    <DataGridTemplateColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False"
+                                            Header="Surowiec"
+                                            Width="50*"
+                                            HeaderStyle="{StaticResource AllignColmnHeaderLeft}">
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Image Margin="{Binding Level, Converter={StaticResource LevelMarginConverter}, Mode=OneWay}" 
+                                           Width="{Binding ElementName=DgMaterials, Path=RowHeight, Mode=OneWay}" 
+                                           Height="{Binding ElementName=DgMaterials, Path=RowHeight, Mode=OneWay}"
+                                           Visibility="{Binding Level, Converter={StaticResource LevelVisibilityConverter}, Mode=OneWay}"
+                                           Source="{Binding SemiOrdering, Converter={StaticResource LevelTypeConverter}, Mode=OneWay}" />
+                                    <TextBlock Padding="3,0,0,0" VerticalAlignment="Center"
+                                               FontSize="{Binding Level, Converter={StaticResource LevelFontSizeConverter}, Mode=OneWay}"
+                                               Text="{Binding Name, Mode=OneWay}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                        <!-- Style in material Cell -->
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="DataGridCell" >
                                 <!-- ForeColor - white when selected -->
                                 <Style.Triggers>
-                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True" >
                                         <Setter Property="Foreground" Value="White" />
                                     </Trigger>
                                 </Style.Triggers>
                                 <!-- BackGround color - yellow/white or blue selected -->
                                 <Setter Property="Background" >
                                     <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}" >
                                             <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
                                             <Binding Path="Operation"/>
                                         </MultiBinding>
@@ -410,16 +435,73 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                                     
+                    <!-- Column material name -->
+                    <!--<DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False" 
+                                        Header="Surowiec"
+                                        Binding="{Binding Name, Mode=OneWay}"
+                                        Width="50*"
+                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
+                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                --><!-- ForeColor - white when selected --><!--
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
+                                        <Setter Property="Foreground" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                                --><!-- BackGround color - yellow/white or blue selected --><!--
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                --><!-- Border color around Star/End area --><!--
+                                <Setter Property="BorderBrush" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                                --><!-- Border thiskness around Start/End area --><!--
+                                <Setter Property="BorderThickness" >
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="mid">
+                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
+                                            <Binding Path="Operation"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
                         </DataGridTextColumn.CellStyle>
-                    </DataGridTextColumn>
+                    </DataGridTextColumn>-->
 
                     <!-- Column amount in % -->
                     <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True" CanUserSort="False"
-                                        Header="Ilość [%]"
+                                        Header="Ilość [%]" Width="20*"
                                         Binding="{Binding Amount, Converter={StaticResource PercentRounConverter}, Mode=OneWay}"
-                                        Width="20*"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+
+                        <!-- Style inside cell - text only -->
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{Binding Level, Converter={StaticResource LevelFontSizeConverter}}" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        
+                        <!-- Whole cell style -->
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
