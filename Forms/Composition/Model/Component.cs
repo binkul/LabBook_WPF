@@ -20,6 +20,7 @@ namespace LabBook.Forms.Composition.Model
         private bool _isSemi = false;
         private long _semiNrD = -1;
         SubRecipeOrdering _subOrdering = SubRecipeOrdering.none;
+        SubRecipeStatus _subRecipeStatus = SubRecipeStatus.close;
         private int _operation = 1;
         private string _operationName;
         private double _density = -1;
@@ -188,6 +189,12 @@ namespace LabBook.Forms.Composition.Model
         {
             get => _subOrdering;
             set => _subOrdering = value;
+        }
+
+        public SubRecipeStatus SemiStatus
+        {
+            get => _subRecipeStatus;
+            set => _subRecipeStatus = value;
         }
 
         public bool IsSemiproductPresent => SemiProduct.Count > 0;

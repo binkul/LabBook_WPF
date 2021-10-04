@@ -49,6 +49,7 @@
         <ConvertorsLocal:LevelFrameTypeConverter x:Key="LevelTypeConverter" />
         <ConvertorsLocal:LevelFrameMarginConverter x:Key="LevelMarginConverter" />
         <ConvertorsLocal:LevelFontSizeConverter x:Key="LevelFontSizeConverter" />
+        <ConvertorsLocal:LevelPlusImageConverter x:Key="ShowPlusConverter" />
         <localOut:BindingProxy x:Key="proxy" Data="{Binding}" />
 
         <Style x:Key="AllignCellLeft" TargetType="TextBlock">
@@ -278,13 +279,36 @@
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
                                 <StackPanel Background="#FFE5E5E5" >
-                                    <Image x:Name="ArrowRight" Width="18" Height="16" Margin="1,1,1,1" Source="/Img/arrow-right.png" 
-                                           Visibility="Hidden">
+                                    <Image x:Name="ImageType" Width="20" Height="20" Margin="1,0,1,1" Stretch="Uniform" >
+                                        <Image.Source>
+                                            <MultiBinding Converter="{StaticResource ShowPlusConverter}" Mode="OneWay" >
+                                                <Binding Path="IsSemiProduct" />
+                                                <Binding Path="SemiStatus" />
+                                                <Binding Path="IsSelected">
+                                                    <Binding.RelativeSource>
+                                                        <RelativeSource AncestorType="DataGridRow" />
+                                                    </Binding.RelativeSource>
+                                                </Binding>
+                                            </MultiBinding>
+                                        </Image.Source>
                                     </Image>
                                 </StackPanel>
+                                
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" >
-                                        <Setter TargetName="ArrowRight" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="ImageType" Property="Source" >
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource ShowPlusConverter}" Mode="OneWay">
+                                                    <Binding Path="IsSemiProduct" />
+                                                    <Binding Path="SemiStatus" />
+                                                    <Binding Path="IsSelected">
+                                                        <Binding.RelativeSource>
+                                                            <RelativeSource AncestorType="DataGridRow" />
+                                                        </Binding.RelativeSource>
+                                                    </Binding>
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>

@@ -27,6 +27,12 @@ namespace LabBook.ADO.Service
         bottom = 4
     }
 
+    public enum SubRecipeStatus
+    {
+        open,
+        close
+    }
+
     public class CompositionService
     {
         private readonly IRepository<CompositionDto> _repository = new CompositionRepository();

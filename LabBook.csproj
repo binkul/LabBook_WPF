@@ -160,6 +160,7 @@
     <Compile Include="Forms\Composition\Converters\LevelFrameMarginConverter.cs" />
     <Compile Include="Forms\Composition\Converters\LevelFrameTypeConverter.cs" />
     <Compile Include="Forms\Composition\Converters\LevelFrameVisibilityConverter.cs" />
+    <Compile Include="Forms\Composition\Converters\LevelPlusImageConverter.cs" />
     <Compile Include="Forms\Composition\Converters\MassRoundConverter.cs" />
     <Compile Include="Forms\Composition\Converters\OrderingToStringConverter.cs" />
     <Compile Include="Forms\Composition\Converters\PercentRounConverter.cs" />
@@ -468,6 +469,19 @@
   <ItemGroup>
     <Resource Include="Img\frameBottom.png" />
     <Resource Include="Img\frameTop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\arrow-with_plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\arrow-with_minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\minus.png" />
+    <Resource Include="Img\plus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
