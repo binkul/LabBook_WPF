@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabBook.ADO.Service;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -23,27 +24,27 @@ namespace LabBook.Forms.Composition.Converters
             switch (type)
             {
                 case "left":
-                    if (operation == 2)
+                    if (operation == (int)RecipeOperation.start)
                         return new Thickness(2, 2, 0, 0);
-                    else if (operation == 3)
+                    else if (operation == (int)RecipeOperation.middle)
                         return new Thickness(2, 0, 0, 0);
-                    else if (operation == 4)
+                    else if (operation == (int)RecipeOperation.end)
                         return new Thickness(2, 0, 0, 2);
                     else
                         return new Thickness(0, 0, 0, 0);
                 case "mid":
-                    if (operation == 2)
+                    if (operation == (int)RecipeOperation.start)
                         return new Thickness(0, 2, 0, 0);
-                    else if (operation == 4)
+                    else if (operation == (int)RecipeOperation.end)
                         return new Thickness(0, 0, 0, 2);
                     else
                         return new Thickness(0, 0, 0, 0);
                 case "right":
-                    if (operation == 2)
+                    if (operation == (int)RecipeOperation.start)
                         return new Thickness(0, 2, 2, 0);
-                    else if (operation == 3)
+                    else if (operation == (int)RecipeOperation.middle)
                         return new Thickness(0, 0, 2, 0);
-                    else if (operation == 4)
+                    else if (operation == (int)RecipeOperation.end)
                         return new Thickness(0, 0, 2, 2);
                     else
                         return new Thickness(0, 0, 0, 0);

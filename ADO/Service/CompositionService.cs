@@ -9,6 +9,14 @@ using System.Linq;
 
 namespace LabBook.ADO.Service
 {
+    public enum RecipeOperation
+    {
+        none = 1,
+        start = 2,
+        middle = 3,
+        end = 4
+    }
+
     public enum RecipeLevelType
     {
         mainLevel = 0,
@@ -73,6 +81,9 @@ namespace LabBook.ADO.Service
                 }
                 component.VOC = CalculateVOC(component);
 
+                if (component.IsSemiProduct)
+                    component.SemiRecipe = GetSemiRecipe(component.SemiProductNrD, component.Operation, component.Amount, component.Mass);
+
                 recipe.Add(component);
 
                 // **** temporary
@@ -97,6 +108,43 @@ namespace LabBook.ADO.Service
         {
             CompositionRepository repository = (CompositionRepository)_repository;
             return repository.GetRecipeData(numberD, title, density);
+        }
+
+        private IList<Component> GetSemiRecipe(long nrD, int operation, double percent, double mass)
+        {
+            IList<Component> recipe = new List<Component>();
+            DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + nrD.ToString());
+
+            foreach (DataRow row in table.Rows)
+            {
+                Component component = new Component
+                {
+                    Ordering = Convert.ToInt32(row["ordering"]),
+                    Name = row["component"].ToString(),
+                    IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]),
+                };
+                double amount = Convert.ToDouble(row["amount"]);
+                component.Amount = amount * percent / 100d;
+                component.Mass = amount * mass / 100;
+                component.Operation = operation > 1 ? 3 : 1;
+                component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
+                component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
+                component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
+                
+                double rate = Convert.ToDouble(row["rate"]);
+                if (component.PriceKg > 0 && rate > 0)
+                {
+                    component.PriceKg *= rate;
+                    component.Price = component.PriceKg * component.Mass;
+                }
+                component.VOC = CalculateVOC(component);
+                recipe.Add(component);
+            }
+
+            if (operation == ((int)RecipeOperation.end) && recipe.Count > 0)
+                recipe[recipe.Count - 1].Operation = operation;
+
+            return recipe;
         }
 
         public DataView GetAllMaterials()

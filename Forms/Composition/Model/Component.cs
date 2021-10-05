@@ -1,6 +1,6 @@
 ﻿using LabBook.ADO.Service;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace LabBook.Forms.Composition.Model
@@ -24,7 +24,7 @@ namespace LabBook.Forms.Composition.Model
         private int _operation = 1;
         private string _operationName;
         private double _density = -1;
-        public ObservableCollection<Component> SemiProduct { get; } = new ObservableCollection<Component>();
+        public IList<Component> SemiRecipe { get; set; } = new List<Component>();
 
         public Component()
         { }
@@ -197,7 +197,7 @@ namespace LabBook.Forms.Composition.Model
             set => _subRecipeStatus = value;
         }
 
-        public bool IsSemiproductPresent => SemiProduct.Count > 0;
+        public bool IsSemiproductPresent => SemiRecipe.Count > 0;
 
         public int Operation
         {
@@ -223,11 +223,6 @@ namespace LabBook.Forms.Composition.Model
         {
             get => _density;
             set => _density = value;
-        }
-
-        public void AddSemiProduct(Component component)
-        {
-            SemiProduct.Add(component);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
