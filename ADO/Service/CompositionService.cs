@@ -76,25 +76,12 @@ namespace LabBook.ADO.Service
                 component.VOC = CalculateVOC(component);
 
                 if (component.IsSemiProduct)
+                {
+                    component.SemiStatus = "[+]";
                     component.SemiRecipe = GetSemiRecipe(component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass);
+                }
 
                 recipe.Add(component);
-
-                // **** temporary
-                //if (component.IsSemiProduct)
-                //{
-                //    component = new Component((int)RecipeLevelType.firstLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
-                //    recipe.Add(component);
-                //    component = new Component((int)RecipeLevelType.firstLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.middle, 3, "", 1d);
-                //    recipe.Add(component);
-                //    component = new Component((int)RecipeLevelType.firstLevel, 3, "Trzy", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
-                //    recipe.Add(component);
-                //    component = new Component((int)RecipeLevelType.secondLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
-                //    recipe.Add(component);
-                //    component = new Component((int)RecipeLevelType.secondLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
-                //    recipe.Add(component);
-
-                //}
             }
         }
 

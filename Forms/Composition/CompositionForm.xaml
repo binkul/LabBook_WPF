@@ -145,6 +145,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </ComboBox>
@@ -168,6 +169,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </TextBox>
@@ -191,6 +193,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </TextBox>
@@ -210,6 +213,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </RadioButton>
@@ -229,6 +233,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </RadioButton>
@@ -252,6 +257,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </TextBox>
@@ -283,47 +289,71 @@
 
                     <!-- Column status -->
                     <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"
-                                            HeaderStyle="{StaticResource AllignColmnHeaderCenter}"
-                                            Width="32">
+                                            Width="24">
+                        <DataGridTemplateColumn.CellStyle >
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Background" Value="#FFE5E5E5" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                <Setter Property="Margin" Value="0,0,-1,0" />
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+
+                        <DataGridTemplateColumn.HeaderStyle >
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="SeparatorBrush" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="1,1,0,1" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                        
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
-                                <StackPanel Background="#FFE5E5E5" >
-                                    <Image x:Name="ImageType" Width="20" Height="20" Margin="1,0,1,1" Stretch="Uniform" >
-                                        <Image.Source>
-                                            <MultiBinding Converter="{StaticResource ShowPlusConverter}" Mode="OneWay" >
-                                                <Binding Path="IsSemiProduct" />
-                                                <Binding Path="SemiStatus" />
-                                                <Binding Path="IsSelected">
-                                                    <Binding.RelativeSource>
-                                                        <RelativeSource AncestorType="DataGridRow" />
-                                                    </Binding.RelativeSource>
-                                                </Binding>
-                                            </MultiBinding>
-                                        </Image.Source>
+                                <StackPanel Background="#FFE5E5E5" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                                    <Image x:Name="ArrowRight" Width="18" Height="16" Margin="0" Source="/Img/arrow-right.png" 
+                                                   Visibility="Hidden" >
                                     </Image>
                                 </StackPanel>
                                 
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True" >
-                                        <Setter TargetName="ImageType" Property="Source" >
-                                            <Setter.Value>
-                                                <MultiBinding Converter="{StaticResource ShowPlusConverter}" Mode="OneWay">
-                                                    <Binding Path="IsSemiProduct" />
-                                                    <Binding Path="SemiStatus" />
-                                                    <Binding Path="IsSelected">
-                                                        <Binding.RelativeSource>
-                                                            <RelativeSource AncestorType="DataGridRow" />
-                                                        </Binding.RelativeSource>
-                                                    </Binding>
-                                                </MultiBinding>
-                                            </Setter.Value>
-                                        </Setter>
+                                        <Setter TargetName="ArrowRight" Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
+                    <!-- Column [+] and [-]-->
+                    <DataGridTemplateColumn x:Name="ColSemiRecipe" IsReadOnly="True" CanUserSort="False" 
+                                            CanUserResize="False" Width="10" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate >
+                                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" >
+                                    <TextBlock FontSize="12" Margin="0,2,0,0" FontWeight="Bold"
+                                               Text="{Binding SemiStatus, Mode=OneWay}" HorizontalAlignment="Left" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                        <DataGridTemplateColumn.HeaderStyle >
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="SeparatorBrush" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0,1,1,1" />
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+
+
+                        <DataGridTemplateColumn.CellStyle >
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Background" Value="#FFE5E5E5" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                <Setter Property="Margin" Value="-1,0,0,0" />
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                    
                     <!-- Column L.P. -->
                     <DataGridTextColumn x:Name="ColLP" IsReadOnly="True" CanUserSort="False"
                                         Header="L.P."
@@ -411,7 +441,7 @@
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <!-- Column material name with subrecipes -->
+                    <!-- Column material name -->
                     <DataGridTemplateColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False"
                                             Header="Surowiec"
                                             Width="50*"
@@ -831,6 +861,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
 
@@ -851,6 +882,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -870,6 +902,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -887,6 +920,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -907,6 +941,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </TextBox>
@@ -924,6 +959,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -943,6 +979,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -960,6 +997,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -979,6 +1017,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -998,6 +1037,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>
@@ -1017,6 +1057,7 @@
                             <Binding ElementName="ColPrice" Path="ActualWidth" />
                             <Binding ElementName="RdSemiproduct" Path="ActualWidth" />
                             <Binding ElementName="ColVoc" Path="ActualWidth" />
+                            <Binding ElementName="ColSemiRecipe" Path="ActualWidth" />
                         </MultiBinding>
                     </Canvas.Left>
                 </Label>

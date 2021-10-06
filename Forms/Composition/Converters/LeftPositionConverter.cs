@@ -10,7 +10,7 @@ namespace LabBook.Forms.Composition.Converters
         {
             double start = 2;
             string type = parameter.ToString();
-            double colStatus = System.Convert.ToDouble(values[0]);
+            double colArrow = System.Convert.ToDouble(values[0]);
             double colLP = System.Convert.ToDouble(values[1]);
             double colMaterial = System.Convert.ToDouble(values[2]);
             double colAmountPr = System.Convert.ToDouble(values[3]);
@@ -19,6 +19,8 @@ namespace LabBook.Forms.Composition.Converters
             double colPrice = System.Convert.ToDouble(values[6]);
             double rdAmountWidth = System.Convert.ToDouble(values[7]);
             double colVoc = System.Convert.ToDouble(values[8]);
+            double colPlusMinus = System.Convert.ToDouble(values[9]);
+            double colStatus = colArrow + colPlusMinus;
             double result;
 
             switch (type)

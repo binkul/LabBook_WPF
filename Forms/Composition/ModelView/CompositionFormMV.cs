@@ -1,15 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
 using LabBook.Commons;
-using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -307,8 +304,8 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void OnMouseDownCommandExecuted(MouseButtonEventArgs e)
         {
-            var position = e.GetPosition((UIElement)e.Source);
-            if (position.X > 16 && position.X < 32)
+            Point position = e.GetPosition((UIElement)e.Source);
+            if (position.X > 26 && position.X < 38)
             {
                 _mouseDown = true;
             }
