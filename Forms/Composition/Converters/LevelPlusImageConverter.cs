@@ -1,5 +1,4 @@
-﻿using LabBook.ADO.Service;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -30,18 +29,18 @@ namespace LabBook.Forms.Composition.Converters
                 return _pathEmpty;
 
             bool isSemi = (bool)values[0];
-            SubRecipeStatus status = (SubRecipeStatus)values[1];
+            string status = values[1].ToString();
             bool isSelected = (bool)values[2];
 
             if (!isSemi && isSelected)
                 return _sourceArrow;
-            else if (isSemi && status == SubRecipeStatus.close && !isSelected)
+            else if (isSemi && status == "close" && !isSelected)
                 return _sourcePlus;
-            else if (isSemi && status == SubRecipeStatus.open && !isSelected)
+            else if (isSemi && status == "open" && !isSelected)
                 return _sourceMinus;
-            else if (isSemi && status == SubRecipeStatus.close && isSelected)
+            else if (isSemi && status == "close" && isSelected)
                 return _sourceArrowWithPlus;
-            else if (isSemi && status == SubRecipeStatus.open && isSelected)
+            else if (isSemi && status == "open" && isSelected)
                 return _sourceArrowWithMinus;
             else
                 return _sourceEmpty;

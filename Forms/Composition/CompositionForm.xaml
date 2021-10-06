@@ -265,12 +265,21 @@
                       FrozenColumnCount="1" HeadersVisibility="Column" TabIndex="4"
                       SelectedIndex="{Binding SelectedIndex}"
                       ItemsSource="{Binding Recipe}" >
-                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedCellsChanged">
+                        <cmd:EventToCommand Command="{Binding OnSelectedCellsCommnd}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="PreviewMouseDown">
+                        <cmd:EventToCommand Command="{Binding OnMouseDownCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
                 <DataGrid.Columns>
 
                     <DataGridTextColumn x:Name="ColSemiProd" Binding="{Binding IsSemiProduct}" Visibility="Collapsed" />
                     <DataGridTextColumn x:Name="ColOperation" Binding="{Binding Operation}" Visibility="Collapsed" />
                     <DataGridTextColumn x:Name="ColLevel" Binding="{Binding Level}" Visibility="Collapsed" />
+                    <DataGridTextColumn x:Name="ColSemiStatus" Binding="{Binding SemiStatus}" Visibility="Hidden" />
 
                     <!-- Column status -->
                     <DataGridTemplateColumn x:Name="ColStatus" IsReadOnly="True" CanUserSort="False" CanUserResize="False"

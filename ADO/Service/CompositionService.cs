@@ -35,12 +35,6 @@ namespace LabBook.ADO.Service
         bottom = 4
     }
 
-    public enum SubRecipeStatus
-    {
-        open,
-        close
-    }
-
     public class CompositionService
     {
         private readonly IRepository<CompositionDto> _repository = new CompositionRepository();
@@ -82,25 +76,25 @@ namespace LabBook.ADO.Service
                 component.VOC = CalculateVOC(component);
 
                 if (component.IsSemiProduct)
-                    component.SemiRecipe = GetSemiRecipe(component.SemiProductNrD, component.Operation, component.Amount, component.Mass);
+                    component.SemiRecipe = GetSemiRecipe(component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass);
 
                 recipe.Add(component);
 
                 // **** temporary
-                if (component.IsSemiProduct)
-                {
-                    component = new Component((int)RecipeLevelType.firstLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
-                    recipe.Add(component);
-                    component = new Component((int)RecipeLevelType.firstLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.middle, 3, "", 1d);
-                    recipe.Add(component);
-                    component = new Component((int)RecipeLevelType.firstLevel, 3, "Trzy", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
-                    recipe.Add(component);
-                    component = new Component((int)RecipeLevelType.secondLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
-                    recipe.Add(component);
-                    component = new Component((int)RecipeLevelType.secondLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
-                    recipe.Add(component);
+                //if (component.IsSemiProduct)
+                //{
+                //    component = new Component((int)RecipeLevelType.firstLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
+                //    recipe.Add(component);
+                //    component = new Component((int)RecipeLevelType.firstLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.middle, 3, "", 1d);
+                //    recipe.Add(component);
+                //    component = new Component((int)RecipeLevelType.firstLevel, 3, "Trzy", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
+                //    recipe.Add(component);
+                //    component = new Component((int)RecipeLevelType.secondLevel, 1, "Jeden", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.top, 3, "", 1d);
+                //    recipe.Add(component);
+                //    component = new Component((int)RecipeLevelType.secondLevel, 2, "Dwa", 5d, 5d, 1d, 5d, 0d, 0d, "", false, -1, SubRecipeOrdering.bottom, 3, "", 1d);
+                //    recipe.Add(component);
 
-                }
+                //}
             }
         }
 
@@ -110,7 +104,7 @@ namespace LabBook.ADO.Service
             return repository.GetRecipeData(numberD, title, density);
         }
 
-        private IList<Component> GetSemiRecipe(long nrD, int operation, double percent, double mass)
+        private IList<Component> GetSemiRecipe(int level, long nrD, int operation, double percent, double mass)
         {
             IList<Component> recipe = new List<Component>();
             DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + nrD.ToString());
@@ -119,6 +113,7 @@ namespace LabBook.ADO.Service
             {
                 Component component = new Component
                 {
+                    Level = level + 1,
                     Ordering = Convert.ToInt32(row["ordering"]),
                     Name = row["component"].ToString(),
                     IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]),

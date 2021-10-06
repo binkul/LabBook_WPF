@@ -11,6 +11,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Component = LabBook.Forms.Composition.Model.Component;
 
 namespace LabBook.Forms.Composition.ModelView
@@ -30,9 +32,12 @@ namespace LabBook.Forms.Composition.ModelView
         private bool _massMode = false;
         private readonly DataView _materialView;
         private int _selectedIndex;
+        private bool _mouseDown = false;
 
         public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
+        public RelayCommand<SelectedCellsChangedEventArgs> OnSelectedCellsCommnd { get; set; }
+        public RelayCommand<MouseButtonEventArgs> OnMouseDownCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CompositionFormMV() //CompositionEnterDto data)
@@ -43,6 +48,8 @@ namespace LabBook.Forms.Composition.ModelView
 
             _materialView = _service.GetAllMaterials();
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
+            OnSelectedCellsCommnd = new RelayCommand<SelectedCellsChangedEventArgs>(OnSelectedCellsCommandExecuted);
+            OnMouseDownCommand = new RelayCommand<MouseButtonEventArgs>(OnMouseDownCommandExecuted);
 
             _recipeData = _service.GetRecipeData(_numberD, _title, _density);
             _service.GetRecipe(Recipe, _recipeData);
@@ -265,5 +272,46 @@ namespace LabBook.Forms.Composition.ModelView
             WindowSetting.Save(_windowData);
         }
 
+        public void OnSelectedCellsCommandExecuted(SelectedCellsChangedEventArgs e)
+        {
+            if (!_mouseDown) return;
+            if (Recipe.Count == 0) return;
+
+            IList<DataGridCellInfo> info = e.AddedCells;
+            Component component = info[0].Item as Component;
+
+            if (!component.IsSemiProduct) return;
+
+            int index = Recipe.IndexOf(component);
+            index++;
+
+            if (component.SemiStatus == "close")
+            {
+                foreach (Component subComponent in component.SemiRecipe)
+                {
+                    if (index < Recipe.Count)
+                        Recipe.Insert(index, subComponent);
+                    else
+                        Recipe.Add(subComponent);
+                }
+                component.SemiStatus = "open";
+                component.Comment = "Zmiana";
+            }
+            else
+            {
+
+            }
+
+            _mouseDown = false;
+        }
+
+        public void OnMouseDownCommandExecuted(MouseButtonEventArgs e)
+        {
+            var position = e.GetPosition((UIElement)e.Source);
+            if (position.X > 16 && position.X < 32)
+            {
+                _mouseDown = true;
+            }
+        }
     }
 }
