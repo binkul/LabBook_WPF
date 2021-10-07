@@ -291,6 +291,7 @@ namespace LabBook.Forms.Composition.ModelView
                             Recipe.Insert(index, subComponent);
                         else
                             Recipe.Add(subComponent);
+                        index++;
                     }
                     component.SemiStatus = "[-]";
                 }

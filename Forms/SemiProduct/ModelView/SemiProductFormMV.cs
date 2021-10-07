@@ -754,12 +754,12 @@ namespace LabBook.Forms.SemiProduct.ModelView
                 long numberD = Convert.ToInt64(row["intermediate_nrD"]);
                 if (_calculationType == CalculationType.price)
                 {
-                    double price = _materialService.CalculatePrice(numberD);
+                    double price = CommonFunction.CalculatePrice(numberD);
                     row["price"] = Math.Round(price, 2);
                 }
                 else
                 {
-                    double voc = _materialService.CalculateVOC(numberD);
+                    double voc = CommonFunction.CalculateVOC(numberD);
                     row["VOC"] = voc;
                 }
                 count++;

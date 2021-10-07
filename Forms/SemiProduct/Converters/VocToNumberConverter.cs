@@ -1,10 +1,6 @@
-﻿using LabBook.ADO.Service;
+﻿using LabBook.Commons;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace LabBook.Forms.SemiProduct.Converters

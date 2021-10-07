@@ -509,52 +509,6 @@
                         </DataGridTemplateColumn.CellStyle>
                     </DataGridTemplateColumn>
                                      
-                    <!-- Column material name -->
-                    <!--<DataGridTextColumn x:Name="ColMaterial" IsReadOnly="True" CanUserSort="False" 
-                                        Header="Surowiec"
-                                        Binding="{Binding Name, Mode=OneWay}"
-                                        Width="50*"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
-                                        HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
-                        <DataGridTextColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                --><!-- ForeColor - white when selected --><!--
-                                <Style.Triggers>
-                                    <Trigger Property="DataGridCell.IsSelected" Value="true">
-                                        <Setter Property="Foreground" Value="White" />
-                                    </Trigger>
-                                </Style.Triggers>
-                                --><!-- BackGround color - yellow/white or blue selected --><!--
-                                <Setter Property="Background" >
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BackColorConverter}">
-                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
-                                            <Binding Path="Operation"/>
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
-                                --><!-- Border color around Star/End area --><!--
-                                <Setter Property="BorderBrush" >
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BorderColorConverter}" >
-                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
-                                            <Binding Path="Operation"/>
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
-                                --><!-- Border thiskness around Start/End area --><!--
-                                <Setter Property="BorderThickness" >
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource BorderThicknesConverter}" ConverterParameter="mid">
-                                            <Binding RelativeSource="{RelativeSource Self}" Path="IsSelected"/>
-                                            <Binding Path="Operation"/>
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGridTextColumn.CellStyle>
-                    </DataGridTextColumn>-->
-
                     <!-- Column amount in % -->
                     <DataGridTextColumn x:Name="ColAmountPr" IsReadOnly="True" CanUserSort="False"
                                         Header="Ilość [%]" Width="20*"
@@ -617,8 +571,20 @@
                                         Header="Masa [kg]"
                                         Width="20*"
                                         Binding="{Binding Mass, Converter={StaticResource MassRoundConverter}, Mode=OneWay}"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+                        
+                        <!-- Style inside cell - text only -->
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{Binding Level, Converter={StaticResource LevelFontSizeConverter}}" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                        <!-- Whole cell style -->
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -663,8 +629,20 @@
                                         Header="Cena/kg"
                                         Width="20*"
                                         Binding="{Binding PriceKg, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+
+                        <!-- Style inside cell - text only -->
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{Binding Level, Converter={StaticResource LevelFontSizeConverter}}" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                        <!-- Whole cell style -->
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -710,8 +688,20 @@
                                         Header="Cena"
                                         Width="20*"
                                         Binding="{Binding Price, Converter={StaticResource PriceRounConverter}, Mode=OneWay}"
-                                        ElementStyle="{StaticResource DataGridTextLeftStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+
+                        <!-- Style inside cell - text only -->
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{Binding Level, Converter={StaticResource LevelFontSizeConverter}}" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                        <!-- Whole cell style -->
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->
@@ -757,8 +747,20 @@
                                         Header="Voc [kg]"
                                         Width="20*"
                                         Binding="{Binding VOC, Converter={StaticResource VocRoundConverter}, Mode=OneWay}"
-                                        ElementStyle="{StaticResource DataGridTextCenterStyle}"
                                         HeaderStyle="{StaticResource AllignColmnHeaderLeft}" >
+
+                        <!-- Style inside cell - text only -->
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="{Binding Level, Converter={StaticResource LevelFontSizeConverter}}" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Padding" Value="3,0,0,0" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                        <!-- Whole cell style -->
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <!-- ForeColor - white when selected -->

@@ -1,5 +1,6 @@
 ﻿using LabBook.ADO.Common;
 using LabBook.ADO.Repository;
+using LabBook.Commons;
 using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
 using System;
@@ -42,44 +43,41 @@ namespace LabBook.ADO.Service
 
         public void GetRecipe(IList<Component> recipe, CompositionData data)
         {
-            char topRight = '\u250C';
-            char middleRight = '\u251C';
-            char bottomRight = '\u2514';
-            char minus = '\u2500';
             DataTable table = _repository.GetAll(CompositionRepository.AllRecipeQuery + data.LabBookId.ToString());
 
             foreach (DataRow row in table.Rows)
             {
-                Component component = new Component
-                {
-                    Ordering = Convert.ToInt32(row["ordering"]),
-                    Name = row["component"].ToString(),
-                    IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]),
-                    Amount = Convert.ToDouble(row["amount"]),
-                    Operation = Convert.ToInt32(row["operation"]),
-                    OperationName = row["name"].ToString(),
-                    Comment = row["comment"].ToString()
-                };
+                Component component = new Component();
 
+                component.Ordering = Convert.ToInt32(row["ordering"]);
+                component.Name = row["component"].ToString();
+                component.IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]);
+                component.Amount = Convert.ToDouble(row["amount"]);
+                component.Operation = Convert.ToInt32(row["operation"]);
+                component.OperationName = row["name"].ToString();
+                component.Comment = row["comment"].ToString();
                 component.Mass = component.Amount * data.Mass / 100;
                 component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
                 component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
-                component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
 
-                double rate = Convert.ToDouble(row["rate"]);
-                if (component.PriceKg > 0 && rate > 0)
+                if (!component.IsSemiProduct)
                 {
-                    component.PriceKg *= rate;
-                    component.Price = component.PriceKg * component.Mass;
+                    double rate = Convert.ToDouble(row["rate"]);
+                    component.PriceKg = component.PriceKg > 0 && rate > 0 ? component.PriceKg * rate : 0d;
+                    component.Price = component.PriceKg > 0 && rate > 0 ? CalculatePrice(component) : 0d;
+                    component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
                 }
-                component.VOC = CalculateVOC(component);
+                else
+                {
+                    component.PriceKg = CommonFunction.CalculatePrice(component.SemiProductNrD);
+                    component.Price = component.PriceKg > 0 ? CalculatePrice(component) : 0d;
+                    component.VocPercent = CommonFunction.CalculateVOC(component.SemiProductNrD);
+                }
 
-                if (component.IsSemiProduct)
-                {
-                    component.SemiStatus = "[+]";
-                    component.SemiRecipe = GetSemiRecipe(component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass);
-                }
+                component.VOC = CalculateVOC(component);
+                component.SemiStatus = component.IsSemiProduct ? "[+]" : "";
+                component.SemiRecipe = component.IsSemiProduct ? GetSemiRecipe(component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass) : new List<Component>();
 
                 recipe.Add(component);
             }
@@ -98,28 +96,29 @@ namespace LabBook.ADO.Service
 
             foreach (DataRow row in table.Rows)
             {
-                Component component = new Component
-                {
-                    Level = level + 1,
-                    Ordering = Convert.ToInt32(row["ordering"]),
-                    Name = row["component"].ToString(),
-                    IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]),
-                };
+                Component component = new Component();
+
                 double amount = Convert.ToDouble(row["amount"]);
+                component.Name = row["component"].ToString();
                 component.Amount = amount * percent / 100d;
                 component.Mass = amount * mass / 100;
+                component.IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]);
+                component.Ordering = Convert.ToInt32(row["ordering"]);
+                component.Level = level + 1;
+                component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
                 component.Operation = operation > 1 ? 3 : 1;
                 component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
                 component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
-                
+
                 double rate = Convert.ToDouble(row["rate"]);
-                if (component.PriceKg > 0 && rate > 0)
-                {
-                    component.PriceKg *= rate;
-                    component.Price = component.PriceKg * component.Mass;
-                }
+                component.PriceKg = component.PriceKg > 0 && rate > 0 ? component.PriceKg * rate : 0d;
+                component.Price = component.PriceKg > 0 && rate > 0 ? CalculatePrice(component) : 0d;
                 component.VOC = CalculateVOC(component);
+
+                component.SemiStatus = component.IsSemiProduct ? "[+]" : "";
+                component.SemiRecipe = component.IsSemiProduct ? GetSemiRecipe(component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass) : new List<Component>();
+
                 recipe.Add(component);
             }
 
@@ -132,8 +131,8 @@ namespace LabBook.ADO.Service
             }
             else if (recipe.Count > 1)
             {
-                recipe[0].SubOrdering = SubRecipeOrdering.bottom;
-                recipe[recipe.Count - 1].SubOrdering = SubRecipeOrdering.top;
+                recipe[0].SubOrdering = SubRecipeOrdering.top;
+                recipe[recipe.Count - 1].SubOrdering = SubRecipeOrdering.bottom;
             }
 
             return recipe;

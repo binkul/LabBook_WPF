@@ -117,6 +117,7 @@
     <Compile Include="ADO\Service\LabBookService.cs" />
     <Compile Include="ADO\Service\MaterialService.cs" />
     <Compile Include="ADO\Service\UserService.cs" />
+    <Compile Include="Commons\CommonFunction.cs" />
     <Compile Include="Commons\DelegateCommand.cs" />
     <Compile Include="Commons\SortableObservableCollection.cs" />
     <Compile Include="Dto\ClpDto.cs" />
