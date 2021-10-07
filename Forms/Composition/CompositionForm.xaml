@@ -272,11 +272,8 @@
                       SelectedIndex="{Binding SelectedIndex}"
                       ItemsSource="{Binding Recipe}" >
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedCellsChanged">
-                        <cmd:EventToCommand Command="{Binding OnSelectedCellsCommnd}" PassEventArgsToCommand="True" />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="PreviewMouseDown">
-                        <cmd:EventToCommand Command="{Binding OnMouseDownCommand}" PassEventArgsToCommand="True" />
+                    <i:EventTrigger EventName="PreviewMouseUp">
+                        <cmd:EventToCommand Command="{Binding OnMouseUpCommand}" PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
@@ -300,7 +297,12 @@
 
                         <DataGridTemplateColumn.HeaderStyle >
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="White" />
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1" >
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                                 <Setter Property="SeparatorBrush" Value="Transparent" />
                                 <Setter Property="BorderThickness" Value="1,1,0,1" />
                             </Style>
@@ -330,14 +332,20 @@
                             <DataTemplate >
                                 <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Left" >
                                     <TextBlock FontSize="12" Margin="0,2,0,0" FontWeight="Bold"
-                                               Text="{Binding SemiStatus, Mode=OneWay}" HorizontalAlignment="Left" />
+                                               Text ="{Binding SemiStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                               HorizontalAlignment="Left" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
 
                         <DataGridTemplateColumn.HeaderStyle >
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="White" />
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
                                 <Setter Property="SeparatorBrush" Value="Transparent" />
                                 <Setter Property="BorderThickness" Value="0,1,1,1" />
                             </Style>
@@ -453,7 +461,7 @@
                                            Width="{Binding ElementName=DgMaterials, Path=RowHeight, Mode=OneWay}" 
                                            Height="{Binding ElementName=DgMaterials, Path=RowHeight, Mode=OneWay}"
                                            Visibility="{Binding Level, Converter={StaticResource LevelVisibilityConverter}, Mode=OneWay}"
-                                           Source="{Binding SemiOrdering, Converter={StaticResource LevelTypeConverter}, Mode=OneWay}" />
+                                           Source="{Binding SubOrdering, Converter={StaticResource LevelTypeConverter}, Mode=OneWay}" />
                                     <TextBlock Padding="3,0,0,0" VerticalAlignment="Center"
                                                FontSize="{Binding Level, Converter={StaticResource LevelFontSizeConverter}, Mode=OneWay}"
                                                Text="{Binding Name, Mode=OneWay}" />

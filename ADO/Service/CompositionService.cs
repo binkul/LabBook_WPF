@@ -126,6 +126,16 @@ namespace LabBook.ADO.Service
             if (operation == ((int)RecipeOperation.end) && recipe.Count > 0)
                 recipe[recipe.Count - 1].Operation = operation;
 
+            if (recipe.Count == 1)
+            {
+                recipe[0].SubOrdering = SubRecipeOrdering.onlyOne;
+            }
+            else if (recipe.Count > 1)
+            {
+                recipe[0].SubOrdering = SubRecipeOrdering.bottom;
+                recipe[recipe.Count - 1].SubOrdering = SubRecipeOrdering.top;
+            }
+
             return recipe;
         }
 

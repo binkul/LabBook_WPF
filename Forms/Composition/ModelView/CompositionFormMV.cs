@@ -29,12 +29,10 @@ namespace LabBook.Forms.Composition.ModelView
         private bool _massMode = false;
         private readonly DataView _materialView;
         private int _selectedIndex;
-        private bool _mouseDown = false;
 
         public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
-        public RelayCommand<SelectedCellsChangedEventArgs> OnSelectedCellsCommnd { get; set; }
-        public RelayCommand<MouseButtonEventArgs> OnMouseDownCommand { get; set; }
+        public RelayCommand<MouseButtonEventArgs> OnMouseUpCommand { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CompositionFormMV() //CompositionEnterDto data)
@@ -45,8 +43,7 @@ namespace LabBook.Forms.Composition.ModelView
 
             _materialView = _service.GetAllMaterials();
             OnClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingCommandExecuted);
-            OnSelectedCellsCommnd = new RelayCommand<SelectedCellsChangedEventArgs>(OnSelectedCellsCommandExecuted);
-            OnMouseDownCommand = new RelayCommand<MouseButtonEventArgs>(OnMouseDownCommandExecuted);
+            OnMouseUpCommand = new RelayCommand<MouseButtonEventArgs>(OnMouseUpCommandExecuted);
 
             _recipeData = _service.GetRecipeData(_numberD, _title, _density);
             _service.GetRecipe(Recipe, _recipeData);
@@ -233,6 +230,11 @@ namespace LabBook.Forms.Composition.ModelView
             }
         }
 
+        public string GetSemiStatus
+        {
+            get => Recipe[_selectedIndex].SemiStatus;
+        }
+
         private void SortRecipe()
         {
             Recipe.Sort(x => x.Ordering, ListSortDirection.Ascending);
@@ -269,45 +271,33 @@ namespace LabBook.Forms.Composition.ModelView
             WindowSetting.Save(_windowData);
         }
 
-        public void OnSelectedCellsCommandExecuted(SelectedCellsChangedEventArgs e)
+        public void OnMouseUpCommandExecuted(MouseButtonEventArgs e)
         {
-            if (!_mouseDown) return;
             if (Recipe.Count == 0) return;
-
-            IList<DataGridCellInfo> info = e.AddedCells;
-            Component component = info[0].Item as Component;
-
+            Component component = Recipe[_selectedIndex];
             if (!component.IsSemiProduct) return;
 
-            int index = Recipe.IndexOf(component);
+            int index = _selectedIndex;
             index++;
-
-            if (component.SemiStatus == "close")
-            {
-                foreach (Component subComponent in component.SemiRecipe)
-                {
-                    if (index < Recipe.Count)
-                        Recipe.Insert(index, subComponent);
-                    else
-                        Recipe.Add(subComponent);
-                }
-                component.SemiStatus = "open";
-                component.Comment = "Zmiana";
-            }
-            else
-            {
-
-            }
-
-            _mouseDown = false;
-        }
-
-        public void OnMouseDownCommandExecuted(MouseButtonEventArgs e)
-        {
             Point position = e.GetPosition((UIElement)e.Source);
             if (position.X > 26 && position.X < 38)
             {
-                _mouseDown = true;
+                if (component.SemiStatus == "[+]")
+                {
+                    for (int i = 0; i < component.SemiRecipe.Count; i++)
+                    {
+                        Component subComponent = component.SemiRecipe[i];
+                        if (index < Recipe.Count)
+                            Recipe.Insert(index, subComponent);
+                        else
+                            Recipe.Add(subComponent);
+                    }
+                    component.SemiStatus = "[-]";
+                }
+                else
+                {
+
+                }
             }
         }
     }

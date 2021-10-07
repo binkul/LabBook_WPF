@@ -185,7 +185,7 @@ namespace LabBook.Forms.Composition.Model
             set => _semiNrD = value;
         }
 
-        public SubRecipeOrdering SemiOrdering
+        public SubRecipeOrdering SubOrdering
         {
             get => _subOrdering;
             set => _subOrdering = value;
@@ -194,7 +194,11 @@ namespace LabBook.Forms.Composition.Model
         public string SemiStatus
         {
             get => _subRecipeStatus;
-            set => _subRecipeStatus = value;
+            set
+            {
+                _subRecipeStatus = value;
+                OnPropertyChanged(nameof(SemiStatus));
+            }
         }
 
         public bool IsSemiproductPresent => SemiRecipe.Count > 0;
