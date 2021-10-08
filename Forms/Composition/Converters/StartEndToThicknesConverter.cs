@@ -1,10 +1,7 @@
-﻿using LabBook.ADO.Service;
+﻿using LabBook.Dto;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -24,27 +21,27 @@ namespace LabBook.Forms.Composition.Converters
             switch (type)
             {
                 case "left":
-                    if (operation == (int)RecipeOperation.start)
+                    if (operation == (int)RecipeOperation.Start)
                         return new Thickness(2, 2, 0, 0);
-                    else if (operation == (int)RecipeOperation.middle)
+                    else if (operation == (int)RecipeOperation.Inside)
                         return new Thickness(2, 0, 0, 0);
-                    else if (operation == (int)RecipeOperation.end)
+                    else if (operation == (int)RecipeOperation.End)
                         return new Thickness(2, 0, 0, 2);
                     else
                         return new Thickness(0, 0, 0, 0);
                 case "mid":
-                    if (operation == (int)RecipeOperation.start)
+                    if (operation == (int)RecipeOperation.Start)
                         return new Thickness(0, 2, 0, 0);
-                    else if (operation == (int)RecipeOperation.end)
+                    else if (operation == (int)RecipeOperation.End)
                         return new Thickness(0, 0, 0, 2);
                     else
                         return new Thickness(0, 0, 0, 0);
                 case "right":
-                    if (operation == (int)RecipeOperation.start)
+                    if (operation == (int)RecipeOperation.Start)
                         return new Thickness(0, 2, 2, 0);
-                    else if (operation == (int)RecipeOperation.middle)
+                    else if (operation == (int)RecipeOperation.Inside)
                         return new Thickness(0, 0, 2, 0);
-                    else if (operation == (int)RecipeOperation.end)
+                    else if (operation == (int)RecipeOperation.End)
                         return new Thickness(0, 0, 2, 2);
                     else
                         return new Thickness(0, 0, 0, 0);

@@ -14,6 +14,7 @@ namespace LabBook.Forms.Composition.Model
         private double _mass = 0;
         private double _priceKg = -1;
         private double _price = -1;
+        private double _rate = -1;
         private double _vocPercent = -1;
         private double _voc = -1;
         private string _comment;
@@ -29,7 +30,7 @@ namespace LabBook.Forms.Composition.Model
         public Component()
         { }
 
-        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price,
+        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, double rate,
             double vocPercent, double voc, string comment, bool isSemi, long semiNrD, SubRecipeOrdering subOrder, int operation, string operationName, double density)
         {
             _level = level;
@@ -39,6 +40,7 @@ namespace LabBook.Forms.Composition.Model
             _mass = mass;
             _priceKg = priceKg;
             _price = price;
+            _rate = rate;
             _vocPercent = vocPercent;
             _voc = voc;
             _comment = comment;
@@ -50,7 +52,7 @@ namespace LabBook.Forms.Composition.Model
             _density = density;
         }
 
-        public Component(int ordering, string name, double amount, double mass, double priceKg, double price,
+        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, double rate,
             double vocPercent, double voc, string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
         {
             _ordering = ordering;
@@ -59,6 +61,7 @@ namespace LabBook.Forms.Composition.Model
             _mass = mass;
             _priceKg = priceKg;
             _price = price;
+            _rate = rate;
             _vocPercent = vocPercent;
             _voc = voc;
             _comment = comment;
@@ -136,6 +139,15 @@ namespace LabBook.Forms.Composition.Model
             {
                 _priceKg = value;
                 OnPropertyChanged(nameof(PriceKg));
+            }
+        }
+
+        public double Rate
+        {
+            get => _rate;
+            set
+            {
+                _rate = value;
             }
         }
 

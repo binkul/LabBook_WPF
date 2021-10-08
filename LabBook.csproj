@@ -124,6 +124,7 @@
     <Compile Include="Dto\ComboListDto.cs" />
     <Compile Include="Dto\CompositionDto.cs" />
     <Compile Include="Dto\CompositionEnterDto.cs" />
+    <Compile Include="Dto\CompositionSubRecipeDto.cs" />
     <Compile Include="Dto\CurrencyDto.cs" />
     <Compile Include="Dto\GhsDto.cs" />
     <Compile Include="Dto\MaterialDto.cs" />
