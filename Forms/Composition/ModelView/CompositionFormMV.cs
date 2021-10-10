@@ -168,7 +168,7 @@ namespace LabBook.Forms.Composition.ModelView
             get => _selectedIndex;
             set
             {
-                if (_blockSelectedIndex) return;
+                if (_selectedIndex < 0) return;
 
                 _selectedIndex = value;
                 _componentPercent = Recipe[_selectedIndex].Amount;
@@ -177,6 +177,16 @@ namespace LabBook.Forms.Composition.ModelView
                 OnPropertyChanged(nameof(ComponentPercent));
                 OnPropertyChanged(nameof(ComponentMass));
                 OnPropertyChanged(nameof(ComponentName));
+                OnPropertyChanged(nameof(IsSemiComponent));
+            }
+        }
+
+        public bool IsSemiComponent
+        {
+            get
+            {
+                if (_selectedIndex < 0) return false;
+                return Recipe[_selectedIndex].Level == 0;
             }
         }
 
@@ -277,50 +287,15 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void OnMouseUpCommandExecuted(MouseButtonEventArgs e)
         {
+            if (_selectedIndex < 0) return;
             if (Recipe.Count == 0) return;
             Component component = Recipe[_selectedIndex];
             if (!component.IsSemiProduct) return;
 
-            int index = _selectedIndex;
-            index++;
             Point position = e.GetPosition((UIElement)e.Source);
             if (position.X > 26 && position.X < 38)
             {
-                if (component.SemiStatus == "[+]")
-                {
-                    for (int i = 0; i < component.SemiRecipe.Count; i++)
-                    {
-                        Component subComponent = component.SemiRecipe[i];
-                        if (index < Recipe.Count)
-                            Recipe.Insert(index, subComponent);
-                        else
-                            Recipe.Add(subComponent);
-                        index++;
-                    }
-                    component.SemiStatus = "[-]";
-                }
-                else
-                {
-                    _blockSelectedIndex = true;
-                    int parentId = component.Id;
-
-                    IList<Component> childs = new List<Component>();
-                    foreach (Component child in Recipe)
-                    {
-                        if (child.ParentsId.Contains(parentId))
-                            childs.Add(child);
-                    }
-
-                    foreach(Component child in childs)
-                    {
-                        if (child.IsSemiProduct)
-                            child.SemiStatus = "[+]";
-                        Recipe.Remove(child);
-                    }
-
-                    component.SemiStatus = "[+]";
-                    _blockSelectedIndex = false;
-                }
+                _service.ExpandOrHideSemiRecipe(Recipe, component, _selectedIndex);
             }
         }
     }

@@ -117,7 +117,8 @@
                    Content="{Binding GetTitle, Mode=OneWay}"/>
 
             <!-- Setting values for recipes -->
-            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30">
+            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,36,0,0" Height="30"
+                    Visibility="{Binding IsSemiComponent, Converter={StaticResource BoolToHiddenConverter}}">
                 
                 <!-- Combo with material list -->
                 <ComboBox x:Name="CmbMaterial" KeyUp="ComboBox_KeyUp" TabIndex="3"

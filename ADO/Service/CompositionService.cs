@@ -251,5 +251,54 @@ namespace LabBook.ADO.Service
         {
             return component.VOC = component.VocPercent >= 0 ? component.VocPercent * component.Amount / 100 : -1d;
         }
+
+        public void ExpandOrHideSemiRecipe(IList<Component> recipe, Component component, int index)
+        {
+            if (component.SemiStatus == "[+]")
+            {
+                ExpandSemiRecipe(recipe, component, index + 1);
+            }
+            else
+            {
+                HideSemiRecipe(recipe, component);
+            }
+        }
+
+        public void ExpandSemiRecipe(IList<Component> recipe, Component component, int index)
+        {
+            if (component == null) return;
+
+            foreach (Component child in component.SemiRecipe)
+            {
+                if (index < recipe.Count)
+                    recipe.Insert(index, child);
+                else
+                    recipe.Add(child);
+                index++;
+            }
+            component.SemiStatus = "[-]";
+        }
+
+        public void HideSemiRecipe(IList<Component> recipe, Component component)
+        {
+            if (component == null) return;
+
+            int parentId = component.Id;
+            IList<Component> childs = new List<Component>();
+            foreach (Component child in recipe)
+            {
+                if (child.ParentsId.Contains(parentId))
+                    childs.Add(child);
+            }
+
+            foreach (Component child in childs)
+            {
+                if (child.IsSemiProduct)
+                    child.SemiStatus = "[+]";
+                recipe.Remove(child);
+            }
+
+            component.SemiStatus = "[+]";
+        }
     }
 }
