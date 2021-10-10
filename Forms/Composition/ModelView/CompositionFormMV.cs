@@ -29,6 +29,7 @@ namespace LabBook.Forms.Composition.ModelView
         private bool _massMode = false;
         private readonly DataView _materialView;
         private int _selectedIndex;
+        private bool _blockSelectedIndex = false;
 
         public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
@@ -118,7 +119,7 @@ namespace LabBook.Forms.Composition.ModelView
             set
             {
                 _recipeData.Mass = value;
-                _service.RecalculateByAmount(Recipe, _recipeData);
+                _service.RecalculateByAmount(Recipe, _recipeData.Mass, 0, 0);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetPricePerL));
@@ -167,6 +168,8 @@ namespace LabBook.Forms.Composition.ModelView
             get => _selectedIndex;
             set
             {
+                if (_blockSelectedIndex) return;
+
                 _selectedIndex = value;
                 _componentPercent = Recipe[_selectedIndex].Amount;
                 _componentMass = Recipe[_selectedIndex].Mass;
@@ -184,7 +187,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentPercent = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Amount = _componentPercent;
-                _service.RecalculateByAmount(Recipe, _recipeData);
+                _service.RecalculateByAmount(Recipe, _recipeData.Mass, 0, 0);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetPricePerL));
@@ -201,7 +204,8 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentMass = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Mass = _componentMass;
-                _service.RecalculateByMass(Recipe, _recipeData);
+                _recipeData.Mass = _service.SumOfMass(Recipe);
+                _service.RecalculateByMass(Recipe, _recipeData.Mass, 0, 0);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetPricePerL));
@@ -297,7 +301,25 @@ namespace LabBook.Forms.Composition.ModelView
                 }
                 else
                 {
+                    _blockSelectedIndex = true;
+                    int parentId = component.Id;
 
+                    IList<Component> childs = new List<Component>();
+                    foreach (Component child in Recipe)
+                    {
+                        if (child.ParentsId.Contains(parentId))
+                            childs.Add(child);
+                    }
+
+                    foreach(Component child in childs)
+                    {
+                        if (child.IsSemiProduct)
+                            child.SemiStatus = "[+]";
+                        Recipe.Remove(child);
+                    }
+
+                    component.SemiStatus = "[+]";
+                    _blockSelectedIndex = false;
                 }
             }
         }

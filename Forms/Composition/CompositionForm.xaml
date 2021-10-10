@@ -269,7 +269,7 @@
                       ColumnWidth="*" SelectionMode="Single" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True"
                       CanUserAddRows="False"  CanUserResizeColumns="True" CanUserResizeRows="False" RowHeight="22"
                       FrozenColumnCount="1" HeadersVisibility="Column" TabIndex="4"
-                      SelectedIndex="{Binding SelectedIndex}"
+                      SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                       ItemsSource="{Binding Recipe}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="PreviewMouseUp">

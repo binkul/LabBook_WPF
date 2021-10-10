@@ -7,9 +7,11 @@ namespace LabBook.Forms.Composition.Model
 {
     public class Component : INotifyPropertyChanged, IComparable<Component>
     {
+        public int Id { get; set; }
         private int _level = (int)RecipeLevelType.mainLevel;
         private int _ordering = 1;
         private string _name;
+        private double _amountOryginal = 0;
         private double _amount = 0;
         private double _mass = 0;
         private double _priceKg = -1;
@@ -26,50 +28,19 @@ namespace LabBook.Forms.Composition.Model
         private string _operationName;
         private double _density = -1;
         public IList<Component> SemiRecipe { get; set; } = new List<Component>();
+        public IList<int> ParentsId { get; set; } = new List<int>();
 
         public Component()
         { }
 
-        public Component(int level, int ordering, string name, double amount, double mass, double priceKg, double price, double rate,
-            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, SubRecipeOrdering subOrder, int operation, string operationName, double density)
-        {
-            _level = level;
-            _ordering = ordering;
-            _name = name;
-            _amount = amount;
-            _mass = mass;
-            _priceKg = priceKg;
-            _price = price;
-            _rate = rate;
-            _vocPercent = vocPercent;
-            _voc = voc;
-            _comment = comment;
-            _isSemi = isSemi;
-            _semiNrD = semiNrD;
-            _subOrdering = subOrder;
-            _operation = operation;
-            _operationName = operationName;
-            _density = density;
-        }
 
-        public Component(int ordering, string name, double amount, double mass, double priceKg, double price, double rate,
-            double vocPercent, double voc, string comment, bool isSemi, long semiNrD, int operation, string operationName, double density)
+        public void AddParent(IList<int> parents, int id)
         {
-            _ordering = ordering;
-            _name = name;
-            _amount = amount;
-            _mass = mass;
-            _priceKg = priceKg;
-            _price = price;
-            _rate = rate;
-            _vocPercent = vocPercent;
-            _voc = voc;
-            _comment = comment;
-            _isSemi = isSemi;
-            _semiNrD = semiNrD;
-            _operation = operation;
-            _operationName = operationName;
-            _density = density;
+            foreach (int parent in parents)
+            {
+                ParentsId.Add(parent);
+            }
+            ParentsId.Add(id);
         }
 
         public int Level
@@ -100,6 +71,12 @@ namespace LabBook.Forms.Composition.Model
                 _name = value;
                 OnPropertyChanged(nameof(Name));
             }
+        }
+
+        public double AmountOriginal
+        {
+            get => _amountOryginal;
+            set => _amountOryginal = value;
         }
 
         public double Amount
