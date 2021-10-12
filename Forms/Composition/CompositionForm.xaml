@@ -98,7 +98,37 @@
         <!-- Menu -->
         <Ribbon DockPanel.Dock="Top" FontWeight="Bold" FontSize="14" >
             <RibbonTab Header="Skład" >
-                <RibbonGroup Header="Operacje"  FontSize="10" >
+                <RibbonGroup Header="Plik"  FontSize="10" >
+                    <RibbonButton Label="Zapisz" LargeImageSource="/Img/save.png"  FontSize="12" FontWeight="Regular"
+                                  Command="{Binding SaveButton}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="90" Height="14.5" Background="Yellow" >
+                                    <TextBlock FontSize="12">Zapisz recepturę</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
+                    <RibbonButton Label="Drukuj" LargeImageSource="/Img/printer.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding PrintButton}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="105" Height="14.5" Background="Yellow" >
+                                    <TextBlock FontSize="12">Wydrukuj recepturę</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
+                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding DeleteButton}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="75" Height="14.5" Background="Yellow" >
+                                    <TextBlock FontSize="12">Usuń składnik</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
 
                 </RibbonGroup>
                 <RibbonGroup Header="Dodawanie"  FontSize="10">

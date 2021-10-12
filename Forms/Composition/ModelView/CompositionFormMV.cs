@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
 using LabBook.Commons;
+using LabBook.Forms.Composition.Command;
 using LabBook.Forms.Composition.Model;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,10 @@ namespace LabBook.Forms.Composition.ModelView
 {
     public class CompositionFormMV : INotifyPropertyChanged
     {
+        private ICommand _saveButton;
+        private ICommand _deleteButton;
+        private ICommand _printButton;
+
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
         private readonly long _numberD;
@@ -30,6 +35,7 @@ namespace LabBook.Forms.Composition.ModelView
         private readonly DataView _materialView;
         private int _selectedIndex;
         private bool _blockSelectedIndex = false;
+        private bool _modified = false;
 
         public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
         public RelayCommand<CancelEventArgs> OnClosingCommand { get; set; }
@@ -151,6 +157,39 @@ namespace LabBook.Forms.Composition.ModelView
         public double GetSumMass => _service.SumOfMass(Recipe);
 
         public double GetSumVoc => _service.SumOfVoc(Recipe);
+
+        public bool Modified
+        {
+            get => _modified;
+            set => _modified = value;
+        }
+
+        public ICommand SaveButton
+        {
+            get
+            {
+                if (_saveButton == null) _saveButton = new SaveButton(this);
+                return _saveButton;
+            }
+        }
+
+        public ICommand DeleteButton
+        {
+            get
+            {
+                if (_deleteButton == null) _deleteButton = new DeleteButton(this);
+                return _deleteButton;
+            }
+        }
+
+        public ICommand PrintButton
+        {
+            get
+            {
+                if (_printButton == null) _printButton = new PrinterButton(this);
+                return _printButton;
+            }
+        }
 
         public double GetSumVocPerLiter
         {
@@ -297,6 +336,21 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _service.ExpandOrHideSemiRecipe(Recipe, component, _selectedIndex);
             }
+        }
+
+        public void SaveAll()
+        {
+
+        }
+
+        public void Delete()
+        {
+
+        }
+
+        public void Print()
+        {
+
         }
     }
 }

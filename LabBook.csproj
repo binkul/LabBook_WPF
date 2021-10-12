@@ -154,6 +154,9 @@
     <Compile Include="Forms\ClpData\Model\Clp.cs" />
     <Compile Include="Forms\ClpData\Model\ClpList.cs" />
     <Compile Include="Forms\ClpData\Model\SelectedClpData.cs" />
+    <Compile Include="Forms\Composition\Command\DeleteButton.cs" />
+    <Compile Include="Forms\Composition\Command\PrinterButton.cs" />
+    <Compile Include="Forms\Composition\Command\SaveButton.cs" />
     <Compile Include="Forms\Composition\CompositionForm.xaml.cs">
       <DependentUpon>CompositionForm.xaml</DependentUpon>
     </Compile>
@@ -484,6 +487,9 @@
   <ItemGroup>
     <Resource Include="Img\minus.png" />
     <Resource Include="Img\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\printer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
