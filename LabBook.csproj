@@ -154,7 +154,17 @@
     <Compile Include="Forms\ClpData\Model\Clp.cs" />
     <Compile Include="Forms\ClpData\Model\ClpList.cs" />
     <Compile Include="Forms\ClpData\Model\SelectedClpData.cs" />
+    <Compile Include="Forms\Composition\Command\AddFirstButton.cs" />
+    <Compile Include="Forms\Composition\Command\AddLastButton.cs" />
+    <Compile Include="Forms\Composition\Command\AddMiddleButton.cs" />
     <Compile Include="Forms\Composition\Command\DeleteButton.cs" />
+    <Compile Include="Forms\Composition\Command\ExchangeButton.cs" />
+    <Compile Include="Forms\Composition\Command\FrameCutButton.cs" />
+    <Compile Include="Forms\Composition\Command\FrameDownButton.cs" />
+    <Compile Include="Forms\Composition\Command\FrameUpButton.cs" />
+    <Compile Include="Forms\Composition\Command\InsertButton.cs" />
+    <Compile Include="Forms\Composition\Command\MoveDownButton.cs" />
+    <Compile Include="Forms\Composition\Command\MoveUpButton.cs" />
     <Compile Include="Forms\Composition\Command\PrinterButton.cs" />
     <Compile Include="Forms\Composition\Command\SaveButton.cs" />
     <Compile Include="Forms\Composition\CompositionForm.xaml.cs">
@@ -490,6 +500,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Img\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\loadFromDB.png" />
+    <Resource Include="Img\loadToMaterial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\addLast.png" />
+    <Resource Include="Img\addFirst.png" />
+    <Resource Include="Img\addMiddle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\cut.png" />
+    <Resource Include="Img\moveDown.png" />
+    <Resource Include="Img\moveUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\recFrameDown.png" />
+    <Resource Include="Img\recFrameUp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

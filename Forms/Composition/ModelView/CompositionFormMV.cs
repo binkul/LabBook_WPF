@@ -20,6 +20,16 @@ namespace LabBook.Forms.Composition.ModelView
         private ICommand _saveButton;
         private ICommand _deleteButton;
         private ICommand _printButton;
+        private ICommand _loadRecipeButton;
+        private ICommand _insertButton;
+        private ICommand _addFirstButton;
+        private ICommand _addMiddleButton;
+        private ICommand _addLastButton;
+        private ICommand _moveUpButton;
+        private ICommand _moveDownButton;
+        private ICommand _frameUpButton;
+        private ICommand _frameCutButton;
+        private ICommand _frameDownButton;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
@@ -34,7 +44,6 @@ namespace LabBook.Forms.Composition.ModelView
         private bool _massMode = false;
         private readonly DataView _materialView;
         private int _selectedIndex;
-        private bool _blockSelectedIndex = false;
         private bool _modified = false;
 
         public SortableObservableCollection<Component> Recipe { get; } = new SortableObservableCollection<Component>();
@@ -188,6 +197,96 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 if (_printButton == null) _printButton = new PrinterButton(this);
                 return _printButton;
+            }
+        }
+
+        public ICommand LoadRecipeButton
+        {
+            get
+            {
+                if (_loadRecipeButton == null) _loadRecipeButton = new ExchangeButton(this);
+                return _loadRecipeButton;
+            }
+        }
+
+        public ICommand InsertRecipeButton
+        {
+            get
+            {
+                if (_insertButton == null) _insertButton = new InsertButton(this);
+                return _insertButton;
+            }
+        }
+
+        public ICommand AddFirstButton
+        {
+            get
+            {
+                if (_addFirstButton == null) _addFirstButton = new AddFirstButton(this);
+                return _addFirstButton;
+            }
+        }
+
+        public ICommand AddMiddleButton
+        {
+            get
+            {
+                if (_addMiddleButton == null) _addMiddleButton = new AddMiddleButton(this);
+                return _addMiddleButton;
+            }
+        }
+
+        public ICommand AddLastButton
+        {
+            get
+            {
+                if (_addLastButton == null) _addLastButton = new AddLastButton(this);
+                return _addLastButton;
+            }
+        }
+
+        public ICommand MoveUpButton
+        {
+            get
+            {
+                if (_moveUpButton == null) _moveUpButton = new MoveUpButton(this);
+                return _moveUpButton;
+            }
+        }
+
+        public ICommand MoveDownButton
+        {
+            get
+            {
+                if (_moveDownButton == null) _moveDownButton = new MoveDownButton(this);
+                return _moveDownButton;
+            }
+        }
+
+        public ICommand FrameUpButton
+        {
+            get
+            {
+                if (_frameUpButton == null) _frameUpButton = new FrameUpButton(this);
+                return _frameUpButton;
+            }
+        }
+
+        public ICommand FrameCutButton
+        {
+            get
+            {
+                if (_frameCutButton == null) _frameCutButton = new FrameCutButton(this);
+                return _frameCutButton;
+            }
+        }
+
+        public ICommand FrameDownButton
+        {
+            get
+            {
+                if (_frameDownButton == null) _frameDownButton = new FrameDownButton(this);
+                return _frameDownButton;
             }
         }
 
@@ -349,6 +448,56 @@ namespace LabBook.Forms.Composition.ModelView
         }
 
         public void Print()
+        {
+
+        }
+
+        public void LoadRecipe()
+        {
+
+        }
+
+        public void InserRecipe()
+        {
+
+        }
+
+        public void AddFirst()
+        {
+
+        }
+
+        public void AddMiddle()
+        {
+
+        }
+
+        public void AddLast()
+        {
+
+        }
+
+        public void MoveUp()
+        {
+
+        }
+
+        public void MoveDown()
+        {
+
+        }
+
+        public void FrameUp()
+        {
+
+        }
+
+        public void FrameCut()
+        {
+
+        }
+
+        public void FrameDown()
         {
 
         }
