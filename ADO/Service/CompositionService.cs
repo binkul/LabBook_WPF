@@ -57,7 +57,8 @@ namespace LabBook.ADO.Service
                 component.Rate = !row["rate"].Equals(DBNull.Value) ? Convert.ToDouble(row["rate"]) : 0d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
 
-                UpdatePriceAndVoc(component, row);
+                double voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
+                UpdatePriceAndVoc(component, voc);
                 CompositionSubRecipeDto recipeDto = new CompositionSubRecipeDto(component.Id, component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass, component.ParentsId);
                 component.SemiRecipe = component.IsSemiProduct ? GetSemiRecipe(recipeDto) : new List<Component>();
 
@@ -90,7 +91,8 @@ namespace LabBook.ADO.Service
                 component.Rate = !row["rate"].Equals(DBNull.Value) ? Convert.ToDouble(row["rate"]) : 0d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
 
-                UpdatePriceAndVoc(component, row);
+                double voc = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
+                UpdatePriceAndVoc(component, voc);
                 CompositionSubRecipeDto subRecipeDto = new CompositionSubRecipeDto(component.Id, component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass, component.ParentsId);
                 component.SemiRecipe = component.IsSemiProduct ? GetSemiRecipe(subRecipeDto) : new List<Component>();
 
@@ -101,13 +103,13 @@ namespace LabBook.ADO.Service
             return recipe;
         }
 
-        private void UpdatePriceAndVoc(Component component, DataRow row)
+        private void UpdatePriceAndVoc(Component component, double voc)
         {
             if (!component.IsSemiProduct)
             {
                 component.PriceKg = component.PriceKg > 0 && component.Rate > 0 ? component.PriceKg * component.Rate : 0d;
                 component.Price = component.PriceKg > 0 && component.Rate > 0 ? CalculatePrice(component) : 0d;
-                component.VocPercent = !row["VOC"].Equals(DBNull.Value) ? Convert.ToDouble(row["VOC"]) : -1d;
+                component.VocPercent = voc;
             }
             else
             {
@@ -226,20 +228,23 @@ namespace LabBook.ADO.Service
             MaterialRepository materialRepository = new MaterialRepository();
             MaterialDto material = materialRepository.GetByName(component.Name);
 
-            component.VocPercent = material.VOC;
             component.Density = material.Density;
             component.IsSemiProduct = material.IsIntermediate;
             component.SemiProductNrD = material.IntermediateNrD;
-            component.VOC = CalculateVOC(component);
+            component.SemiStatus = "";
 
             if (material.Id > 0)
             {
                 CurrencyRepository currencyRepository = new CurrencyRepository();
                 CurrencyDto currency = currencyRepository.GetById(material.CurrencyId, CurrencyRepository.GetByIdQuery);
-                decimal rate = currency.Rate;
-                component.PriceKg = (double)(material.Price * rate);
-                component.Price = CalculatePrice(component);
+
+                component.Rate = (double)currency.Rate;
+                UpdatePriceAndVoc(component, material.VOC);
+
             }
+
+            CompositionSubRecipeDto recipeDto = new CompositionSubRecipeDto(component.Id, component.Level, component.SemiProductNrD, component.Operation, component.Amount, component.Mass, component.ParentsId);
+            component.SemiRecipe = component.IsSemiProduct ? GetSemiRecipe(recipeDto) : new List<Component>();
         }
 
         private double CalculatePrice(Component component)
@@ -282,6 +287,7 @@ namespace LabBook.ADO.Service
         public void HideSemiRecipe(IList<Component> recipe, Component component)
         {
             if (component == null) return;
+            if (!component.IsSemiProduct) return;
 
             int parentId = component.Id;
             IList<Component> childs = new List<Component>();

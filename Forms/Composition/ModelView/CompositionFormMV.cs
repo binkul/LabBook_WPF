@@ -371,6 +371,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentName = value;
                 Recipe[_selectedIndex].Name = _componentName;
+                _service.HideSemiRecipe(Recipe, Recipe[_selectedIndex]);
                 _service.UpdateComponent(Recipe[_selectedIndex], _recipeData);
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
