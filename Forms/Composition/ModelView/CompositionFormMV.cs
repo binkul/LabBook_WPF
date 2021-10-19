@@ -312,6 +312,7 @@ namespace LabBook.Forms.Composition.ModelView
                 _componentPercent = Recipe[_selectedIndex].Amount;
                 _componentMass = Recipe[_selectedIndex].Mass;
                 _componentName = Recipe[_selectedIndex].Name;
+                OnPropertyChanged(nameof(SelectedIndex));
                 OnPropertyChanged(nameof(ComponentPercent));
                 OnPropertyChanged(nameof(ComponentMass));
                 OnPropertyChanged(nameof(ComponentName));
@@ -465,7 +466,15 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void AddFirst()
         {
+            Component component = _service.GetNewComponent();
+            Recipe.Insert(0, component);
+            SelectedIndex = 0;
 
+            for (int i = 0; i < Recipe.Count; i++)
+            {
+                if (Recipe[i].Level > 0) continue;
+                Recipe[i].Ordering = i + 1;
+            }
         }
 
         public void AddMiddle()

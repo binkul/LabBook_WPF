@@ -40,9 +40,9 @@ namespace LabBook.ADO.Service
 
             foreach (DataRow row in table.Rows)
             {
-                Component component = new Component();
+                Component component = GetNewComponent();
 
-                component.Id = _id++;
+                //component.Id = _id++;
                 component.Name = row["component"].ToString();
                 component.Ordering = Convert.ToInt32(row["ordering"]);
                 component.IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]);
@@ -73,9 +73,9 @@ namespace LabBook.ADO.Service
 
             foreach (DataRow row in table.Rows)
             {
-                Component component = new Component();
+                Component component = GetNewComponent(); // new Component();
 
-                component.Id = _id++;
+                //component.Id = _id++;
                 component.AddParent(recipeDto.ParentsId, recipeDto.Id); 
                 component.Level = recipeDto.Level + 1;
                 component.Name = row["component"].ToString();
@@ -135,6 +135,16 @@ namespace LabBook.ADO.Service
                 recipe[0].SubOrdering = SubRecipeOrdering.top;
                 recipe[recipe.Count - 1].SubOrdering = SubRecipeOrdering.bottom;
             }
+        }
+
+        public Component GetNewComponent()
+        {
+            Component component = new Component
+            {
+                Id = _id++,
+                Name = "-- Pusty --"
+            };
+            return component;
         }
 
         public CompositionData GetRecipeData(long numberD, string title, decimal density)
@@ -231,6 +241,8 @@ namespace LabBook.ADO.Service
             component.Density = material.Density;
             component.IsSemiProduct = material.IsIntermediate;
             component.SemiProductNrD = material.IntermediateNrD;
+            component.PriceKg = (double)material.Price;
+            component.VocPercent = material.VOC;
             component.SemiStatus = "";
 
             if (material.Id > 0)
