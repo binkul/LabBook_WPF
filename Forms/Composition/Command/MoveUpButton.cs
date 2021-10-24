@@ -28,7 +28,7 @@ namespace LabBook.Forms.Composition.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _modelView.MoveUpCanExecute();
         }
 
         public void Execute(object parameter)

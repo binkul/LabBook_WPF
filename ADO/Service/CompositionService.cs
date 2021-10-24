@@ -318,5 +318,18 @@ namespace LabBook.ADO.Service
 
             component.SemiStatus = "[+]";
         }
+
+        public void Reordering(IList<Component> recipe)
+        {
+            if (recipe == null) return;
+            if (recipe.Count == 0) return;
+
+            for (int i = 0; i < recipe.Count; i++)
+            {
+                if (recipe[i].Level > 0) continue;
+                recipe[i].Ordering = i + 1;
+            }
+
+        }
     }
 }

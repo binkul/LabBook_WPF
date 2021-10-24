@@ -306,7 +306,7 @@ namespace LabBook.Forms.Composition.ModelView
             get => _selectedIndex;
             set
             {
-                if (_selectedIndex < 0) return;
+                if (value < 0) return;
 
                 _selectedIndex = value;
                 _componentPercent = Recipe[_selectedIndex].Amount;
@@ -324,8 +324,14 @@ namespace LabBook.Forms.Composition.ModelView
         {
             get
             {
-                if (_selectedIndex < 0) return false;
-                return Recipe[_selectedIndex].Level == 0;
+                if (_selectedIndex < 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return Recipe.Count != 0 && Recipe[_selectedIndex].Level == 0;
+                }
             }
         }
 
@@ -446,7 +452,28 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void Delete()
         {
+            if (Recipe.Count <= 0) return;
 
+            int tmp = SelectedIndex;
+            Component component = Recipe[SelectedIndex];
+            _service.HideSemiRecipe(Recipe, component);
+            _ = Recipe.Remove(component);
+
+            if (Recipe.Count == 0)
+            {
+                SelectedIndex = -1;
+                OnPropertyChanged(nameof(IsSemiComponent));
+            }
+            else if (tmp >= Recipe.Count)
+            {
+                SelectedIndex = Recipe.Count - 1;
+            }
+            else
+            {
+                SelectedIndex = tmp;
+            }
+
+            _service.Reordering(Recipe);
         }
 
         public void Print()
@@ -470,31 +497,154 @@ namespace LabBook.Forms.Composition.ModelView
             Recipe.Insert(0, component);
             SelectedIndex = 0;
 
-            for (int i = 0; i < Recipe.Count; i++)
-            {
-                if (Recipe[i].Level > 0) continue;
-                Recipe[i].Ordering = i + 1;
-            }
+            _service.Reordering(Recipe);
         }
 
         public void AddMiddle()
         {
+            if (SelectedIndex < 0)
+            {
+                AddFirst();
+            }
+            else if (SelectedIndex == Recipe.Count - 1)
+            {
+                AddLast();
+            }
+            else
+            {
+                Component component = _service.GetNewComponent();
+                component.Operation = Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 3 ? 3 : 1;
+                Recipe.Insert(SelectedIndex + 1, component);
+                SelectedIndex++;
 
+                _service.Reordering(Recipe);
+            }
         }
 
         public void AddLast()
         {
+            if (Recipe.Count <= 0)
+            {
+                AddFirst();
+            }
+            else
+            {
+                Component component = _service.GetNewComponent();
+                component.Ordering = Recipe.Count + 1;
+                Recipe.Add(component);
+                SelectedIndex = Recipe.Count - 1;
+            }
+        }
 
+        public bool MoveUpCanExecute()
+        {
+            if (SelectedIndex <= 0)
+                return false;
+            else if (Recipe[SelectedIndex].Level > 0)
+                return false;
+            else
+                return true;
         }
 
         public void MoveUp()
         {
+            if (SelectedIndex <= 0) return;
 
+            Component upComponent = Recipe[SelectedIndex - 1];
+            Component currentComponent = Recipe[SelectedIndex];
+            int currentOrder = currentComponent.Ordering;
+
+            _service.HideSemiRecipe(Recipe, upComponent);
+            _service.HideSemiRecipe(Recipe, currentComponent);
+
+            currentComponent.Ordering = upComponent.Ordering;
+            upComponent.Ordering = currentOrder;
+
+            if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
+            {
+                switch (upComponent.Operation)
+                {
+                    case 1:
+                        currentComponent.Operation = 1;
+                        break;
+                    case 2:
+                        currentComponent.Operation = 1;
+                        break;
+                    case 3:
+                        currentComponent.Operation = 3;
+                        break;
+                    case 4:
+                        currentComponent.Operation = 3;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (currentComponent.Operation == 2)
+            {
+                upComponent.Operation = 3;
+            }
+            else
+            {
+                upComponent.Operation = 1;
+            }
+            SortRecipe();
+        }
+
+        public bool MoveDownCanExecute()
+        {
+            if (SelectedIndex >= Recipe.Count - 1)
+                return false;
+            else if (Recipe[SelectedIndex].Level > 0)
+                return false;
+            else
+                return true;
         }
 
         public void MoveDown()
         {
+            if (SelectedIndex >= Recipe.Count - 1) return;
 
+            Component currentComponent = Recipe[SelectedIndex];
+            Component downComponent = Recipe[SelectedIndex + 1];
+            int currentOrder = currentComponent.Ordering;
+
+            _service.HideSemiRecipe(Recipe, downComponent);
+            _service.HideSemiRecipe(Recipe, currentComponent);
+
+            currentComponent.Ordering = downComponent.Ordering;
+            downComponent.Ordering = currentOrder;
+
+            if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
+            {
+                switch (downComponent.Operation)
+                {
+                    case 1:
+                        currentComponent.Operation = 1;
+                        break;
+                    case 2:
+                        currentComponent.Operation = 3;
+                        break;
+                    case 3:
+                        currentComponent.Operation = 3;
+                        break;
+                    case 4:
+                        currentComponent.Operation = 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (currentComponent.Operation == 2)
+            {
+                downComponent.Operation = 1;
+            }
+            else
+            {
+                downComponent.Operation = 3;
+            }
+
+            SortRecipe();
         }
 
         public void FrameUp()

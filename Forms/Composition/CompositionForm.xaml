@@ -119,17 +119,6 @@
                             </ToolTip>
                         </RibbonButton.ToolTip>
                     </RibbonButton>
-                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
-                                  Command="{Binding DeleteButton}" >
-                        <RibbonButton.ToolTip >
-                            <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
-                                    <TextBlock FontSize="12">Usuń składnik</TextBlock>
-                                </DockPanel>
-                            </ToolTip>
-                        </RibbonButton.ToolTip>
-                    </RibbonButton>
-
                 </RibbonGroup>
                 <RibbonGroup Header="Ładowanie"  FontSize="10">
                     <RibbonButton Label="Załaduj recepturę" LargeImageSource="/Img/loadFromDB.png" FontSize="12" FontWeight="Regular"
@@ -180,6 +169,16 @@
                             <ToolTip Background="Yellow">
                                 <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
                                     <TextBlock FontSize="12">Dodaj ostatni</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
+                    <RibbonButton Label="Usuń" LargeImageSource="/Img/delete.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding DeleteButton}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                    <TextBlock FontSize="12">Usuń składnik</TextBlock>
                                 </DockPanel>
                             </ToolTip>
                         </RibbonButton.ToolTip>
@@ -236,7 +235,6 @@
                             </ToolTip>
                         </RibbonButton.ToolTip>
                     </RibbonButton>
-
                 </RibbonGroup>
                 <RibbonGroup Header="Obliczenia" FontSize="10">
 
