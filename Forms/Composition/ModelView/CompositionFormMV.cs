@@ -562,31 +562,28 @@ namespace LabBook.Forms.Composition.ModelView
 
             if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
             {
+                int operation;
                 switch (upComponent.Operation)
                 {
-                    case 1:
-                        currentComponent.Operation = 1;
-                        break;
-                    case 2:
-                        currentComponent.Operation = 1;
-                        break;
                     case 3:
-                        currentComponent.Operation = 3;
+                        operation = 3;
                         break;
                     case 4:
-                        currentComponent.Operation = 3;
+                        operation = 3;
                         break;
                     default:
+                        operation = 1;
                         break;
                 }
+                _service.SetOperation(currentComponent, operation);
             }
             else if (currentComponent.Operation == 2)
             {
-                upComponent.Operation = 3;
+                _service.SetOperation(upComponent, 3);
             }
             else
             {
-                upComponent.Operation = 1;
+                _service.SetOperation(upComponent, 1);
             }
             SortRecipe();
         }
@@ -617,33 +614,29 @@ namespace LabBook.Forms.Composition.ModelView
 
             if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
             {
+                int operation;
                 switch (downComponent.Operation)
                 {
-                    case 1:
-                        currentComponent.Operation = 1;
-                        break;
                     case 2:
-                        currentComponent.Operation = 3;
+                        operation = 3;
                         break;
                     case 3:
-                        currentComponent.Operation = 3;
-                        break;
-                    case 4:
-                        currentComponent.Operation = 1;
+                        operation = 3;
                         break;
                     default:
+                        operation = 1;
                         break;
                 }
+                _service.SetOperation(currentComponent, operation);
             }
             else if (currentComponent.Operation == 2)
             {
-                downComponent.Operation = 1;
+                _service.SetOperation(downComponent, 1);
             }
             else
             {
-                downComponent.Operation = 3;
+                _service.SetOperation(downComponent, 3);
             }
-
             SortRecipe();
         }
 

@@ -331,5 +331,18 @@ namespace LabBook.ADO.Service
             }
 
         }
+
+        public void SetOperation(Component component, int operation)
+        {
+            component.Operation = operation;
+
+            if (component.IsSemiProduct)
+            {
+                foreach (Component subComponent in component.SemiRecipe)
+                {
+                    SetOperation(subComponent, operation);
+                }
+            }
+        }
     }
 }
