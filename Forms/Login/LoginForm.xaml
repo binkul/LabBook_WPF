@@ -18,7 +18,7 @@
                       IsEditable="True" FontWeight="Bold" >
                 <ComboBox.ToolTip>
                     <ToolTip Background="Yellow">
-                        <DockPanel Width="80" Height="14.5" Background="Yellow" >
+                        <DockPanel Width="auto" Height="auto" Background="Yellow" >
                             <TextBlock FontSize="12">Podaj login</TextBlock>
                         </DockPanel>
                     </ToolTip>
@@ -29,7 +29,7 @@
                          Height="{Binding ElementName=CmbUserName, Path=ActualHeight}">
                 <PasswordBox.ToolTip>
                     <ToolTip Background="Yellow">
-                        <DockPanel Width="80" Height="14.5" Background="Yellow" >
+                        <DockPanel Width="auto" Height="auto" Background="Yellow" >
                             <TextBlock FontSize="12">Podaj hasło</TextBlock>
                         </DockPanel>
                     </ToolTip>

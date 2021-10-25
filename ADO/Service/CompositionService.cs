@@ -344,5 +344,24 @@ namespace LabBook.ADO.Service
                 }
             }
         }
+
+        public void BuildFrame(IList<Component> recipe)
+        {
+            bool start = false;
+            foreach (Component component in recipe)
+            {
+                if (component.Operation == 2)
+                    start = true;
+
+                if (start && component.Operation != 2 && component.Operation != 4)
+                    SetOperation(component, 3);
+                else if (!start)
+                    SetOperation(component, 1);
+
+                if (component.Operation == 4)
+                    start = false;
+            }
+        }
+
     }
 }

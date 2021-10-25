@@ -640,19 +640,70 @@ namespace LabBook.Forms.Composition.ModelView
             SortRecipe();
         }
 
+        public bool FrameUpCanExecute()
+        {
+            if (SelectedIndex < 0 || Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0)
+            {
+                return false;
+            }
+            else if (Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void FrameUp()
         {
+            _service.SetOperation(Recipe[SelectedIndex], 2);
+            _service.BuildFrame(Recipe);
+        }
 
+        public bool FrameCutCanExecute()
+        {
+            if (SelectedIndex < 0 || Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4;
+            }
         }
 
         public void FrameCut()
         {
+            int operation = Recipe[SelectedIndex].Operation;
+            if (operation == 2 || operation == 4)
+            {
+                _service.SetOperation(Recipe[SelectedIndex], 1);
+                _service.BuildFrame(Recipe);
+            }
+        }
 
+        public bool FrameDownCanExecute()
+        {
+            if (SelectedIndex < 0 || Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0)
+            {
+                return false;
+            }
+            else if (Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void FrameDown()
         {
-
+            _service.SetOperation(Recipe[SelectedIndex], 4);
+            _service.BuildFrame(Recipe);
         }
     }
 }

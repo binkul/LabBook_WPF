@@ -103,7 +103,7 @@
                                   Command="{Binding SaveButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Zapisz recepturę</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -113,7 +113,7 @@
                                   Command="{Binding PrintButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Wydrukuj recepturę</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -125,7 +125,7 @@
                                   Command="{Binding LoadRecipeButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Zastąp recepturę</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -135,7 +135,7 @@
                                   Command="{Binding InsertRecipeButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Wstaw za wybrany</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -147,7 +147,7 @@
                                   Command="{Binding AddFirstButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Dodaj na początek</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -157,7 +157,7 @@
                                   Command="{Binding AddMiddleButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Dodaj pod wybranym</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -167,7 +167,7 @@
                                   Command="{Binding AddLastButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Dodaj ostatni</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -177,7 +177,7 @@
                                   Command="{Binding DeleteButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Usuń składnik</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -189,7 +189,7 @@
                                   Command="{Binding MoveUpButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Przesuń w górę</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -199,7 +199,7 @@
                                   Command="{Binding MoveDownButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Przesuń w dół</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -209,17 +209,17 @@
                                   Command="{Binding FrameUpButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Ramka górna</TextBlock>
                                 </DockPanel>
                             </ToolTip>
                         </RibbonButton.ToolTip>
                     </RibbonButton>
                     <RibbonButton Label="Usuń ramkę" LargeImageSource="/Img/cut.png" FontSize="12" FontWeight="Regular"
-                                  Command="{Binding FarmeCutButton}" >
+                                  Command="{Binding FrameCutButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Usuń ramki</TextBlock>
                                 </DockPanel>
                             </ToolTip>
@@ -229,7 +229,7 @@
                                   Command="{Binding FrameDownButton}" >
                         <RibbonButton.ToolTip >
                             <ToolTip Background="Yellow">
-                                <DockPanel Width="Auto" Height="14.5" Background="Yellow" >
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
                                     <TextBlock FontSize="12">Ramka dolna</TextBlock>
                                 </DockPanel>
                             </ToolTip>
