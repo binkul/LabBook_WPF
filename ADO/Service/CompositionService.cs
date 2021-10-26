@@ -340,7 +340,8 @@ namespace LabBook.ADO.Service
             {
                 foreach (Component subComponent in component.SemiRecipe)
                 {
-                    SetOperation(subComponent, operation);
+                    int subOperation = operation == 1 ? 1 : 3;
+                    SetOperation(subComponent, subOperation);
                 }
             }
         }

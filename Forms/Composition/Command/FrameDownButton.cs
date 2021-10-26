@@ -28,7 +28,7 @@ namespace LabBook.Forms.Composition.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _modelView.FrameDownCanExecute();
         }
 
         public void Execute(object parameter)

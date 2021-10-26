@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -550,12 +551,12 @@ namespace LabBook.Forms.Composition.ModelView
         {
             if (SelectedIndex <= 0) return;
 
+            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex - 1]);
+            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex]);
+
             Component upComponent = Recipe[SelectedIndex - 1];
             Component currentComponent = Recipe[SelectedIndex];
             int currentOrder = currentComponent.Ordering;
-
-            _service.HideSemiRecipe(Recipe, upComponent);
-            _service.HideSemiRecipe(Recipe, currentComponent);
 
             currentComponent.Ordering = upComponent.Ordering;
             upComponent.Ordering = currentOrder;
@@ -585,14 +586,17 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _service.SetOperation(upComponent, 1);
             }
-            SortRecipe();
+
+            Recipe.Move(Recipe.IndexOf(currentComponent), Recipe.IndexOf(upComponent));
+
+            //SortRecipe();
         }
 
         public bool MoveDownCanExecute()
         {
-            if (SelectedIndex >= Recipe.Count - 1)
-                return false;
-            else if (Recipe[SelectedIndex].Level > 0)
+            int maxOrder = Recipe.Where(x => x.Level == 0).Max().Ordering;
+
+            if (Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0 || Recipe[SelectedIndex].Ordering == maxOrder)
                 return false;
             else
                 return true;
@@ -602,12 +606,12 @@ namespace LabBook.Forms.Composition.ModelView
         {
             if (SelectedIndex >= Recipe.Count - 1) return;
 
+            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex + 1]);
+            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex]);
+
             Component currentComponent = Recipe[SelectedIndex];
             Component downComponent = Recipe[SelectedIndex + 1];
             int currentOrder = currentComponent.Ordering;
-
-            _service.HideSemiRecipe(Recipe, downComponent);
-            _service.HideSemiRecipe(Recipe, currentComponent);
 
             currentComponent.Ordering = downComponent.Ordering;
             downComponent.Ordering = currentOrder;
@@ -637,12 +641,15 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _service.SetOperation(downComponent, 3);
             }
-            SortRecipe();
+
+            Recipe.Move(Recipe.IndexOf(currentComponent), Recipe.IndexOf(downComponent));
         }
 
         public bool FrameUpCanExecute()
         {
-            if (SelectedIndex < 0 || Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0)
+            int maxOrder = Recipe.Where(x => x.Level == 0).Max().Ordering;
+
+            if (SelectedIndex < 0 || Recipe.Count == 0 || Recipe[SelectedIndex].Level > 0 || Recipe[SelectedIndex].Ordering == maxOrder)
             {
                 return false;
             }
