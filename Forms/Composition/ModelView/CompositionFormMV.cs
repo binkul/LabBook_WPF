@@ -1,16 +1,15 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using LabBook.ADO.Service;
 using LabBook.Commons;
+using LabBook.Forms.InputBox;
 using LabBook.Forms.Composition.Command;
 using LabBook.Forms.Composition.Model;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Component = LabBook.Forms.Composition.Model.Component;
 
@@ -37,7 +36,7 @@ namespace LabBook.Forms.Composition.ModelView
         private readonly long _numberD;
         private readonly CompositionData _recipeData;
         private readonly string _title;
-        private readonly decimal _density;
+        private decimal _density;
         private double _componentPercent;
         private double _componentMass;
         private string _componentName;
@@ -168,6 +167,17 @@ namespace LabBook.Forms.Composition.ModelView
 
         public double GetSumVoc => _service.SumOfVoc(Recipe);
 
+        public double GetSumVocPerLiter
+        {
+            get
+            {
+                if (GetSumVoc >= 0 && _recipeData.Density > 0)
+                    return GetSumVoc * Convert.ToDouble(_recipeData.Density) * 10;
+                else
+                    return -1;
+            }
+        }
+
         public bool Modified
         {
             get => _modified;
@@ -288,17 +298,6 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 if (_frameDownButton == null) _frameDownButton = new FrameDownButton(this);
                 return _frameDownButton;
-            }
-        }
-
-        public double GetSumVocPerLiter
-        {
-            get
-            {
-                if (GetSumVoc >= 0 && _recipeData.Density > 0)
-                    return GetSumVoc * Convert.ToDouble(_recipeData.Density) * 10;
-                else
-                    return -1;
             }
         }
 
@@ -484,7 +483,38 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void LoadRecipe()
         {
+            InputBox.InputBox inputBox = new InputBox.InputBox("Podaj numer D receptury do wstawienia:", "Numer D");
+            string tmp;
+            if (inputBox.ShowDialog() == true)
+                tmp = inputBox.Answer;
+            else
+                return;
 
+            if (!long.TryParse(tmp, out long id))
+            {
+                MessageBox.Show("Wprowadzona wartość nie jest liczbą całkowitą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            _recipeData.LabBookId = id;
+            _density = _service.GetDensity(id);
+            _recipeData.Density = _density;
+
+            Recipe.Clear();
+            _service.GetRecipe(Recipe, _recipeData);
+            if (Recipe.Count > 0)
+            {
+                SelectedIndex = 0;
+                OnPropertyChanged(nameof(SelectedIndex));
+            }
+
+            OnPropertyChanged(nameof(GetDensity));
+            OnPropertyChanged(nameof(GetSumPercent));
+            OnPropertyChanged(nameof(GetPricePerKg));
+            OnPropertyChanged(nameof(GetPricePerL));
+            OnPropertyChanged(nameof(GetSumMass));
+            OnPropertyChanged(nameof(GetSumVoc));
+            OnPropertyChanged(nameof(GetSumVocPerLiter));
         }
 
         public void InserRecipe()
@@ -551,12 +581,12 @@ namespace LabBook.Forms.Composition.ModelView
         {
             if (SelectedIndex <= 0) return;
 
-            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex - 1]);
-            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex]);
-
-            Component upComponent = Recipe[SelectedIndex - 1];
             Component currentComponent = Recipe[SelectedIndex];
+            Component upComponent = _service.FindFirstAround(Recipe, currentComponent, true);
             int currentOrder = currentComponent.Ordering;
+
+            _service.HideSemiRecipe(Recipe, currentComponent);
+            _service.HideSemiRecipe(Recipe, upComponent);
 
             currentComponent.Ordering = upComponent.Ordering;
             upComponent.Ordering = currentOrder;
@@ -588,8 +618,6 @@ namespace LabBook.Forms.Composition.ModelView
             }
 
             Recipe.Move(Recipe.IndexOf(currentComponent), Recipe.IndexOf(upComponent));
-
-            //SortRecipe();
         }
 
         public bool MoveDownCanExecute()
@@ -606,12 +634,12 @@ namespace LabBook.Forms.Composition.ModelView
         {
             if (SelectedIndex >= Recipe.Count - 1) return;
 
-            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex + 1]);
-            _service.HideSemiRecipe(Recipe, Recipe[SelectedIndex]);
-
             Component currentComponent = Recipe[SelectedIndex];
-            Component downComponent = Recipe[SelectedIndex + 1];
+            Component downComponent = _service.FindFirstAround(Recipe, currentComponent, false);
             int currentOrder = currentComponent.Ordering;
+
+            _service.HideSemiRecipe(Recipe, currentComponent);
+            _service.HideSemiRecipe(Recipe, downComponent);
 
             currentComponent.Ordering = downComponent.Ordering;
             downComponent.Ordering = currentOrder;

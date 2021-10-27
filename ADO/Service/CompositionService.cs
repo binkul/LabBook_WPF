@@ -153,6 +153,12 @@ namespace LabBook.ADO.Service
             return repository.GetRecipeData(numberD, title, density);
         }
 
+        public decimal GetDensity(long numberD)
+        {
+            CompositionRepository repository = (CompositionRepository)_repository;
+            return repository.GetDensityById(numberD);
+        }
+
         public DataView GetAllMaterials()
         {
             _dataTableMaterial = _repository.GetAll(CompositionRepository.MaterialListQuery);
@@ -362,6 +368,41 @@ namespace LabBook.ADO.Service
                 if (component.Operation == 4)
                     start = false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recipe"></param>
+        /// <param name="upDown"></param>
+        /// <param name="component"></param>
+        /// upDown=true => up; upDown=false => down
+        /// <returns></returns>
+        public Component FindFirstAround(IList<Component> recipe, Component component, bool upDown)
+        {
+            int pos = recipe.IndexOf(component);
+            int loopStep = upDown ? -1 : 1;
+            bool finish;
+            do
+            {
+                pos += loopStep;
+                if (recipe[pos].Level == 0)
+                {
+                    return recipe[pos];
+                }
+
+                if (upDown)
+                {
+                    finish = pos >= 0;
+                }
+                else
+                {
+                    finish = pos < recipe.Count;
+                }
+
+            }
+            while (finish);
+            return null;
         }
 
     }

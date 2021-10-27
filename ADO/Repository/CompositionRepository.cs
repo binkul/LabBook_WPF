@@ -18,7 +18,8 @@ namespace LabBook.ADO.Repository
         public static readonly string RecipeDataQuery = "Select Top 1 c.id, c.labbook_id, c.version, c.mass, c.change_date, " +
             "c.comment, c.login_id, u.identifier, u.login, u.permission From LabBook.dbo.ExpCompositionData c Left Join " +
             "LabBook.dbo.Users u On c.login_id= u.id Where c.labbook_id=";
-      
+        public static readonly string GetDensityQuery = "Select ISNULL(density, 0) as density From LabBook.dbo.ExpLabBook Where id=";
+
         public CompositionData GetRecipeData(long numberD, string title, decimal density)
         {
             CompositionData data = new CompositionData(numberD, title, density);
@@ -63,6 +64,45 @@ namespace LabBook.ADO.Repository
             }
 
             return data;
+        }
+
+        public decimal GetDensityById(long numberD)
+        {
+            decimal density = 0M;
+
+            using (SqlConnection connection = new SqlConnection(Application.Current.FindResource("ConnectionString").ToString()))
+            {
+                try
+                {
+                    string query = GetDensityQuery + numberD.ToString();
+                    SqlCommand sqlCmd = new SqlCommand(query, connection) { CommandType = CommandType.Text };
+                    connection.Open();
+                    SqlDataReader reader = sqlCmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        _ = reader.Read();
+                        density = reader.GetDecimal(0);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony, błąd w nazwie serwera lub dostępie do bazy: '" + ex.Message + "'",
+                        "Błąd połaczenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    _ = MessageBox.Show("Problem z połączeniem z serwerem. Prawdopodobnie serwer jest wyłączony: '" + ex.Message + "'",
+                        "Błąd połączenia", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return density;
+
         }
     }
 }
