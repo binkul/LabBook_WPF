@@ -3,10 +3,12 @@ using LabBook.ADO.Repository;
 using LabBook.Commons;
 using LabBook.Dto;
 using LabBook.Forms.Composition.Model;
+using LabBook.Forms.InputBox;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace LabBook.ADO.Service
 {
@@ -42,13 +44,12 @@ namespace LabBook.ADO.Service
             {
                 Component component = GetNewComponent();
 
-                //component.Id = _id++;
                 component.Name = row["component"].ToString();
                 component.Ordering = Convert.ToInt32(row["ordering"]);
                 component.IsSemiProduct = Convert.ToBoolean(row["is_intermediate"]);
                 component.SemiProductNrD = !row["intermediate_nrD"].Equals(DBNull.Value) ? Convert.ToInt64(row["intermediate_nrD"]) : -2;
-                component.AmountOriginal = Convert.ToDouble(row["amount"]);
-                component.Amount = Convert.ToDouble(row["amount"]);
+                component.AmountOriginal = Math.Round(Convert.ToDouble(row["amount"]) * data.Amount / 100d, 4);
+                component.Amount = component.AmountOriginal; // Convert.ToDouble(row["amount"]) * data.Amount / 100d;
                 component.Mass = component.Amount * data.Mass / 100d;
                 component.Operation = Convert.ToInt32(row["operation"]);
                 component.OperationName = row["name"].ToString();
@@ -73,9 +74,8 @@ namespace LabBook.ADO.Service
 
             foreach (DataRow row in table.Rows)
             {
-                Component component = GetNewComponent(); // new Component();
+                Component component = GetNewComponent();
 
-                //component.Id = _id++;
                 component.AddParent(recipeDto.ParentsId, recipeDto.Id); 
                 component.Level = recipeDto.Level + 1;
                 component.Name = row["component"].ToString();
@@ -100,6 +100,14 @@ namespace LabBook.ADO.Service
             }
 
             UpdateSemiOperation(recipeDto, recipe);
+            return recipe;
+        }
+
+        public IList<Component> GetSemiRecipe(long numberD, double mass, double amount)
+        {
+            IList<Component> recipe = new List<Component>();
+            CompositionData data = new CompositionData { LabBookId = numberD, Mass = mass, Amount = amount };
+            GetRecipe(recipe, data);
             return recipe;
         }
 
@@ -405,5 +413,41 @@ namespace LabBook.ADO.Service
             return null;
         }
 
+        public long GetRecipeNumber()
+        {
+            long numberD = 0;
+
+            InputBox inputBox = new InputBox("Podaj numer D receptury do wgrania:", "Numer D");
+            string tmp;
+            if (inputBox.ShowDialog() == true)
+                tmp = inputBox.Answer;
+            else
+                return numberD;
+
+            if (!long.TryParse(tmp, out numberD))
+            {
+                MessageBox.Show("Wprowadzona wartość nie jest liczbą całkowitą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return numberD;
+        }
+    
+        public void InsertSubrecipe(IList<Component> recipe, IList<Component> subRecipe, Component component)
+        {
+            if (subRecipe.Count == 0)
+            {
+                MessageBox.Show("Brak składników dla wybranej receptury", "Brak składników", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var i = recipe.IndexOf(component);
+            HideSemiRecipe(recipe, component);
+            recipe.Remove(component);
+            foreach (Component comp in subRecipe)
+            {
+                recipe.Insert(i, comp);
+                i++;
+            }
+        }
     }
 }

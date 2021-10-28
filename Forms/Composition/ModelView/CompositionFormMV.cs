@@ -12,6 +12,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Component = LabBook.Forms.Composition.Model.Component;
+using System.Collections.Generic;
 
 namespace LabBook.Forms.Composition.ModelView
 {
@@ -483,21 +484,15 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void LoadRecipe()
         {
-            InputBox.InputBox inputBox = new InputBox.InputBox("Podaj numer D receptury do wstawienia:", "Numer D");
-            string tmp;
-            if (inputBox.ShowDialog() == true)
-                tmp = inputBox.Answer;
-            else
-                return;
-
-            if (!long.TryParse(tmp, out long id))
+            if (MessageBox.Show("UWAGA - Cała bieżąca receptura zostanie zastąpiona nową i wszystkie zmiany zostaną utracone. Czy kontynuować?", "Nowa receptura"
+                    , MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No )
             {
-                MessageBox.Show("Wprowadzona wartość nie jest liczbą całkowitą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            _recipeData.LabBookId = id;
-            _density = _service.GetDensity(id);
+            long labbokId = _service.GetRecipeNumber();
+            _recipeData.LabBookId = labbokId;
+            _density = _service.GetDensity(labbokId);
             _recipeData.Density = _density;
 
             Recipe.Clear();
@@ -517,9 +512,45 @@ namespace LabBook.Forms.Composition.ModelView
             OnPropertyChanged(nameof(GetSumVocPerLiter));
         }
 
+        public bool InsertRecipeCanExecute()
+        {
+            return Recipe.Count > 0;
+        }
+
         public void InserRecipe()
         {
+            Component component = Recipe[SelectedIndex];
+            MessageBoxResult result = MessageBoxResult.No;
 
+            if (component.IsSemiProduct)
+            {
+                result = MessageBox.Show("Czy wstawić pod wybraną pozycje półprodukt D-" + component.SemiProductNrD + " o nazwie '" + component.Name + "'?", "Wstawianie półproduktu"
+                    , MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
+            }
+
+            IList<Component> subRecipe;
+            if (result == MessageBoxResult.Yes)
+            {
+                subRecipe = _service.GetSemiRecipe(component.SemiProductNrD, GetSumMass, component.Amount);
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                long numberD = _service.GetRecipeNumber();
+                subRecipe = _service.GetSemiRecipe(numberD, GetSumMass, component.Amount);
+            }
+            else
+            {
+                return;
+            }
+
+            _service.InsertSubrecipe(Recipe, subRecipe, component);
+            _service.Reordering(Recipe);
+            OnPropertyChanged(nameof(GetSumPercent));
+            OnPropertyChanged(nameof(GetPricePerKg));
+            OnPropertyChanged(nameof(GetPricePerL));
+            OnPropertyChanged(nameof(GetSumMass));
+            OnPropertyChanged(nameof(GetSumVoc));
+            OnPropertyChanged(nameof(GetSumVocPerLiter));
         }
 
         public void AddFirst()

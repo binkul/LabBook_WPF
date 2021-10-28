@@ -9,14 +9,15 @@ namespace LabBook.Forms.Composition.Model
         public long Id { get; set; } = -1;
         public long LabBookId { get; set; } = 0;
         public int Version { get; set; } = 1;
-        public double Mass { get; set; } = 1000;
+        public double Mass { get; set; } = 1000d;
+        public double Amount { get; set; } = 100d;
         public DateTime ChangeDate { get; set; } = DateTime.Today;
         public string Comment { get; set; }
         public long LoginId { get; set; } = UserSingleton.Id;
         public string LoginShortcut { get; set; } = UserSingleton.Identifier;
         public string Permision { get; set; } = UserSingleton.Permission;
         public string Title { get; set; } = "";
-        public decimal Density { get; set; } = 0;
+        public decimal Density { get; set; } = 0m;
 
         public CompositionData()
         { }
@@ -28,13 +29,14 @@ namespace LabBook.Forms.Composition.Model
             Density = density;
         }
 
-        public CompositionData(long id, long labBookId, int version, double mass, DateTime changeDate, string comment, 
+        public CompositionData(long id, long labBookId, int version, double mass, double amount, DateTime changeDate, string comment, 
             long loginId, string loginShortcut, string permision, string title, decimal density)
         {
             Id = id;
             LabBookId = labBookId;
             Version = version;
             Mass = mass;
+            Amount = amount;
             ChangeDate = changeDate;
             Comment = comment;
             LoginId = loginId;
@@ -51,6 +53,7 @@ namespace LabBook.Forms.Composition.Model
                    LabBookId == data.LabBookId &&
                    Version == data.Version &&
                    Mass == data.Mass &&
+                   Amount == data.Amount &&
                    ChangeDate == data.ChangeDate &&
                    Comment == data.Comment &&
                    LoginId == data.LoginId &&
@@ -67,6 +70,7 @@ namespace LabBook.Forms.Composition.Model
             hashCode = hashCode * -1521134295 + LabBookId.GetHashCode();
             hashCode = hashCode * -1521134295 + Version.GetHashCode();
             hashCode = hashCode * -1521134295 + Mass.GetHashCode();
+            hashCode = hashCode * -1521134295 + Amount.GetHashCode();
             hashCode = hashCode * -1521134295 + ChangeDate.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Comment);
             hashCode = hashCode * -1521134295 + LoginId.GetHashCode();
