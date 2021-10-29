@@ -30,6 +30,14 @@ namespace LabBook.ADO.Service
         bottom = 4
     }
 
+    public enum RecipeOperation
+    {
+        None = 1,
+        Start = 2,
+        Middle = 3,
+        End = 4
+    }
+
     public class CompositionService
     {
         private int _id = 0;
@@ -51,7 +59,7 @@ namespace LabBook.ADO.Service
                 component.AmountOriginal = Math.Round(Convert.ToDouble(row["amount"]) * data.Amount / 100d, 4);
                 component.Amount = component.AmountOriginal; // Convert.ToDouble(row["amount"]) * data.Amount / 100d;
                 component.Mass = component.Amount * data.Mass / 100d;
-                component.Operation = Convert.ToInt32(row["operation"]);
+                component.Operation = (RecipeOperation)Convert.ToInt32(row["operation"]);
                 component.OperationName = row["name"].ToString();
                 component.Comment = row["comment"].ToString();
                 component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
@@ -86,7 +94,7 @@ namespace LabBook.ADO.Service
                 double amount = Convert.ToDouble(row["amount"]);
                 component.Amount = amount * recipeDto.Amount / 100d;
                 component.Mass = amount * recipeDto.Mass / 100d;
-                component.Operation = recipeDto.Operation > 1 ? 3 : 1;
+                component.Operation = recipeDto.Operation != RecipeOperation.None ? RecipeOperation.Middle : RecipeOperation.None;
                 component.PriceKg = !row["price"].Equals(DBNull.Value) ? Convert.ToDouble(row["price"]) : 0d;
                 component.Rate = !row["rate"].Equals(DBNull.Value) ? Convert.ToDouble(row["rate"]) : 0d;
                 component.Density = !row["density"].Equals(DBNull.Value) ? Convert.ToDouble(row["density"]) : -1d;
@@ -131,7 +139,7 @@ namespace LabBook.ADO.Service
 
         private void UpdateSemiOperation(CompositionSubRecipeDto recipeDto, IList<Component> recipe)
         {
-            if (recipeDto.Operation == ((int)RecipeOperation.End) && recipe.Count > 0)
+            if (recipeDto.Operation == RecipeOperation.End && recipe.Count > 0)
                 recipe[recipe.Count - 1].Operation = recipeDto.Operation;
 
             if (recipe.Count == 1)
@@ -346,7 +354,7 @@ namespace LabBook.ADO.Service
 
         }
 
-        public void SetOperation(Component component, int operation)
+        public void SetOperation(Component component, RecipeOperation operation)
         {
             component.Operation = operation;
 
@@ -354,7 +362,7 @@ namespace LabBook.ADO.Service
             {
                 foreach (Component subComponent in component.SemiRecipe)
                 {
-                    int subOperation = operation == 1 ? 1 : 3;
+                    RecipeOperation subOperation = operation == RecipeOperation.None ? RecipeOperation.None : RecipeOperation.Middle;
                     SetOperation(subComponent, subOperation);
                 }
             }
@@ -365,15 +373,15 @@ namespace LabBook.ADO.Service
             bool start = false;
             foreach (Component component in recipe)
             {
-                if (component.Operation == 2)
+                if (component.Operation == RecipeOperation.Start)
                     start = true;
 
-                if (start && component.Operation != 2 && component.Operation != 4)
-                    SetOperation(component, 3);
+                if (start && component.Operation != RecipeOperation.Start && component.Operation != RecipeOperation.End)
+                    SetOperation(component, RecipeOperation.Middle);
                 else if (!start)
-                    SetOperation(component, 1);
+                    SetOperation(component, RecipeOperation.None);
 
-                if (component.Operation == 4)
+                if (component.Operation == RecipeOperation.End)
                     start = false;
             }
         }
@@ -432,6 +440,12 @@ namespace LabBook.ADO.Service
             return numberD;
         }
     
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recipe">original recipe</param>
+        /// <param name="subRecipe">recipe to replace component</param>
+        /// <param name="component">component to be replaced</param>
         public void InsertSubrecipe(IList<Component> recipe, IList<Component> subRecipe, Component component)
         {
             if (subRecipe.Count == 0)
@@ -440,14 +454,44 @@ namespace LabBook.ADO.Service
                 return;
             }
 
+            RecipeOperation startOperation;
+            RecipeOperation midOperation;
+            RecipeOperation endOperation;
+            switch (component.Operation)
+            {
+                case RecipeOperation.Start:
+                    startOperation = RecipeOperation.Start;
+                    midOperation = RecipeOperation.Middle;
+                    endOperation = RecipeOperation.Middle;
+                    break;
+                case RecipeOperation.Middle:
+                    startOperation = RecipeOperation.Middle;
+                    midOperation = RecipeOperation.Middle;
+                    endOperation = RecipeOperation.Middle;
+                    break;
+                case RecipeOperation.End:
+                    startOperation = RecipeOperation.Middle;
+                    midOperation = RecipeOperation.Middle;
+                    endOperation = RecipeOperation.End;
+                    break;
+                default:
+                    startOperation = RecipeOperation.None;
+                    midOperation = RecipeOperation.None;
+                    endOperation = RecipeOperation.None;
+                    break;
+            }
+
             var i = recipe.IndexOf(component);
             HideSemiRecipe(recipe, component);
             recipe.Remove(component);
             foreach (Component comp in subRecipe)
             {
+                comp.Operation = midOperation;
                 recipe.Insert(i, comp);
                 i++;
             }
+            subRecipe[0].Operation = startOperation;
+            subRecipe[subRecipe.Count - 1].Operation = endOperation;
         }
     }
 }

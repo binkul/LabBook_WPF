@@ -24,7 +24,7 @@ namespace LabBook.Forms.Composition.Model
         private long _semiNrD = -1;
         private SubRecipeOrdering _subOrdering = SubRecipeOrdering.none;
         private string _subRecipeStatus = "";
-        private int _operation = 1;
+        private RecipeOperation _operation = RecipeOperation.None;
         private string _operationName;
         private double _density = -1;
         public IList<Component> SemiRecipe { get; set; } = new List<Component>();
@@ -192,7 +192,7 @@ namespace LabBook.Forms.Composition.Model
 
         public bool IsSemiproductPresent => SemiRecipe.Count > 0;
 
-        public int Operation
+        public RecipeOperation Operation
         {
             get => _operation;
             set

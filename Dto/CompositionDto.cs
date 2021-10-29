@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using LabBook.ADO.Service;
+using System.Collections.Generic;
 
 namespace LabBook.Dto
 {
-    public enum RecipeOperation
-    {
-        Blank = 1,
-        Start = 2,
-        Inside = 3,
-        End = 4
-    }
     public class CompositionDto
     {
         public long LabBookId { get; set; }
@@ -16,7 +10,7 @@ namespace LabBook.Dto
         public string Component { get; set; }
         public bool IsIntermediate { get; set; } = false;
         public decimal Amount { get; set; }
-        public RecipeOperation Operation { get; set; } = RecipeOperation.Blank;
+        public RecipeOperation Operation { get; set; } = RecipeOperation.None;
         public string Comment { get; set; }
 
         public CompositionDto(long labBookId, int ordering, string component, bool isIntermediate, decimal amount, RecipeOperation operation, string comment)

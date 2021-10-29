@@ -10,12 +10,12 @@ namespace LabBook.Dto
         public int Id { get; }
         public int Level { get; }
         public long NrD { get; }
-        public int Operation { get; }
+        public RecipeOperation Operation { get; }
         public double Amount { get; }
         public double Mass { get; }
         public IList<int> ParentsId { get; }
 
-        public CompositionSubRecipeDto(int id, int level, long nrD, int operation, double amount, double mass, IList<int> parents)
+        public CompositionSubRecipeDto(int id, int level, long nrD, RecipeOperation operation, double amount, double mass, IList<int> parents)
         {
             Id = id;
             Level = level;

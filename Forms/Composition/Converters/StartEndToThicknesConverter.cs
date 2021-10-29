@@ -1,4 +1,5 @@
-﻿using LabBook.Dto;
+﻿using LabBook.ADO.Service;
+using LabBook.Dto;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace LabBook.Forms.Composition.Converters
                 case "left":
                     if (operation == (int)RecipeOperation.Start)
                         return new Thickness(2, 2, 0, 0);
-                    else if (operation == (int)RecipeOperation.Inside)
+                    else if (operation == (int)RecipeOperation.Middle)
                         return new Thickness(2, 0, 0, 0);
                     else if (operation == (int)RecipeOperation.End)
                         return new Thickness(2, 0, 0, 2);
@@ -39,7 +40,7 @@ namespace LabBook.Forms.Composition.Converters
                 case "right":
                     if (operation == (int)RecipeOperation.Start)
                         return new Thickness(0, 2, 2, 0);
-                    else if (operation == (int)RecipeOperation.Inside)
+                    else if (operation == (int)RecipeOperation.Middle)
                         return new Thickness(0, 0, 2, 0);
                     else if (operation == (int)RecipeOperation.End)
                         return new Thickness(0, 0, 2, 2);

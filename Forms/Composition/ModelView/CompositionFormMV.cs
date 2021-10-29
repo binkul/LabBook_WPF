@@ -575,7 +575,7 @@ namespace LabBook.Forms.Composition.ModelView
             else
             {
                 Component component = _service.GetNewComponent();
-                component.Operation = Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 3 ? 3 : 1;
+                component.Operation = Recipe[SelectedIndex].Operation == RecipeOperation.Start || Recipe[SelectedIndex].Operation == RecipeOperation.Middle ? RecipeOperation.Middle : RecipeOperation.None;
                 Recipe.Insert(SelectedIndex + 1, component);
                 SelectedIndex++;
 
@@ -622,30 +622,30 @@ namespace LabBook.Forms.Composition.ModelView
             currentComponent.Ordering = upComponent.Ordering;
             upComponent.Ordering = currentOrder;
 
-            if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
+            if (currentComponent.Operation == RecipeOperation.None || currentComponent.Operation == RecipeOperation.Middle)
             {
-                int operation;
+                RecipeOperation operation;
                 switch (upComponent.Operation)
                 {
-                    case 3:
-                        operation = 3;
+                    case RecipeOperation.Middle:
+                        operation = RecipeOperation.Middle;
                         break;
-                    case 4:
-                        operation = 3;
+                    case RecipeOperation.End:
+                        operation = RecipeOperation.Middle;
                         break;
                     default:
-                        operation = 1;
+                        operation = RecipeOperation.None;
                         break;
                 }
                 _service.SetOperation(currentComponent, operation);
             }
-            else if (currentComponent.Operation == 2)
+            else if (currentComponent.Operation == RecipeOperation.Start)
             {
-                _service.SetOperation(upComponent, 3);
+                _service.SetOperation(upComponent, RecipeOperation.Middle);
             }
             else
             {
-                _service.SetOperation(upComponent, 1);
+                _service.SetOperation(upComponent, RecipeOperation.None);
             }
 
             Recipe.Move(Recipe.IndexOf(currentComponent), Recipe.IndexOf(upComponent));
@@ -675,30 +675,30 @@ namespace LabBook.Forms.Composition.ModelView
             currentComponent.Ordering = downComponent.Ordering;
             downComponent.Ordering = currentOrder;
 
-            if (currentComponent.Operation == 1 || currentComponent.Operation == 3)
+            if (currentComponent.Operation == RecipeOperation.None || currentComponent.Operation == RecipeOperation.Middle)
             {
-                int operation;
+                RecipeOperation operation;
                 switch (downComponent.Operation)
                 {
-                    case 2:
-                        operation = 3;
+                    case RecipeOperation.Start:
+                        operation = RecipeOperation.Middle;
                         break;
-                    case 3:
-                        operation = 3;
+                    case RecipeOperation.Middle:
+                        operation = RecipeOperation.Middle;
                         break;
                     default:
-                        operation = 1;
+                        operation = RecipeOperation.None;
                         break;
                 }
                 _service.SetOperation(currentComponent, operation);
             }
-            else if (currentComponent.Operation == 2)
+            else if (currentComponent.Operation == RecipeOperation.Start)
             {
-                _service.SetOperation(downComponent, 1);
+                _service.SetOperation(downComponent, RecipeOperation.None);
             }
             else
             {
-                _service.SetOperation(downComponent, 3);
+                _service.SetOperation(downComponent, RecipeOperation.Middle);
             }
 
             Recipe.Move(Recipe.IndexOf(currentComponent), Recipe.IndexOf(downComponent));
@@ -712,7 +712,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 return false;
             }
-            else if (Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4)
+            else if (Recipe[SelectedIndex].Operation == RecipeOperation.Start || Recipe[SelectedIndex].Operation == RecipeOperation.End)
             {
                 return false;
             }
@@ -724,7 +724,7 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void FrameUp()
         {
-            _service.SetOperation(Recipe[SelectedIndex], 2);
+            _service.SetOperation(Recipe[SelectedIndex], RecipeOperation.Start);
             _service.BuildFrame(Recipe);
         }
 
@@ -736,16 +736,16 @@ namespace LabBook.Forms.Composition.ModelView
             }
             else
             {
-                return Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4;
+                return Recipe[SelectedIndex].Operation == RecipeOperation.Start || Recipe[SelectedIndex].Operation == RecipeOperation.End;
             }
         }
 
         public void FrameCut()
         {
-            int operation = Recipe[SelectedIndex].Operation;
-            if (operation == 2 || operation == 4)
+            RecipeOperation operation = Recipe[SelectedIndex].Operation;
+            if (operation == RecipeOperation.Start || operation == RecipeOperation.End)
             {
-                _service.SetOperation(Recipe[SelectedIndex], 1);
+                _service.SetOperation(Recipe[SelectedIndex], RecipeOperation.None);
                 _service.BuildFrame(Recipe);
             }
         }
@@ -756,7 +756,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 return false;
             }
-            else if (Recipe[SelectedIndex].Operation == 2 || Recipe[SelectedIndex].Operation == 4)
+            else if (Recipe[SelectedIndex].Operation == RecipeOperation.Start || Recipe[SelectedIndex].Operation == RecipeOperation.End)
             {
                 return false;
             }
@@ -768,7 +768,7 @@ namespace LabBook.Forms.Composition.ModelView
 
         public void FrameDown()
         {
-            _service.SetOperation(Recipe[SelectedIndex], 4);
+            _service.SetOperation(Recipe[SelectedIndex], RecipeOperation.End);
             _service.BuildFrame(Recipe);
         }
     }
