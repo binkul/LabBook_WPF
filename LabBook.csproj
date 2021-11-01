@@ -159,6 +159,7 @@
     <Compile Include="Forms\Composition\Command\AddMiddleButton.cs" />
     <Compile Include="Forms\Composition\Command\DeleteButton.cs" />
     <Compile Include="Forms\Composition\Command\ExchangeButton.cs" />
+    <Compile Include="Forms\Composition\Command\FillTo100.cs" />
     <Compile Include="Forms\Composition\Command\FrameCutButton.cs" />
     <Compile Include="Forms\Composition\Command\FrameDownButton.cs" />
     <Compile Include="Forms\Composition\Command\FrameUpButton.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Forms\Composition\Command\MoveDownButton.cs" />
     <Compile Include="Forms\Composition\Command\MoveUpButton.cs" />
     <Compile Include="Forms\Composition\Command\PrinterButton.cs" />
+    <Compile Include="Forms\Composition\Command\RecalculateOnComponent.cs" />
     <Compile Include="Forms\Composition\Command\SaveButton.cs" />
     <Compile Include="Forms\Composition\CompositionForm.xaml.cs">
       <DependentUpon>CompositionForm.xaml</DependentUpon>
@@ -518,6 +520,12 @@
   <ItemGroup>
     <Resource Include="Img\recFrameDown.png" />
     <Resource Include="Img\recFrameUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\upTo100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Img\CountOn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

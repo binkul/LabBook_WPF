@@ -31,6 +31,8 @@ namespace LabBook.Forms.Composition.ModelView
         private ICommand _frameUpButton;
         private ICommand _frameCutButton;
         private ICommand _frameDownButton;
+        private ICommand _fillTo100;
+        private ICommand _calculateTo;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
@@ -299,6 +301,24 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 if (_frameDownButton == null) _frameDownButton = new FrameDownButton(this);
                 return _frameDownButton;
+            }
+        }
+
+        public ICommand FillUpTo100
+        {
+            get
+            {
+                if (_fillTo100== null) _fillTo100 = new FillTo100(this);
+                return _fillTo100;
+            }
+        }
+
+        public ICommand RecalculateOnComponent
+        {
+            get
+            {
+                if (_calculateTo == null) _calculateTo = new RecalculateOnComponent(this);
+                return _calculateTo;
             }
         }
 
@@ -770,6 +790,16 @@ namespace LabBook.Forms.Composition.ModelView
         {
             _service.SetOperation(Recipe[SelectedIndex], RecipeOperation.End);
             _service.BuildFrame(Recipe);
+        }
+
+        public void FillRecipeTo100()
+        {
+
+        }
+
+        public void CalculateOnComponent()
+        {
+
         }
     }
 }

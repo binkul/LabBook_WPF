@@ -237,7 +237,26 @@
                     </RibbonButton>
                 </RibbonGroup>
                 <RibbonGroup Header="Obliczenia" FontSize="10">
-
+                    <RibbonButton Label="Dopełnij do 100%" LargeImageSource="/Img/upTo100.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding FillUpTo100}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
+                                    <TextBlock FontSize="12">Dopełnij do 100%</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
+                    <RibbonButton Label="Przelicz na ..." LargeImageSource="/Img/CountOn.png" FontSize="12" FontWeight="Regular"
+                                  Command="{Binding RecalculateOnComponent}" >
+                        <RibbonButton.ToolTip >
+                            <ToolTip Background="Yellow">
+                                <DockPanel Width="Auto" Height="Auto" Background="Yellow" >
+                                    <TextBlock FontSize="12">Dopełnij do 100%</TextBlock>
+                                </DockPanel>
+                            </ToolTip>
+                        </RibbonButton.ToolTip>
+                    </RibbonButton>
                 </RibbonGroup>
 
             </RibbonTab>
