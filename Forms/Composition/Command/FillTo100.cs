@@ -28,7 +28,7 @@ namespace LabBook.Forms.Composition.Command
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _modelView.FillRecipeTo100CanExecuted();
         }
 
         public void Execute(object parameter)

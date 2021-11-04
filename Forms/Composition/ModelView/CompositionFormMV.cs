@@ -118,6 +118,8 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _amountMode = value;
                 OnPropertyChanged(nameof(AmountMode));
+                OnPropertyChanged(nameof(ComponentMass));
+                OnPropertyChanged(nameof(ComponentPercent));
             }
         }
 
@@ -138,6 +140,7 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _recipeData.Mass = value;
                 _service.RecalculateByAmount(Recipe, _recipeData.Mass, 0, 0);
+                OnPropertyChanged(nameof(GetTotalMass));
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
                 OnPropertyChanged(nameof(GetPricePerL));
@@ -792,14 +795,43 @@ namespace LabBook.Forms.Composition.ModelView
             _service.BuildFrame(Recipe);
         }
 
+        public bool FillRecipeTo100CanExecuted()
+        {
+            return GetSumPercent != 100 && AmountMode;
+        }
+
         public void FillRecipeTo100()
         {
+            if (_selectedIndex < 0 || Recipe.Count == 0) return;
 
+            Component component = Recipe[SelectedIndex];
+            double percent = component.Amount;
+            double differ = 100d - GetSumPercent;
+            double newPercent = percent + differ;
+
+            if (newPercent > 0)
+                component.Amount = newPercent;
+            else
+                component.Amount = 0d;
+
+            _service.RecalculateByAmount(Recipe, _recipeData.Mass,0,0);
+            OnPropertyChanged(nameof(GetSumPercent));
+            OnPropertyChanged(nameof(GetPricePerKg));
+            OnPropertyChanged(nameof(GetPricePerL));
+            OnPropertyChanged(nameof(GetSumMass));
+            OnPropertyChanged(nameof(GetSumVoc));
+            OnPropertyChanged(nameof(GetSumVocPerLiter));
         }
 
         public void CalculateOnComponent()
         {
+            if (_selectedIndex < 0 || Recipe.Count == 0) return;
 
+            double mass = _service.GetNewComponentMass(Recipe, SelectedIndex);
+            if (mass != 0d)
+            {
+                GetTotalMass = mass;
+            }
         }
     }
 }

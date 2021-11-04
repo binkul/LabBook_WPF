@@ -493,5 +493,23 @@ namespace LabBook.ADO.Service
             subRecipe[0].Operation = startOperation;
             subRecipe[subRecipe.Count - 1].Operation = endOperation;
         }
+
+        public double GetNewComponentMass(IList<Component> recipe, int index)
+        {
+            InputBox inputBox = new InputBox("Podaj ilość surowca do przeliczenia:", "Masa");
+            string tmp;
+            if (inputBox.ShowDialog() == true)
+                tmp = inputBox.Answer;
+            else
+                return 0d;
+
+            if (!double.TryParse(tmp, out double mass))
+            {
+                MessageBox.Show("Wprowadzona wartość nie jest liczbą.", "Zła wartość", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Component component = recipe[index];
+            return Math.Round(100d * mass / component.Amount, 2);
+        }
     }
 }
