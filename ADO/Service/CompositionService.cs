@@ -228,7 +228,14 @@ namespace LabBook.ADO.Service
 
                 double amount = level == 0 ? component.Amount : component.AmountOriginal * parentAmount / 100d;
                 component.Amount = amount;
-                component.Mass = amount * mass / 100d;
+
+                double massComp = amount * mass / 100d;
+                if (massComp <= 1) component.Mass = Math.Round(massComp, 4);
+                else if (massComp <= 10) component.Mass = Math.Round(massComp, 3);
+                else if (massComp <= 100) component.Mass = Math.Round(massComp, 2);
+                else component.Mass = Math.Round(massComp, 1);
+
+//                component.Mass = amount * mass / 100d;
                 component.Price = CalculatePrice(component);
                 component.VOC = CalculateVOC(component);
                 if (component.IsSemiProduct)
@@ -509,7 +516,7 @@ namespace LabBook.ADO.Service
             }
 
             Component component = recipe[index];
-            return Math.Round(100d * mass / component.Amount, 2);
+            return Math.Round(100d * mass / component.Amount, 4);
         }
     }
 }

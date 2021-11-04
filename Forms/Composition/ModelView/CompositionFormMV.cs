@@ -373,6 +373,7 @@ namespace LabBook.Forms.Composition.ModelView
                 OnPropertyChanged(nameof(GetSumMass));
                 OnPropertyChanged(nameof(GetSumVoc));
                 OnPropertyChanged(nameof(GetSumVocPerLiter));
+                OnPropertyChanged(nameof(GetTotalMass));
             }
         }
 
@@ -830,7 +831,15 @@ namespace LabBook.Forms.Composition.ModelView
             double mass = _service.GetNewComponentMass(Recipe, SelectedIndex);
             if (mass != 0d)
             {
-                GetTotalMass = mass;
+                _service.RecalculateByAmount(Recipe, mass, 0, 0);
+                _recipeData.Mass = GetSumMass;
+                OnPropertyChanged(nameof(GetTotalMass));
+                OnPropertyChanged(nameof(GetSumPercent));
+                OnPropertyChanged(nameof(GetPricePerKg));
+                OnPropertyChanged(nameof(GetPricePerL));
+                OnPropertyChanged(nameof(GetSumMass));
+                OnPropertyChanged(nameof(GetSumVoc));
+                OnPropertyChanged(nameof(GetSumVocPerLiter));
             }
         }
     }
