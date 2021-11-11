@@ -16,6 +16,15 @@ using System.Collections.Generic;
 
 namespace LabBook.Forms.Composition.ModelView
 {
+    public enum Accuracy
+    {
+        OneZero,
+        TwoZero,
+        ThreeZero,
+        FourZero,
+        Round
+    }
+
     public class CompositionFormMV : INotifyPropertyChanged
     {
         private ICommand _saveButton;
@@ -33,6 +42,12 @@ namespace LabBook.Forms.Composition.ModelView
         private ICommand _frameDownButton;
         private ICommand _fillTo100;
         private ICommand _calculateTo;
+
+        private bool _oneZeroAccuracy = false;
+        private bool _twoZeroAccuracy = false;
+        private bool _threeZeroAccuracy = false;
+        private bool _fourZeroAccuracy = false;
+        private bool _roundAccuracy = true;
 
         private readonly WindowData _windowData = WindowSetting.Read();
         private readonly CompositionService _service = new CompositionService();
@@ -139,7 +154,17 @@ namespace LabBook.Forms.Composition.ModelView
             set
             {
                 _recipeData.Mass = value;
-                _service.RecalculateByAmount(Recipe, _recipeData.Mass, 0, 0);
+                _service.RecalculateByAmount(Recipe, value, 0, 0);
+                GetTotalMassNoCalculation = value;
+            }
+        }
+
+        public double GetTotalMassNoCalculation
+        {
+            get => _recipeData.Mass;
+            set
+            {
+                _recipeData.Mass = value;
                 OnPropertyChanged(nameof(GetTotalMass));
                 OnPropertyChanged(nameof(GetSumPercent));
                 OnPropertyChanged(nameof(GetPricePerKg));
@@ -188,6 +213,68 @@ namespace LabBook.Forms.Composition.ModelView
         {
             get => _modified;
             set => _modified = value;
+        }
+
+        public bool OneZeroAccuracy
+        {
+            get => _oneZeroAccuracy;
+            set
+            {
+                _oneZeroAccuracy = value;
+                OnPropertyChanged(nameof(SetAccuracy));
+            }
+        }
+
+        public bool TwoZeroAccuracy
+        {
+            get => _twoZeroAccuracy;
+            set
+            {
+                _twoZeroAccuracy = value;
+                OnPropertyChanged(nameof(SetAccuracy));
+            }
+        }
+
+        public bool ThreeZeroAccuracy
+        {
+            get => _threeZeroAccuracy;
+            set
+            {
+                _threeZeroAccuracy = value;
+                OnPropertyChanged(nameof(SetAccuracy));
+            }
+        }
+
+        public bool FourZeroAccuracy
+        {
+            get => _fourZeroAccuracy;
+            set
+            {
+                _fourZeroAccuracy = value;
+                OnPropertyChanged(nameof(SetAccuracy));
+            }
+        }
+
+        public bool RoundAccuracy
+        {
+            get => _roundAccuracy;
+            set
+            {
+                _roundAccuracy = value;
+                OnPropertyChanged(nameof(SetAccuracy));
+            }
+        }
+
+        public Accuracy SetAccuracy
+        {
+            get
+            {
+                if (_oneZeroAccuracy) return Accuracy.OneZero;
+                else if (_twoZeroAccuracy) return Accuracy.TwoZero;
+                else if (_threeZeroAccuracy) return Accuracy.ThreeZero;
+                else if (_fourZeroAccuracy) return Accuracy.FourZero;
+                else return Accuracy.Round;
+            }
         }
 
         public ICommand SaveButton
@@ -366,14 +453,8 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentPercent = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Amount = _componentPercent;
-                _service.RecalculateByAmount(Recipe, _recipeData.Mass, 0, 0);
-                OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetPricePerKg));
-                OnPropertyChanged(nameof(GetPricePerL));
-                OnPropertyChanged(nameof(GetSumMass));
-                OnPropertyChanged(nameof(GetSumVoc));
-                OnPropertyChanged(nameof(GetSumVocPerLiter));
-                OnPropertyChanged(nameof(GetTotalMass));
+                GetTotalMass = _service.SumOfMass(Recipe);
+                SelectedIndex = _selectedIndex;
             }
         }
 
@@ -384,15 +465,10 @@ namespace LabBook.Forms.Composition.ModelView
             {
                 _componentMass = Convert.ToDouble(value);
                 Recipe[_selectedIndex].Mass = _componentMass;
-                _recipeData.Mass = _service.SumOfMass(Recipe);
-                _service.RecalculateByMass(Recipe, _recipeData.Mass, 0, 0);
-                OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetPricePerKg));
-                OnPropertyChanged(nameof(GetPricePerL));
-                OnPropertyChanged(nameof(GetSumMass));
-                OnPropertyChanged(nameof(GetSumVoc));
-                OnPropertyChanged(nameof(GetSumVocPerLiter));
-                OnPropertyChanged(nameof(GetTotalMass));
+                double totalMass = _service.SumOfMass(Recipe);
+                _service.RecalculateByMass(Recipe, totalMass, 0, 0);
+                FillRecipeTo100();
+                GetTotalMassNoCalculation = totalMass;
             }
         }
 
@@ -815,31 +891,20 @@ namespace LabBook.Forms.Composition.ModelView
             else
                 component.Amount = 0d;
 
-            _service.RecalculateByAmount(Recipe, _recipeData.Mass,0,0);
-            OnPropertyChanged(nameof(GetSumPercent));
-            OnPropertyChanged(nameof(GetPricePerKg));
-            OnPropertyChanged(nameof(GetPricePerL));
-            OnPropertyChanged(nameof(GetSumMass));
-            OnPropertyChanged(nameof(GetSumVoc));
-            OnPropertyChanged(nameof(GetSumVocPerLiter));
+            GetTotalMass = _recipeData.Mass;
+            SelectedIndex = _selectedIndex;
         }
 
         public void CalculateOnComponent()
         {
             if (_selectedIndex < 0 || Recipe.Count == 0) return;
 
-            double mass = _service.GetNewComponentMass(Recipe, SelectedIndex);
+            double mass = _service.SetNewTotalMassFromCompound(Recipe, SelectedIndex);
             if (mass != 0d)
             {
                 _service.RecalculateByAmount(Recipe, mass, 0, 0);
-                _recipeData.Mass = GetSumMass;
-                OnPropertyChanged(nameof(GetTotalMass));
-                OnPropertyChanged(nameof(GetSumPercent));
-                OnPropertyChanged(nameof(GetPricePerKg));
-                OnPropertyChanged(nameof(GetPricePerL));
-                OnPropertyChanged(nameof(GetSumMass));
-                OnPropertyChanged(nameof(GetSumVoc));
-                OnPropertyChanged(nameof(GetSumVocPerLiter));
+                GetTotalMassNoCalculation = GetSumMass;
+                SelectedIndex = _selectedIndex;
             }
         }
     }

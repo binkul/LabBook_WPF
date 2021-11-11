@@ -35,10 +35,10 @@
                     </ToolTip>
                 </PasswordBox.ToolTip>
             </PasswordBox>
-            <Button x:Name="BtnSubbmit" Content="Zaloguj się" Background="#FF545d6a" Foreground="White" 
+            <Button x:Name="BtnSubbmit" Content="Zaloguj się" Background="#FF545d6a" Foreground="White" Height="30"
                     FontSize="18" Margin="80 10" Click="BtnSubbmit_Click" />
             <Separator />
-            <Button x:Name="BtnRegister" Content="Rejestracja" Background="#FF446AD3" Foreground="White" 
+            <Button x:Name="BtnRegister" Content="Rejestracja" Background="#FF446AD3" Foreground="White" Height="30"
                     FontSize="16" Margin="160,40,20,20" Click="BtnRegister_Click" />
 
         </StackPanel>

@@ -229,13 +229,7 @@ namespace LabBook.ADO.Service
                 double amount = level == 0 ? component.Amount : component.AmountOriginal * parentAmount / 100d;
                 component.Amount = amount;
 
-                double massComp = amount * mass / 100d;
-                if (massComp <= 1) component.Mass = Math.Round(massComp, 4);
-                else if (massComp <= 10) component.Mass = Math.Round(massComp, 3);
-                else if (massComp <= 100) component.Mass = Math.Round(massComp, 2);
-                else component.Mass = Math.Round(massComp, 1);
-
-//                component.Mass = amount * mass / 100d;
+                component.Mass = amount * mass / 100d;
                 component.Price = CalculatePrice(component);
                 component.VOC = CalculateVOC(component);
                 if (component.IsSemiProduct)
@@ -251,7 +245,7 @@ namespace LabBook.ADO.Service
             {
                 if (component.Level > level) continue;
 
-                component.Amount = level == 0 ? component.Mass / mass * 100d : parentAmount * component.AmountOriginal / 100d;
+                component.Amount = level == 0 ? Math.Round(component.Mass / mass * 100d, 4) : Math.Round(parentAmount * component.AmountOriginal / 100d, 4);
                 component.Mass = level == 0 ? component.Mass : mass * component.AmountOriginal / 100d;
                 component.Price = CalculatePrice(component);
                 component.VOC = CalculateVOC(component);
@@ -501,7 +495,7 @@ namespace LabBook.ADO.Service
             subRecipe[subRecipe.Count - 1].Operation = endOperation;
         }
 
-        public double GetNewComponentMass(IList<Component> recipe, int index)
+        public double SetNewTotalMassFromCompound(IList<Component> recipe, int index)
         {
             InputBox inputBox = new InputBox("Podaj ilość surowca do przeliczenia:", "Masa");
             string tmp;

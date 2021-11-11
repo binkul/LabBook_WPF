@@ -55,32 +55,17 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public bool Modified
-        {
-            get
-            {
-                return _service.Modified;
-            }
-        }
+        public bool Modified => _service.Modified;
 
         public long DataGriddRowIndex
         {
-            get
-            {
-                return _dataGridRowIndex;
-            }
-            set
-            {
-                _dataGridRowIndex = value;
-            }
+            get => _dataGridRowIndex;
+            set => _dataGridRowIndex = value;
         }
 
         public DataRowView ActualDataGridRow
         {
-            get
-            {
-                return _actualDatGridRow;
-            }
+            get => _actualDatGridRow;
             set
             {
                 if (value != null)
@@ -110,36 +95,15 @@ namespace LabBook.Forms.MainForm.ModelView
             }
         }
 
-        public DataView GetYieldView
-        {
-            get
-            {
-                return _service.GetYieldView;
-            }
-        }
+        public DataView GetYieldView => _service.GetYieldView;
 
-        public DataView GetAppTypeView
-        {
-            get
-            {
-                return _service.GetAppTypeView;
-            }
-        }
+        public DataView GetAppTypeView => _service.GetAppTypeView;
 
-        public IDictionary<string, bool> GetDgColumns
-        {
-            get
-            {
-                return OpacityColumn.GetColumn(_opacityColumns);
-            }
-        }
+        public IDictionary<string, bool> GetDgColumns => OpacityColumn.GetColumn(_opacityColumns);
 
         public bool VisibilityStandard
         {
-            get
-            {
-                return _opacityStd;
-            }
+            get => _opacityStd;
             set
             {
                 _opacityStd = value;
@@ -153,10 +117,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public bool VisibilityExtend
         {
-            get
-            {
-                return _opacityExtend;
-            }
+            get => _opacityExtend;
             set
             {
                 _opacityExtend = value;
@@ -170,10 +131,7 @@ namespace LabBook.Forms.MainForm.ModelView
 
         public bool VisibilityExtra
         {
-            get
-            {
-                return _opacityExtra;
-            }
+            get => _opacityExtra;
             set
             {
                 _opacityExtra = value;
