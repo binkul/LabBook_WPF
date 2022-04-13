@@ -10,18 +10,15 @@ namespace LabBook.Forms.MainForm.Converters
 {
     public class DateTimeConverter : IValueConverter
     {
-        private const string _format = "dd-MM-yyyy";
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime date = (DateTime)value;
-
-            return date.ToString(_format);
+            return string.Format("{0:dd-MM-yyyy}", date);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return DateTime.ParseExact((string)value, _format, culture);
+            string date = value.ToString();
+            return DateTime.TryParse(date, out DateTime result) ? result : value;
         }
     }
-}
